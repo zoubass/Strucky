@@ -3,20 +3,74 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url"
-                  value="jdbc:h2:~/test;MV_STORE=FALSE;MODE=MSSQLServer;MVCC=FALSE;DB_CLOSE_ON_EXIT=TRUE;AUTO_SERVER=FALSE"/>
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
-        <property name="initialSize" value="5"/>
-        <property name="maxActive" value="10"/>
-        <property name="poolPreparedStatements" value="true"/>
-    </bean>
-    <bean id="h2WebServer" class="org.h2.tools.Server" factory-method="createWebServer" init-method="start"
-          destroy-method="stop">
-        <constructor-arg value="-web,-webAllowOthers,-webPort,8082"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:oracle_database.properties</value>
+        </property>
     </bean>
 
+    <beans profile="production">
+        <!--TODO: implement-->
+        <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="driverClassName" value="${h2.driver}"/>-->
+        <!--<property name="url" value="${dev.db.url}"/>-->
+        <!--<property name="username" value="${dev.db.username}"/>-->
+        <!--<property name="password" value="${dev.db.password}"/>-->
+        <!--</bean>-->
+    </beans>
 
+    <beans profile="test">
+        <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="org.h2.Driver"/>
+            <property name="url"
+                      value="jdbc:h2:~/test;MV_STORE=FALSE;MODE=MSSQLServer;MVCC=FALSE;DB_CLOSE_ON_EXIT=TRUE;AUTO_SERVER=FALSE"/>
+            <property name="username" value="sa"/>
+            <property name="password" value=""/>
+            <property name="initialSize" value="5"/>
+            <property name="maxActive" value="10"/>
+            <property name="poolPreparedStatements" value="true"/>
+        </bean>
+        <bean id="h2WebServer" class="org.h2.tools.Server" factory-method="createWebServer" init-method="start"
+              destroy-method="stop">
+            <constructor-arg value="-web,-webAllowOthers,-webPort,8082"/>
+        </bean>
+        <bean id="czgusrmngPopulator" class="cz.generali.test.config.populator.SimpleDatabasePoplulaterBundle">
+            <constructor-arg name="dataSource" ref="dataSource"/>
+            <constructor-arg name="databasePopulators">
+                <list>
+                    <bean class="test.config.populator.HibernateSchemaExportDatabasePopulator">
+                        <constructor-arg name="dataLocations">
+                            <list>
+                                <value>classpath*:report/itms/db/delete_db_structure.sql</value>
+                                <value>classpath*:report/itms/db/TCompany_creation.sql</value>
+                                <value>classpath*:report/itms/db/TItem.sql</value>
+                                <value>classpath*:report/itms/db/TQuest.sql</value>
+                                <value>classpath*:report/itms/db/TRates.sql</value>
+                                <value>classpath*:report/itms/db/TSubQuest.sql</value>
+                                <value>classpath*:report/itms/db/indexes.sql</value>
+                                <value>classpath*:report/itms/db/TRates_insert_quotesDate.sql
+                                </value>
+                                <value>classpath*:report/itms/db/TCompany_insert_quotesDate.sql
+                                </value>
+                                <value>classpath*:report/itms/db/TQuest_insert.sql</value>
+                                <value>classpath*:report/itms/db/TSubQuest_insert_quotesDate.sql
+                                </value>
+                                <value>classpath*:report/ppm/db/PPM_databaseSchema.sql</value>
+                                <value>classpath*:report/ppm/db/PPM_Conastraints.sql</value>
+                                <value>classpath*:report/ppm/db/PPM_codeListData_insertion.sql
+                                </value>
+                                <value>classpath*:report/ppm/db/PPM_figures_insertion.sql
+                                </value>
+                                <value>classpath*:report/ppm/db/PPM_responsiblePerson_insertion.sql
+                                </value><!-- <value>classpath*:report/kpi/db/KPIinserts.sql</value>
+-->
+                            </list>
+                        </constructor-arg>
+                        <constructor-arg name="databaseOperation" value="CLEAN_INSERT"/>
+                        <constructor-arg name="dataSource" ref="dataSource"/>
+                    </bean>
+                </list>
+            </constructor-arg>
+        </bean>
+    </beans>
 </beans>

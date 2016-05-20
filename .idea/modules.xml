@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/neo.iml" filepath="$PROJECT_DIR$/neo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/struct.iml" filepath="$PROJECT_DIR$/struct.iml" />
     </modules>
   </component>
 </project>
