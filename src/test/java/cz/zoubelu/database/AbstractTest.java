@@ -1,5 +1,7 @@
 package cz.zoubelu.database;
 
+import cz.zoubelu.config.ApplicationConfig;
+import cz.zoubelu.config.TestConfig;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -11,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:META-INF/spring/application-context.xml")
+@ContextConfiguration(classes = {ApplicationConfig.class, TestConfig.class})
 @ActiveProfiles("test")
 public abstract class AbstractTest {
 }

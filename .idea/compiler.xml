@@ -32,8 +32,7 @@
         <module name="struct" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="neo" target="1.7" />
+    <bytecodeTargetLevel target="1.7">
       <module name="struct" target="1.7" />
     </bytecodeTargetLevel>
   </component>

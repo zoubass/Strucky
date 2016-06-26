@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class InformaDaoImpl implements InformaDao {
 
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     public InformaDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
