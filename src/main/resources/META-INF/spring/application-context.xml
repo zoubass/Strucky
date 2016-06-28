@@ -8,7 +8,7 @@
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
         <property name="ignoreResourceNotFound" value="true"/>
         <property name="location">
-            <value>classpath:database.properties</value>
+            <value>classpath:conf/database.properties</value>
         </property>
     </bean>
 

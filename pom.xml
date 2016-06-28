@@ -20,7 +20,7 @@
         <h2.version>1.4.191</h2.version>
         <commons.dbcp.version>1.2.2</commons.dbcp.version>
         <spring.data.neo4j>4.1.1.RELEASE</spring.data.neo4j>
-        <neo4j.version>3.0.3</neo4j.version>
+        <neo4j.version>2.3.5</neo4j.version>
     </properties>
 
     <dependencies>
@@ -110,9 +110,9 @@
             <version>${neo4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-graphdb-api</artifactId>
-            <version>${neo4j.version}</version>
+        <groupId>org.neo4j.driver</groupId>
+        <artifactId>neo4j-java-driver</artifactId>
+        <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.neo4j</groupId>
@@ -176,10 +176,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
+                <!--<configuration>-->
+                <!--<source>1.7</source>-->
+                <!--<target>1.7</target>-->
+                <!--</configuration>-->
             </plugin>
         </plugins>
     </build>

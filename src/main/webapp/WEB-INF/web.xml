@@ -14,8 +14,9 @@
         <param-name>contextConfigLocation</param-name>
         <!--TODO: nemohu mít jen cz.zoubelu.config.*?-->
         <param-value>
-            cz.zoubelu.config.ApplicationConfig,cz.zoubelu.config.TestConfig,cz.zoubelu.config.ProductionConfig,cz.zoubelu.config.GraphConfig
+            cz.zoubelu.config.ApplicationConfig,cz.zoubelu.config.TestConfig,cz.zoubelu.config.ProductionConfig,
         </param-value>
+        <!--cz.zoubelu.config.GraphConfig-->
     </context-param>
     <context-param>
         <!--TODO: change profile-->

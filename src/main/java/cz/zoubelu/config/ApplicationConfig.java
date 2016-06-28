@@ -2,19 +2,13 @@ package cz.zoubelu.config;
 
 import cz.zoubelu.dao.InformaDao;
 import cz.zoubelu.dao.impl.InformaDaoImpl;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Created by zoubas
@@ -33,7 +27,7 @@ public class ApplicationConfig {
         PropertySourcesPlaceholderConfigurer placeHolder = new PropertySourcesPlaceholderConfigurer();
         placeHolder.setIgnoreResourceNotFound(true);
         placeHolder.setIgnoreUnresolvablePlaceholders(true);
-        placeHolder.setLocation(new ClassPathResource("database.properties"));
+        placeHolder.setLocation(new ClassPathResource("conf/database.properties"));
         return placeHolder;
     }
 
