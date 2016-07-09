@@ -1,6 +1,6 @@
-package cz.zoubelu.dao.mapper;
+package cz.zoubelu.repository.mapper;
 
-import cz.zoubelu.model.InformaLog;
+import cz.zoubelu.domain.InformaLog;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

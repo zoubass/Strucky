@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("production")
-public class ProductionConfig implements DataSource {
+public class DataSourceProductionConfig implements DataSource {
 
     //TODO: zmenit odkaz na property
     @Value("${h2.url}")

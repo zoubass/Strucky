@@ -1,4 +1,4 @@
-package cz.zoubelu.model;
+package cz.zoubelu.domain;
 
 import java.sql.Timestamp;
 

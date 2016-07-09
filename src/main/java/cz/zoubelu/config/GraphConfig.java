@@ -1,34 +1,45 @@
 package cz.zoubelu.config;
 
 import org.apache.log4j.Logger;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
-
-import java.io.File;
 
 /**
  * Created by zoubas
  */
 @Configuration
-@EnableNeo4jRepositories(basePackages = "cz.zoubelu.dao")
+@Profile("production")
 public class GraphConfig extends Neo4jConfiguration {
     private final Logger log = Logger.getLogger(getClass());
 
-    @Override
-    public SessionFactory getSessionFactory() {
-        return null;
-    }
+    @Value("${neo4j.db.url}")
+    private String url;
 
+    @Value("${neo4j.db.driver")
+    private String driver;
 
     @Bean
-    public GraphDatabaseService graphDatabaseService() {
-        String path = "test.db";
-        log.debug("Creating new embedded database with file: " + path);
-        return new GraphDatabaseFactory().newEmbeddedDatabase(new File(path));
+    public org.neo4j.ogm.config.Configuration getConfiguration() {
+        org.neo4j.ogm.config.Configuration config = new org.neo4j.ogm.config.Configuration();
+        config
+                .driverConfiguration()
+                .setDriverClassName(driver)
+                .setURI(url);
+        return config;
     }
+
+    @Bean
+    public SessionFactory getSessionFactory() {
+        return new SessionFactory(getConfiguration(), "cz.zoubelu.domain");
+    }
+
+    @Bean
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public Session getSession() throws Exception {
+        return super.getSession();
+    }
+
 }

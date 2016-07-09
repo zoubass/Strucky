@@ -1,26 +1,30 @@
 package cz.zoubelu.config;
 
-import cz.zoubelu.dao.InformaDao;
-import cz.zoubelu.dao.impl.InformaDaoImpl;
-import org.apache.commons.dbcp.BasicDataSource;
+import cz.zoubelu.repository.InformaDao;
+import cz.zoubelu.repository.impl.InformaDaoImpl;
+import cz.zoubelu.service.ApplicationService;
+import cz.zoubelu.service.ApplicationServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Created by zoubas
  */
 @Configuration
-//@ComponentScan(basePackages = "cz.zoubelu.controller")
+@ComponentScan(basePackages = {"cz.zoubelu.controller", "cz.zoubelu.service"})
+//TODO: presunout neo4j repositories do graph configurace a zarovne tedy
+// udelat jednu konfiguraci, ktera provede funkce jenz maji produkcni a testovaci spolecne...
+@EnableNeo4jRepositories(basePackages = "cz.zoubelu.repository")
+@EnableTransactionManagement
 //@PropertySource("classpath:database.properties")
 public class ApplicationConfig {
     private final Logger log = Logger.getLogger(getClass());
@@ -33,7 +37,8 @@ public class ApplicationConfig {
         PropertySourcesPlaceholderConfigurer placeHolder = new PropertySourcesPlaceholderConfigurer();
         placeHolder.setIgnoreResourceNotFound(true);
         placeHolder.setIgnoreUnresolvablePlaceholders(true);
-        placeHolder.setLocation(new ClassPathResource("database.properties"));
+        //TODO: nejde nacitat vsechny properties v lokaci config?
+        placeHolder.setLocations(new Resource[]{new ClassPathResource("conf/database.properties"), new ClassPathResource("conf/neo4j.properties")});
         return placeHolder;
     }
 
@@ -41,6 +46,11 @@ public class ApplicationConfig {
     public InformaDao getInformaDao() {
         return new InformaDaoImpl(getJdbcTemplate());
     }
+
+//    @Bean
+//    public ApplicationService getAppService() {
+//        return new ApplicationServiceImpl();
+//    }
 
     @Bean
     public JdbcTemplate getJdbcTemplate() {

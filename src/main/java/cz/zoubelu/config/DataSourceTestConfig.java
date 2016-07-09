@@ -12,19 +12,19 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 @Profile("test")
-public class TestConfig implements DataSource {
+public class DataSourceTestConfig implements DataSource {
     private final Logger log = Logger.getLogger(getClass());
 
-    @Value("${h2.url}")
+    @Value("${url}")
     private String url;
 
-    @Value("${h2.driver}")
+    @Value("${driver}")
     private String driver;
 
-    @Value("${h2.username}")
+    @Value("${username}")
     private String username;
 
-    @Value("${h2.password}")
+    @Value("${password}")
     private String password;
 
     @Value("classpath:h2structure/drop_schema.sql")
@@ -65,9 +65,4 @@ public class TestConfig implements DataSource {
         populator.addScript(insertTestData);
         return populator;
     }
-    //    @Bean
-//    public Server getServer() {
-//        return new Server();
-//    }
-
 }

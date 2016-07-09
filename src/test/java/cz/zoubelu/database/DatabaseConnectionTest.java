@@ -1,8 +1,8 @@
 package cz.zoubelu.database;
 
 
-import cz.zoubelu.dao.InformaDao;
-import cz.zoubelu.model.InformaLog;
+import cz.zoubelu.repository.InformaDao;
+import cz.zoubelu.domain.InformaLog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

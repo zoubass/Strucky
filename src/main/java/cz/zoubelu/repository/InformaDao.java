@@ -1,6 +1,6 @@
-package cz.zoubelu.dao;
+package cz.zoubelu.repository;
 
-import cz.zoubelu.model.InformaLog;
+import cz.zoubelu.domain.InformaLog;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package cz.zoubelu.database;
 
 import cz.zoubelu.config.ApplicationConfig;
-import cz.zoubelu.config.TestConfig;
+import cz.zoubelu.config.DataSourceTestConfig;
+import cz.zoubelu.config.GraphTestConfig;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,7 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class, TestConfig.class})
+//TODO: Graph config je navic, v pripade kdy poustim jen test pro oracle db, ale ot je prkotina
+@ContextConfiguration(classes = {ApplicationConfig.class, DataSourceTestConfig.class, GraphTestConfig.class})
 @ActiveProfiles("test")
 public abstract class AbstractTest {
 }

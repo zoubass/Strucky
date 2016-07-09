@@ -1,8 +1,8 @@
-package cz.zoubelu.dao.impl;
+package cz.zoubelu.repository.impl;
 
-import cz.zoubelu.dao.InformaDao;
-import cz.zoubelu.dao.mapper.InteractionMapper;
-import cz.zoubelu.model.InformaLog;
+import cz.zoubelu.repository.InformaDao;
+import cz.zoubelu.repository.mapper.InteractionMapper;
+import cz.zoubelu.domain.InformaLog;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
