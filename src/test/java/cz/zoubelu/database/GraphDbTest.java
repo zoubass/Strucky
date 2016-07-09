@@ -1,15 +1,10 @@
 package cz.zoubelu.database;
 
-import com.google.common.collect.Lists;
 import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.Method;
-import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.service.ApplicationService;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
@@ -23,8 +18,6 @@ public class GraphDbTest extends AbstractTest {
     @Autowired
     private ApplicationService appService;
 
-    @Autowired
-    private Session session;
 
     private Application getAppNode() {
         Assert.assertNotNull(appService);

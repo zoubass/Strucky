@@ -47,11 +47,6 @@ public class ApplicationConfig {
         return new InformaDaoImpl(getJdbcTemplate());
     }
 
-//    @Bean
-//    public ApplicationService getAppService() {
-//        return new ApplicationServiceImpl();
-//    }
-
     @Bean
     public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(dataSource.getDataSource());
