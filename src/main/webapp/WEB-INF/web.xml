@@ -16,6 +16,7 @@
         <param-value>
             cz.zoubelu.config.ApplicationConfig,cz.zoubelu.config.DataSourceTestConfig,cz.zoubelu.config.DataSourceProductionConfig,cz.zoubelu.config.GraphConfig
         </param-value>
+        <!--cz.zoubelu.config.GraphConfig-->
     </context-param>
     <context-param>
         <!--TODO: change profile-->
