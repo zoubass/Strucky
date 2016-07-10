@@ -5,6 +5,7 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,14 +21,17 @@ public class Application {
     private String appName;
 
     @Relationship(type = "PROVIDES", direction = Relationship.OUTGOING)
-    private Set<Method> methods;
+    private Set<Method> providedMethods;
+
+    @Relationship(type = "CONSUMES", direction = Relationship.OUTGOING)
+    private List<ConsumeRelationship> consumeRelationship;
 
     public Application(){
 
     }
-    public Application(String appName, Set<Method> methods) {
+    public Application(String appName, Set<Method> providedMethods) {
         this.appName = appName;
-        this.methods = methods;
+        this.providedMethods = providedMethods;
     }
 
 
@@ -47,11 +51,19 @@ public class Application {
         this.appName = appName;
     }
 
-    public Set<Method> getMethods() {
-        return methods;
+    public Set<Method> getProvidedMethods() {
+        return providedMethods;
     }
 
-    public void setMethods(Set<Method> methods) {
-        this.methods = methods;
+    public void setProvidedMethods(Set<Method> providedMethods) {
+        this.providedMethods = providedMethods;
+    }
+
+    public List<ConsumeRelationship> getConsumeRelationship() {
+        return consumeRelationship;
+    }
+
+    public void setConsumeRelationship(List<ConsumeRelationship> consumeRelationship) {
+        this.consumeRelationship = consumeRelationship;
     }
 }

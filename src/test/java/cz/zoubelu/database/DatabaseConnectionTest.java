@@ -2,7 +2,7 @@ package cz.zoubelu.database;
 
 
 import cz.zoubelu.repository.InformaDao;
-import cz.zoubelu.domain.InformaLog;
+import cz.zoubelu.domain.Message;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ public class DatabaseConnectionTest extends AbstractTest {
     public void testConnection() {
         Assert.assertNotNull(dao);
 
-        List<InformaLog> informaLogs = dao.getInteractionData();
-        Assert.assertEquals(8, informaLogs.size());
+        List<Message> messages = dao.getInteractionData();
+        Assert.assertEquals(25968, messages.size());
     }
 
 }

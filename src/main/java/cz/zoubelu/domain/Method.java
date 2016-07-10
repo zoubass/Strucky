@@ -12,6 +12,18 @@ public class Method {
     @GraphId
     private Long id;
 
+    public Method() {
+
+    }
+
+    public Method(String name, Integer version) {
+        this.name = name;
+        this.version = version;
+    }
+
+    @Property(name="name")
+    private String name;
+
     @Property(name = "version")
     private Integer version;
 
@@ -25,6 +37,14 @@ public class Method {
 
     public Integer getVersion() {
         return version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setVersion(Integer version) {

@@ -2,8 +2,6 @@ package cz.zoubelu.config;
 
 import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.repository.impl.InformaDaoImpl;
-import cz.zoubelu.service.ApplicationService;
-import cz.zoubelu.service.ApplicationServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

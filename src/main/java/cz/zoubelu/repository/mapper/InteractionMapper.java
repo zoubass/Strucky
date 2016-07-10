@@ -1,6 +1,6 @@
 package cz.zoubelu.repository.mapper;
 
-import cz.zoubelu.domain.InformaLog;
+import cz.zoubelu.domain.Message;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -9,10 +9,10 @@ import java.sql.SQLException;
 /**
  * Created by zoubas on 21.5.16.
  */
-public class InteractionMapper implements RowMapper<InformaLog> {
+public class InteractionMapper implements RowMapper<Message> {
 
-    public InformaLog mapRow(ResultSet rs, int rowNum) throws SQLException {
-        InformaLog informalog = new InformaLog();
+    public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Message informalog = new Message();
         informalog.setId(rs.getLong("ID"));
 
         informalog.setRequest_time(rs.getTimestamp("REQUEST_TIME"));
