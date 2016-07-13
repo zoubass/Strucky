@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Method;
-import cz.zoubelu.service.ApplicationService;
+import cz.zoubelu.service.GraphService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Set;
  */
 public class GraphDbTest extends AbstractTest {
     @Autowired
-    private ApplicationService appService;
+    private GraphService appService;
 
 
     private List<Application> getAppNode() {

@@ -1,10 +1,9 @@
 package cz.zoubelu.database;
 
 import cz.zoubelu.domain.Application;
-import cz.zoubelu.domain.Message;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.InformaDao;
-import cz.zoubelu.service.ApplicationService;
+import cz.zoubelu.service.GraphService;
 import cz.zoubelu.service.DataConversionService;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,7 @@ public class DataConversionTest extends AbstractTest {
     private DataConversionService dataConversion;
 
     @Autowired
-    private ApplicationService applicationService;
+    private GraphService graphService;
 
     @Autowired
     private InformaDao informaDao;
@@ -38,17 +37,19 @@ public class DataConversionTest extends AbstractTest {
             List<String> methodsMessages = informaDao.getMethodOfApplication(appName);
             Set<Method> methods = new HashSet<>();
             for (String methodName : methodsMessages) {
-                methods.add(new Method(methodName,0));
+                //metody s verzi jinou nez 100 se musi dynamicky vytvorit, coz je soucast testu
+                methods.add(new Method(methodName, 100));
             }
             applications.add(new Application(appName, methods));
         }
-        applicationService.save(applications);
+        graphService.save(applications);
     }
 
     @Test
     public void shouldConvertFromRDBMToGraph() {
         Assert.assertNotNull(dataConversion);
-        dataConversion.convertToGraphData();
+        dataConversion.convertData();
         //TODO: otestovat
+        Assert.assertEquals("", "");
     }
 }

@@ -31,7 +31,7 @@ public class DataSourceTestConfig implements DataSource {
     private Resource dropDb;
     @Value("classpath:h2structure/create_schema.sql")
     private Resource createSchema;
-    @Value("classpath:h2structure/insert_test_data.sql")
+    @Value("classpath:h2structure/insert_201606.sql")
     private Resource insertTestData;
 
 
@@ -47,7 +47,7 @@ public class DataSourceTestConfig implements DataSource {
         bd.setPoolPreparedStatements(true);
         return bd;
     }
-
+/*
     @Bean
     public DataSourceInitializer dataInit(final BasicDataSource getDataSource, final ResourceDatabasePopulator getDatabasePopulator) {
         DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
@@ -65,4 +65,5 @@ public class DataSourceTestConfig implements DataSource {
         populator.addScript(insertTestData);
         return populator;
     }
+*/
 }

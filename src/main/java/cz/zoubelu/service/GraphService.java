@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by zoubas on 9.7.16.
  */
-public interface ApplicationService {
+public interface GraphService {
 
     void save(Application app);
 
@@ -27,7 +27,7 @@ public interface ApplicationService {
      * @param methodVersion
      * @return Method
      */
-    Method findMethodOfApplication(Application providingApp, String methodName, Integer methodVersion);
+    Method findProvidedMethodOfApplication(Application providingApp, String methodName, Integer methodVersion);
 
     /**
      * @param consumingApp

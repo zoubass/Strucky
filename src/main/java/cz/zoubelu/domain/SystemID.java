@@ -4,7 +4,7 @@ package cz.zoubelu.domain;
  * Created by zoubas on 10.7.16.
  */
 public enum SystemID {
-    //TODO: CREATE CODELIST
+    //TODO: UPRAVIT NAZVY
     IBM_MB(0),
     CZGUSRMNG(1),
     CZGUCINFO(2),
@@ -83,6 +83,7 @@ public enum SystemID {
     }
 
     public static String getSystemByID(Integer id) {
+//        if(id==null) throw new MissingSourceSystemId();
         for (SystemID system : values()) {
             if ((id).equals(system.getID())) {
                 return system.name();

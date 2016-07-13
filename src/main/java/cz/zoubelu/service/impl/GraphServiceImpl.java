@@ -5,7 +5,9 @@ import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.service.ApplicationService;
+import cz.zoubelu.repository.ConsumesRelationshipRepository;
+import cz.zoubelu.repository.MethodRepository;
+import cz.zoubelu.service.GraphService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +19,15 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class ApplicationServiceImpl implements ApplicationService {
+public class GraphServiceImpl implements GraphService {
     @Autowired
     private ApplicationRepository appRepo;
+
+    @Autowired
+    private MethodRepository methodRepo;
+
+    @Autowired
+    private ConsumesRelationshipRepository consumesRelationshipRepo;
 
     @Override
     public void save(Application app) {
@@ -42,13 +50,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Method findMethodOfApplication(Application providingApp, String methodName, Integer methodVersion) {
-        return appRepo.findMethodOfApplication(providingApp, methodName, methodVersion);
+    public Method findProvidedMethodOfApplication(Application providingApp, String methodName, Integer methodVersion) {
+        return methodRepo.findProvidedMethodOfApplication(providingApp, methodName, methodVersion);
     }
 
     @Override
     public ConsumeRelationship findRelationship(Application consumingApp, Method consumedMethod) {
-        return appRepo.findRelationship(consumingApp, consumedMethod);
+        return consumesRelationshipRepo.findRelationship(consumingApp, consumedMethod);
     }
 
 }

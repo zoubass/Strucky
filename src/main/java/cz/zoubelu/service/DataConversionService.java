@@ -8,6 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface DataConversionService {
 
-    void convertToGraphData();
+    /**
+     * Convert data of specific period from relational to graph database
+     * This method is scheduled to be called weekly < may vary
+     */
+    //TODO: přidat období, za které vezme data?
+    void convertData();
 
 }
