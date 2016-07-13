@@ -2,6 +2,7 @@ package cz.zoubelu.repository;
 
 import cz.zoubelu.domain.Message;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
 //FIXME: prejmenovat?
 public interface InformaDao {
 
-    List<Message> getInteractionData(/* Časové rozmezí */);
+    List<Message> getInteractionData(Timestamp startDate, Timestamp endDate);
 
     //TODO: tato metoda je zde pouze pro test, je pro vytvoření struktury grafové databáze
     List<String> getApplicationsInPlatform();

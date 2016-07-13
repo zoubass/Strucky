@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +30,7 @@ public class DataConversionTest extends AbstractTest {
     @Autowired
     private InformaDao informaDao;
 
-    @Before
+//    @Before
     public void createDbStructure() {
         List<String> appsInDb = informaDao.getApplicationsInPlatform();
         List<Application> applications = new ArrayList<Application>();
@@ -45,10 +46,12 @@ public class DataConversionTest extends AbstractTest {
         graphService.save(applications);
     }
 
-    @Test
+//    @Test
     public void shouldConvertFromRDBMToGraph() {
         Assert.assertNotNull(dataConversion);
-        dataConversion.convertData();
+        Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
+        Timestamp end = Timestamp.valueOf("2016-06-07 23:59:00.0");
+        dataConversion.convertData(start, end);
         //TODO: otestovat
         Assert.assertEquals("", "");
     }

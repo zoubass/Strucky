@@ -5,6 +5,7 @@ import cz.zoubelu.repository.mapper.InteractionMapper;
 import cz.zoubelu.domain.Message;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -23,17 +24,17 @@ public class InformaDaoImpl implements InformaDao {
     //TODO: neskládat SQL jako literály
 
     @Override
-    public List<Message> getInteractionData() {
-        return this.jdbcTemplate.query("select * from " + TABLE_NAME, new InteractionMapper());
+    public List<Message> getInteractionData(Timestamp start, Timestamp end) {
+        return this.jdbcTemplate.query("select * from " + TABLE_NAME + " where request_time between ? and ?",new InteractionMapper(), start, end);
     }
 
     @Override
     public List<String> getApplicationsInPlatform() {
-        return this.jdbcTemplate.queryForList("select distinct application from " + TABLE_NAME,String.class);
+        return this.jdbcTemplate.queryForList("select distinct application from " + TABLE_NAME, String.class);
     }
 
     @Override
     public List<String> getMethodOfApplication(String application) {
-        return this.jdbcTemplate.queryForList("select distinct msg_type from MESSAGE where application = ?",new Object[]{application},String.class);
+        return this.jdbcTemplate.queryForList("select distinct msg_type from MESSAGE where application = ?", String.class, application);
     }
 }

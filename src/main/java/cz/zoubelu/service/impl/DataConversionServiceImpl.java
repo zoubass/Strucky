@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,14 +32,14 @@ public class DataConversionServiceImpl implements DataConversionService {
     private boolean isRelationModified = false;
 
     @Override
-    public void convertData() {
-        List<Message> messages = informaDao.getInteractionData();
+    public void convertData(Timestamp startDate, Timestamp endDate) {
+        List<Message> messages = informaDao.getInteractionData(startDate, endDate);
         for (Message msg : messages) {
             Application providingApp = graphService.findByName(msg.getApplication());
             Method consumedMethod = getConsumedMethod(providingApp, msg);
             Application consumingApp = getConsumedApplication(msg);
             createConsumeRelation(consumingApp, consumedMethod);
-            //TODO: what about response? :D
+            //TODO: co treba neco vracet? :D
         }
     }
 
