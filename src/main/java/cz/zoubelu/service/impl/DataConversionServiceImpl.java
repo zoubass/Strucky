@@ -5,6 +5,7 @@ import cz.zoubelu.domain.*;
 import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.service.DataConversionService;
 import cz.zoubelu.service.GraphService;
+import cz.zoubelu.utils.TimeRange;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class DataConversionServiceImpl implements DataConversionService {
     private boolean isRelationModified = false;
 
     @Override
-    public void convertData(Timestamp startDate, Timestamp endDate) {
-        List<Message> messages = informaDao.getInteractionData(startDate, endDate);
+    public void convertData(TimeRange timeRange) {
+        List<Message> messages = informaDao.getInteractionData(timeRange);
         for (Message msg : messages) {
             Application providingApp = graphService.findByName(msg.getApplication());
             Method consumedMethod = getConsumedMethod(providingApp, msg);

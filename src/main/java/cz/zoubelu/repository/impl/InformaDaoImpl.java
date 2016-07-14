@@ -3,6 +3,7 @@ package cz.zoubelu.repository.impl;
 import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.repository.mapper.InteractionMapper;
 import cz.zoubelu.domain.Message;
+import cz.zoubelu.utils.TimeRange;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Timestamp;
@@ -24,8 +25,8 @@ public class InformaDaoImpl implements InformaDao {
     //TODO: neskládat SQL jako literály
 
     @Override
-    public List<Message> getInteractionData(Timestamp start, Timestamp end) {
-        return this.jdbcTemplate.query("select * from " + TABLE_NAME + " where request_time between ? and ?",new InteractionMapper(), start, end);
+    public List<Message> getInteractionData(TimeRange timeRange) {
+        return this.jdbcTemplate.query("select * from " + TABLE_NAME + " where request_time between ? and ?",new InteractionMapper(), timeRange.getStartDate(), timeRange.getEndDate());
     }
 
     @Override

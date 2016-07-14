@@ -1,5 +1,7 @@
 package cz.zoubelu.service;
 
+import cz.zoubelu.utils.TimeRange;
+
 import java.sql.Timestamp;
 
 /**
@@ -11,6 +13,6 @@ public interface DataConversionService {
      * Convert data of specific period from relational to graph database
      * This method is scheduled to be called weekly < may vary
      */
-    void convertData(Timestamp startDate, Timestamp endDate);
+    void convertData(TimeRange timeRange);
 
 }

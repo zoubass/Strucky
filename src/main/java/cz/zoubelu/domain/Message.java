@@ -1,11 +1,15 @@
 package cz.zoubelu.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
+
 import java.sql.Timestamp;
 
 /**
  * Model of one interaction between applications
  * This object represents one row in Message table, INFORMA_LOG database
  */
+@JsonIdentityInfo(generator=JSOGGenerator.class)
 public class Message {
     private Long id;
     private Timestamp request_time;

@@ -8,6 +8,7 @@ import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.ConsumesRelationshipRepository;
 import cz.zoubelu.repository.MethodRepository;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,9 @@ public class CypherQueryTest extends AbstractTest {
         Application modifiedApp = appRepo.findByName("modified");
         Assert.assertEquals(initId, modifiedApp.getId());
 
+    }
+    @After
+    public void clear() {
+        session.purgeDatabase();
     }
 }

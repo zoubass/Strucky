@@ -14,8 +14,6 @@
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
 
-    <neo4j:repositories base-package="cz.zoubelu.repository"/>
-
     <bean id="templateResolver"
           class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/templates/"/>

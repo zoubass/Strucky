@@ -1,6 +1,5 @@
 package cz.zoubelu.domain;
 
-import com.sun.jersey.core.impl.provider.entity.XMLJAXBElementProvider;
 import org.neo4j.ogm.annotation.*;
 
 /**

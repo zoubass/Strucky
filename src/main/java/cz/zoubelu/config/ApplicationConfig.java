@@ -35,7 +35,7 @@ public class ApplicationConfig {
         PropertySourcesPlaceholderConfigurer placeHolder = new PropertySourcesPlaceholderConfigurer();
         placeHolder.setIgnoreResourceNotFound(true);
         placeHolder.setIgnoreUnresolvablePlaceholders(true);
-        //TODO: nejde nacitat vsechny properties v lokaci config?
+        //TODO: nacitat vsechny properties v lokaci config?
         placeHolder.setLocations(new Resource[]{new ClassPathResource("conf/database.properties"), new ClassPathResource("conf/neo4j.properties")});
         return placeHolder;
     }
