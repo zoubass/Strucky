@@ -1,6 +1,6 @@
 package cz.zoubelu.config;
 
-import cz.zoubelu.runnable.impl.ConversionTaskImpl;
+import cz.zoubelu.task.ConversionTaskImpl;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;

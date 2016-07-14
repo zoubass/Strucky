@@ -1,4 +1,4 @@
-package cz.zoubelu.runnable;
+package cz.zoubelu.task;
 
 import it.sauronsoftware.cron4j.TaskExecutionContext;
 

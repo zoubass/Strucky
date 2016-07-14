@@ -1,6 +1,5 @@
-package cz.zoubelu.runnable.impl;
+package cz.zoubelu.task;
 
-import cz.zoubelu.runnable.ConversionTask;
 import cz.zoubelu.service.DataConversionService;
 import cz.zoubelu.utils.DateUtils;
 import it.sauronsoftware.cron4j.Task;
