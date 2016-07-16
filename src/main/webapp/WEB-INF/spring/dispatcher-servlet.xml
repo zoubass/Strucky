@@ -1,7 +1,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:neo4j="http://www.springframework.org/schema/data/neo4j"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -9,10 +8,10 @@
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
     <context:annotation-config/>
-    <context:component-scan base-package="cz.zoubelu.controller"/>
+    <context:component-scan base-package="cz.zoubelu.controller,cz.zoubelu.config"/>
     <mvc:annotation-driven/>
-    <mvc:default-servlet-handler/>
 
     <bean id="templateResolver"
           class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">

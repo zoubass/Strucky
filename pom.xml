@@ -14,7 +14,7 @@
         <junit.version>4.11</junit.version>
         <logback.version>1.0.13</logback.version>
         <slf4j.version>1.7.6</slf4j.version>
-        <spring.version>4.2.4.RELEASE</spring.version>
+        <spring.version>4.2.5.RELEASE</spring.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
         <log4j.version>1.2.17</log4j.version>
         <h2.version>1.4.191</h2.version>
@@ -29,12 +29,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <!--<exclusions>-->
+            <!--<exclusion>-->
+            <!--<groupId>javax.servlet</groupId>-->
+            <!--<artifactId>servlet-api</artifactId>-->
+            <!--</exclusion>-->
+            <!--</exclusions>-->
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -120,7 +120,12 @@
             <artifactId>neo4j-java-driver</artifactId>
             <version>1.0.3</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm</artifactId>
+            <version>1.1.6</version>
+            <!--<type>pom</type>-->
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -162,6 +167,8 @@
             <version>${neo4j.version}</version>
             <type>test-jar</type>
         </dependency>
+        <!--zmena pri prechodu do production-->
+        <!--pridana netestova verze neo4j server-->
         <dependency>
             <groupId>org.neo4j.app</groupId>
             <artifactId>neo4j-server</artifactId>
@@ -178,14 +185,15 @@
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm-test</artifactId>
             <version>2.0.3</version>
-            <scope>test</scope>
+            <!--TODO: vratit zpet na test, poskytuje pristup k http a embedded driveru na test-->
+            <!--<scope>test</scope>-->
         </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-neo4j</artifactId>
-            <version>${spring.data.neo4j}</version>
-            <type>test-jar</type>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.data</groupId>-->
+            <!--<artifactId>spring-data-neo4j</artifactId>-->
+            <!--<version>${spring.data.neo4j}</version>-->
+            <!--<type>test-jar</type>-->
+        <!--</dependency>-->
         <!--JSON-->
         <dependency>
             <groupId>com.voodoodyne.jackson.jsog</groupId>
@@ -193,12 +201,18 @@
             <version>1.1</version>
             <scope>compile</scope>
         </dependency>
+        <!--Scheduler-->
         <dependency>
             <groupId>it.sauronsoftware.cron4j</groupId>
             <artifactId>cron4j</artifactId>
             <version>2.2.5</version>
         </dependency>
-
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

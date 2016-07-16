@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Profile;
  * Created by t922274 on 14.7.2016.
  */
 @Configuration
-@Profile("test")
 public class SchedulerConfig {
 
 	@Bean

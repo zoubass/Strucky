@@ -14,7 +14,7 @@ import org.springframework.data.neo4j.config.Neo4jConfiguration;
 @Profile("production")
 public class GraphConfig extends Neo4jConfiguration {
     private final Logger log = Logger.getLogger(getClass());
-
+/*
     @Value("${neo4j.db.url}")
     private String url;
 
@@ -30,7 +30,6 @@ public class GraphConfig extends Neo4jConfiguration {
                 .setURI(url);
         return config;
     }
-
     @Bean
     public SessionFactory getSessionFactory() {
         return new SessionFactory(getConfiguration(), "cz.zoubelu.domain");
@@ -41,5 +40,17 @@ public class GraphConfig extends Neo4jConfiguration {
     public Session getSession() throws Exception {
         return super.getSession();
     }
+    */
+    @Bean
+    public SessionFactory getSessionFactory() {
+        return new SessionFactory("cz.zoubelu.domain");
+    }
+
+    @Bean
+    public Session getSession() throws Exception {
+        return super.getSession();
+    }
+
+
 
 }

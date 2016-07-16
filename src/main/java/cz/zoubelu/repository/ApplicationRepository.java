@@ -18,6 +18,6 @@ public interface ApplicationRepository extends GraphRepository<Application> {
     @Query("MATCH (a: Application) WHERE a.name={0} RETURN a")
     Application findByName(String name);
 
-    @Query("MATCH (m:Method)<-[:CONSUMES]-(a:Application) RETURN m.name, collect(a.name)")
+    @Query("START n=node(*) MATCH (n)-[r]->(m) RETURN n,r,m")
     List<Map<String, Object>> getGraph();
 }

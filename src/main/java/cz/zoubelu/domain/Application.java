@@ -23,6 +23,7 @@ public class Application {
     @Property(name = "name")
     private String appName;
 
+    //TODO: change to LIST
     @Relationship(type = "PROVIDES", direction = Relationship.OUTGOING)
     private Set<Method> providedMethods;
 

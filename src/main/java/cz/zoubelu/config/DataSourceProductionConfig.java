@@ -10,29 +10,29 @@ import org.springframework.context.annotation.Profile;
 @Profile("production")
 public class DataSourceProductionConfig implements DataSource {
 
-    //TODO: zmenit odkaz na property
-    @Value("${h2.url}")
+    @Value("${url}")
     private String url;
 
-    @Value("${h2.driver}")
+    @Value("${driver}")
     private String driver;
 
-    @Value("${h2.username}")
+    @Value("${username}")
     private String username;
 
-    @Value("${h2.password}")
+    @Value("${password}")
     private String password;
 
+    //TODO: nasadit produkcnim
     @Bean
     public BasicDataSource getDataSource() {
         BasicDataSource bd = new BasicDataSource();
-//        bd.setDriverClassName(driver);
-//        bd.setUrl(url);
-//        bd.setUsername(username);
-//        bd.setPassword(password);
-//        bd.setInitialSize(5);
-//        bd.setMaxActive(10);
-//        bd.setPoolPreparedStatements(true);
+        bd.setDriverClassName(driver);
+        bd.setUrl(url);
+        bd.setUsername(username);
+        bd.setPassword(password);
+        bd.setInitialSize(5);
+        bd.setMaxActive(10);
+        bd.setPoolPreparedStatements(true);
         return bd;
     }
 }

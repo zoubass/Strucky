@@ -13,17 +13,17 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Created by zoubas
  */
 @Configuration
-@ComponentScan(basePackages = {"cz.zoubelu.controller", "cz.zoubelu.service"})
+@ComponentScan(basePackages = {"cz.zoubelu.service"})
 //TODO: presunout neo4j repositories do graph configurace a zarovne tedy
 // udelat jednu konfiguraci, ktera provede funkce jenz maji produkcni a testovaci spolecne...
 @EnableNeo4jRepositories(basePackages = "cz.zoubelu.repository")
 @EnableTransactionManagement
-//@PropertySource("classpath:database.properties")
 public class ApplicationConfig {
     private final Logger log = Logger.getLogger(getClass());
 
