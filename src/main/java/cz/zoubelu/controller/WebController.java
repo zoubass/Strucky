@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class WebController {
 
-//    @Autowired
-//    private Visualization visualization;
-
     @Autowired
     private GraphService graphService;
 
@@ -22,11 +19,11 @@ public class WebController {
 
     @RequestMapping(value = ("/index"), method = RequestMethod.GET)
     public String helloWorld() {
-        Application app = new Application("newApp", null);
-        graphService.save(app);
-        Application a = graphService.findByName("newApp");
+
         return "index";
     }
+
+
 
     @RequestMapping(value = ("/scheduler"), method = RequestMethod.GET)
     public String configScheduler() {

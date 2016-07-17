@@ -2,6 +2,8 @@ package cz.zoubelu.config;
 
 import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.repository.impl.InformaDaoImpl;
+import cz.zoubelu.service.Visualization;
+import cz.zoubelu.service.impl.VisualizationImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +50,11 @@ public class ApplicationConfig {
     @Bean
     public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(dataSource.getDataSource());
+    }
+
+    @Bean
+    public Visualization getVisualization() {
+        return new VisualizationImpl();
     }
 
 }

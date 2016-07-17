@@ -6,6 +6,7 @@ import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.service.GraphService;
+import cz.zoubelu.service.Visualization;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,34 +22,45 @@ import java.util.Set;
  */
 public class GraphDbTest extends AbstractTest {
 
-	private List<Application> getAppNode() {
-		Assert.assertNotNull(graphService);
-		Set<Method> providedMethods = new HashSet<Method>();
-		providedMethods.add(new Method("getClientValue", 154));
-		Application providingApp = new Application("providingApp", providedMethods);
-		Application consumingApp = new Application("consumingApp", null);
-		ConsumeRelationship consumeRelationship = new ConsumeRelationship();
-		consumeRelationship.setApplication(consumingApp);
-		consumeRelationship.setMethod(providedMethods.iterator().next());
-		consumingApp.setConsumeRelationship(Lists.newArrayList(consumeRelationship));
+    @Autowired
+    private Visualization visualization;
 
-		return Lists.newArrayList(consumingApp, providingApp);
-	}
+    private List<Application> getAppNode() {
+        Assert.assertNotNull(graphService);
+        Set<Method> providedMethods = new HashSet<Method>();
+        providedMethods.add(new Method("getClientValue", 100));
+        Application providingApp = new Application("providingApp", providedMethods);
+        Application consumingApp = new Application("consumingApp", null);
+        ConsumeRelationship consumeRelationship = new ConsumeRelationship();
+        consumeRelationship.setApplication(consumingApp);
+        consumeRelationship.setMethod(providedMethods.iterator().next());
+        consumingApp.setConsumeRelationship(Lists.newArrayList(consumeRelationship));
 
-	@Test public void shouldSaveAppAndRetrieveInformation() {
-		for (Application app : getAppNode()) {
-			graphService.save(app);
-		}
-		List<Application> apps = graphService.findAll();
+        return Lists.newArrayList(consumingApp, providingApp);
+    }
 
-		Assert.assertNotNull(apps.get(0));
-		String consumedMethodName = apps.get(0).getConsumeRelationship().get(0).getMethod().getName();
+    @Test
+    public void shouldSaveAppAndRetrieveInformation() {
+        //TODO: zmenit vytvoreni dat na @Before a nebrat si to z metody getAppNode
+        graphService.save(getAppNode());
+        List<Application> apps = graphService.findAll();
 
-		Assert.assertEquals("consumingApp", apps.get(0).getAppName());
-		Assert.assertEquals("getClientValue", consumedMethodName);
-	}
+        Assert.assertNotNull(apps.get(0));
+        String consumedMethodName = apps.get(0).getConsumeRelationship().get(0).getMethod().getName();
 
-	@After public void clear() {
-		session.purgeDatabase();
-	}
+        Assert.assertEquals("consumingApp", apps.get(0).getAppName());
+        Assert.assertEquals("getClientValue", consumedMethodName);
+    }
+
+    @Test
+    public void testVisualizeJson() {
+        //TODO: Stejny jak vyse
+        graphService.save(getAppNode());
+        visualization.visualizeGraph();
+    }
+
+    @After
+    public void clear() {
+        session.purgeDatabase();
+    }
 }
