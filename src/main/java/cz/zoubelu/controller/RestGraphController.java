@@ -43,25 +43,21 @@ public class RestGraphController {
 
 
     @RequestMapping("/graph")
-    public
-    @ResponseBody
-    Map<String, Object> test() {
+    public @ResponseBody Map<String, Object> test() {
+
         return visualization.visualizeGraph();
     }
 
-    Application app = new Application("newApp", null);
-
 
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
-    public
-    @ResponseBody
-    void saveApp() {
-        graphService.save(createSmallExample());
+    public @ResponseBody Application saveApp() {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 23:59:00.0");
-//        dataConversionService.convertData(new TimeRange(start, end));
+        dataConversionService.convertData(new TimeRange(start, end));
+        return graphService.findByName("czgearnix");
     }
 
+/*
     private List<Application> createSmallExample() {
         Set<Method> providedMethods = new HashSet<Method>();
         providedMethods.add(new Method("getClientValue", 100));
@@ -89,4 +85,5 @@ public class RestGraphController {
         }
         return applications;
     }
+    */
 }

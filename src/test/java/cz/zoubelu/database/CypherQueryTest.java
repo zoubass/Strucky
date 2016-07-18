@@ -1,7 +1,6 @@
 package cz.zoubelu.database;
 
 import com.google.common.collect.Lists;
-import com.sun.jersey.core.impl.provider.entity.XMLJAXBElementProvider;
 import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Method;
@@ -14,6 +13,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,10 +30,8 @@ public class CypherQueryTest extends AbstractTest {
     @Autowired
     private ConsumesRelationshipRepository consumeRelationshipRepo;
 
-    private Set<Method> initMethods() {
-        Set<Method> methods = new HashSet<Method>();
-        methods.add(new Method("ping", 1));
-        return methods;
+    private List<Method> initMethods() {
+        return Lists.newArrayList(new Method("ping", 1));
     }
 
     @Test
@@ -74,7 +72,7 @@ public class CypherQueryTest extends AbstractTest {
         appRepo.save(new Application("test", null));
         Application app = appRepo.findByName("test");
         Long initId = app.getId();
-        app.setAppName("modified");
+        app.setName("modified");
         appRepo.save(app);
         Application modifiedApp = appRepo.findByName("modified");
         Assert.assertEquals(initId, modifiedApp.getId());

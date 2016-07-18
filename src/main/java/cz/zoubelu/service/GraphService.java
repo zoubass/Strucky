@@ -11,9 +11,11 @@ import java.util.List;
  */
 public interface GraphService {
 
-    void save(Application app);
+    void saveApp(Application app);
 
-    void save(List<Application> apps);
+    void saveApps(List<Application> apps);
+
+    void saveRel(ConsumeRelationship rel);
 
     List<Application> findAll();
 

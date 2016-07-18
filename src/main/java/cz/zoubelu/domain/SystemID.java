@@ -83,7 +83,10 @@ public enum SystemID {
     }
 
     public static String getSystemByID(Integer id) {
-//        if(id==null) throw new MissingSourceSystemId();
+        if(id==null) {
+//            throw new IllegalArgumentException("System ID cannot be null");
+            return "missing";
+        }
         for (SystemID system : values()) {
             if ((id).equals(system.getID())) {
                 return system.name();

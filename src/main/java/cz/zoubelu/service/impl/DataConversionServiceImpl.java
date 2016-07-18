@@ -6,15 +6,13 @@ import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.service.DataConversionService;
 import cz.zoubelu.service.GraphService;
 import cz.zoubelu.utils.TimeRange;
-import edu.emory.mathcs.backport.java.util.Arrays;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zoubas on 10.7.16.
@@ -22,6 +20,7 @@ import java.util.Set;
 @Service
 @Transactional
 public class DataConversionServiceImpl implements DataConversionService {
+	private final Logger log = Logger.getLogger(getClass());
 
     @Autowired
     private InformaDao informaDao;
@@ -29,75 +28,83 @@ public class DataConversionServiceImpl implements DataConversionService {
     @Autowired
     private GraphService graphService;
 
-    private boolean isAppModified = false;
-    private boolean isRelationModified = false;
 
     @Override
-    public void convertData(TimeRange timeRange) {
-        List<Message> messages = informaDao.getInteractionData(timeRange);
-        for (Message msg : messages) {
-            Application providingApp = graphService.findByName(msg.getApplication());
-            Method consumedMethod = getConsumedMethod(providingApp, msg);
-            Application consumingApp = getConsumedApplication(msg);
-            createConsumeRelation(consumingApp, consumedMethod);
-            //TODO: co treba neco vracet? :D
-        }
-    }
+	public void convertData(TimeRange timeRange) {
+		log.info("Starting conversion.");
+		List<Message> messages = informaDao.getInteractionData(timeRange);
+		for (Message msg : messages) {
+			Application providingApp = graphService.findByName(msg.getApplication());
+			Method consumedMethod = getConsumedMethod(providingApp, msg);
+			Application consumingApp = getConsumerApplication(msg);
 
-    //TODO: opakuje se mi stejny vzor if(true) init object if (object null) action >> else action
-    private Method getConsumedMethod(Application app, Message msg) {
-        Method method;
-        if (app != null) {
-            method = graphService.findProvidedMethodOfApplication(app, msg.getMsg_type(), msg.getMsg_version());
-            if (method == null) {
-                method = createMethodSet(msg);
-                app.getProvidedMethods().add(method);
-                graphService.save(app);
-            }
-        } else {
-            // pokud neexistuje aplikace, vytvoří se a vratí se její, také vytvořená, metoda
-            method = createMethodSet(msg);
-            Set<Method> methods = new HashSet(Arrays.asList(new Method[]{method}));
-            Application providingApp = new Application(msg.getApplication(), methods);
-            graphService.save(providingApp);
-        }
-        return method;
-    }
+			log.info(String.format("Prepared relationship - Consumer: %s, Method: %s.",consumingApp.getName(), consumedMethod.getName()));
 
-    //TODO: opakuje se mi stejny vzor if(true) init object if (object null) action >> else action
-    private Application getConsumedApplication(Message msg) {
+			createConsumeRelation(consumingApp, consumedMethod);
+			//TODO: vratit result
+		}
+	}
+
+	private Method getConsumedMethod(Application app, Message msg) {
+		if (app != null) {
+			Method method = graphService.findProvidedMethodOfApplication(app, msg.getMsg_type(), msg.getMsg_version());
+			return getOrCreateMethod(app, method, msg);
+		} else {
+			log.debug(String.format("Application %s not found in graph database, creating new one.",msg.getApplication()));
+			app = new Application(msg.getApplication(), new ArrayList<Method>());
+			return getOrCreateMethod(app, null, msg);
+		}
+	}
+
+	private Method getOrCreateMethod(Application app, Method method, Message msg) {
+		if (method != null) {
+			return method;
+		} else {
+			log.debug(String.format("Creating method: %s, version: %s for app %s.",msg.getMsg_type(),msg.getMsg_version(),app.getName()));
+			method = new Method(msg.getMsg_type(), msg.getMsg_version());
+
+			if (app.getProvidedMethods() != null) {
+				app.getProvidedMethods().add(method);
+			} else {
+				app.setProvidedMethods(Lists.newArrayList(method));
+			}
+			graphService.saveApp(app);
+			log.debug(String.format("Application: %s successfully saved.",app.getName()));
+			return method;
+		}
+	}
+
+    private Application getConsumerApplication(Message msg) {
         Application consumer;
-        String system = SystemID.getSystemByID(msg.getMsg_src_sys());
-        if (system != null) {
-            consumer = graphService.findByName(system);
-            if (consumer == null) {
-                consumer = createConsumerApp(system);
-            }
-        } else {
-            // neni v ciselniku konzumentů, vytvori se novy node
+        String systemName = SystemID.getSystemByID(msg.getMsg_src_sys());
+        if (systemName != null) {
+            consumer = graphService.findByName(systemName);
+            return (consumer != null) ? consumer : createConsumerApp(systemName);
+		} else {
             consumer = createConsumerApp(msg.getMsg_src_sys().toString());
         }
         return consumer;
     }
 
-    private void createConsumeRelation(Application consumer, Method method) {
-        ConsumeRelationship consumeRelationship = graphService.findRelationship(consumer, method);
-        if (consumeRelationship != null) {
-            consumeRelationship.setTotalUsage(consumeRelationship.getTotalUsage() + 1);
-        } else {
-            consumer.setConsumeRelationship(Lists.newArrayList(new ConsumeRelationship(consumer, method, 1L)));
-        }
-    }
 
-    private final Method createMethodSet(Message msg) {
-        //TODO: zobecnit a nebo se zamyslet zda to teda potrebuju?
-        return new Method(msg.getMsg_type(), msg.getMsg_version());
-    }
+	private Application createConsumerApp(String name) {
+		Application consumer = new Application(name, new ArrayList<Method>());
+		graphService.saveApp(consumer);
+		return consumer;
+	}
 
-    private final Application createConsumerApp(String name) {
-        Application consumer = new Application(name, null);
-        graphService.save(consumer);
-        return consumer;
-    }
+	private void createConsumeRelation(Application consumer, Method method) {
+		ConsumeRelationship consumeRelationship = graphService.findRelationship(consumer, method);
+		if (consumeRelationship != null) {
+			log.debug(String.format("Relationship: %s CONSUMES -> %s, already exists, incrementing total usage by 1.",consumer.getName(),method.getName()));
+			consumeRelationship.setTotalUsage(consumeRelationship.getTotalUsage() + 1);
+		} else {
+			log.debug(String.format("Creating new relationship: %s CONSUMES -> %s.",consumer.getName(),method.getName()));
+			consumeRelationship = new ConsumeRelationship(consumer, method, 1L);
+			consumer.setConsumeRelationship(Lists.newArrayList(consumeRelationship));
+			graphService.saveApp(consumer);
+		}
+		graphService.saveRel(consumeRelationship);
+	}
 
 }

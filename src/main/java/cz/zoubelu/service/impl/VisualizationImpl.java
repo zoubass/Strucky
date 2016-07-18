@@ -14,6 +14,7 @@ public class VisualizationImpl implements Visualization {
     private ApplicationRepository appRepo;
 
     private Map<String, Object> toD3Format(Iterator<Map<String, Object>> result) {
+        //TODO: opravit
         List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> rels = new ArrayList<Map<String, Object>>();
         int i = 0;

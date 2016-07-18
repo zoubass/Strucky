@@ -12,16 +12,15 @@
     </context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <!--TODO: nemohu mít jen cz.zoubelu.config.*?-->
         <param-value>
-            cz.zoubelu.config.*
+            cz.zoubelu.config.ApplicationConfig,
+            cz.zoubelu.config.DataSourceProductionConfig,
+            cz.zoubelu.config.GraphConfig,
+            cz.zoubelu.config.SchedulerConfig
         </param-value>
-        <!--cz.zoubelu.config.DataSourceTestConfig,-->
-        <!--cz.zoubelu.config.DataSourceProductionConfig,-->
-        <!--cz.zoubelu.config.GraphConfig-->
+
     </context-param>
     <context-param>
-        <!--TODO: change profile-->
         <param-name>spring.profiles.active</param-name>
         <param-value>production</param-value>
     </context-param>

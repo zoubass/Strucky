@@ -24,10 +24,9 @@ public class WebController {
     }
 
 
-
     @RequestMapping(value = ("/scheduler"), method = RequestMethod.GET)
     public String configScheduler() {
-        //TODO: implement
+        //TODO: konfigurace scheduleru pres UI?
         return "";
     }
 }

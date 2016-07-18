@@ -31,13 +31,18 @@ public class GraphServiceImpl implements GraphService {
     private ConsumesRelationshipRepository consumesRelationshipRepo;
 
     @Override
-    public void save(Application app) {
+    public void saveApp(Application app) {
         appRepo.save(app);
     }
 
     @Override
-    public void save(List<Application> apps) {
+    public void saveApps(List<Application> apps) {
         appRepo.save(apps);
+    }
+
+    @Override
+    public void saveRel(ConsumeRelationship rel) {
+        consumesRelationshipRepo.save(rel);
     }
 
     @Override

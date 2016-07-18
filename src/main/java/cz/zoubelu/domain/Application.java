@@ -8,7 +8,6 @@ import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by zoubas on 3.6.16.
@@ -20,12 +19,14 @@ public class Application {
     @GraphId
     private Long id;
 
-    @Property(name = "name")
-    private String appName;
+    @Property(name = "systemId")
+    private Integer systemId;
 
-    //TODO: change to LIST
+    @Property(name = "name")
+    private String name;
+
     @Relationship(type = "PROVIDES", direction = Relationship.OUTGOING)
-    private Set<Method> providedMethods;
+    private List<Method> providedMethods;
 
     @Relationship(type = "CONSUMES", direction = Relationship.OUTGOING)
     private List<ConsumeRelationship> consumeRelationship;
@@ -33,8 +34,8 @@ public class Application {
     public Application(){
 
     }
-    public Application(String appName, Set<Method> providedMethods) {
-        this.appName = appName;
+    public Application(String name, List<Method> providedMethods) {
+        this.name = name;
         this.providedMethods = providedMethods;
     }
 
@@ -47,20 +48,12 @@ public class Application {
         this.id = id;
     }
 
-    public String getAppName() {
-        return appName;
+    public String getName() {
+        return name;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    public Set<Method> getProvidedMethods() {
-        return providedMethods;
-    }
-
-    public void setProvidedMethods(Set<Method> providedMethods) {
-        this.providedMethods = providedMethods;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<ConsumeRelationship> getConsumeRelationship() {
@@ -69,5 +62,21 @@ public class Application {
 
     public void setConsumeRelationship(List<ConsumeRelationship> consumeRelationship) {
         this.consumeRelationship = consumeRelationship;
+    }
+
+    public Integer getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(Integer systemId) {
+        this.systemId = systemId;
+    }
+
+    public List<Method> getProvidedMethods() {
+        return providedMethods;
+    }
+
+    public void setProvidedMethods(List<Method> providedMethods) {
+        this.providedMethods = providedMethods;
     }
 }

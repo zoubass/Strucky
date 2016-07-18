@@ -15,6 +15,12 @@ public class Method {
     @GraphId
     private Long id;
 
+    @Property(name="name")
+    private String name;
+
+    @Property(name = "version")
+    private Integer version;
+
     public Method() {
 
     }
@@ -23,12 +29,6 @@ public class Method {
         this.name = name;
         this.version = version;
     }
-
-    @Property(name="name")
-    private String name;
-
-    @Property(name = "version")
-    private Integer version;
 
     public Long getId() {
         return id;
