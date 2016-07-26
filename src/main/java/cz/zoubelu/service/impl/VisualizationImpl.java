@@ -1,5 +1,7 @@
 package cz.zoubelu.service.impl;
 
+import cz.zoubelu.domain.Application;
+import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.service.Visualization;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +22,15 @@ public class VisualizationImpl implements Visualization {
         int i = 0;
         while (result.hasNext()) {
             Map<String, Object> row = result.next();
-            nodes.add(map("title", row.get("application"), "label", "application"));
-            Map<String, Object> method = map("title", row.get("method"), "label", "method");
+            nodes.add(map("label", "application", "title", ((Application)row.get("application")).getName()));
+            Map<String, Object> method = map("label", "method", "title", ((Method)row.get("method")).getName());
             int target = nodes.indexOf(method);
             if (target == -1) {
                 nodes.add(method);
                 target = i++;
             }
-            rels.add(map("source", i, "target", target));
+//            if(row.get("rel");
+            rels.add(mapRelation("source", i, "target", target,"type","PROVIDES","count", "0"));
         }
         return map("nodes", nodes, "links", rels);
     }
@@ -36,6 +39,14 @@ public class VisualizationImpl implements Visualization {
         Map<String, Object> result = new HashMap<String, Object>(2);
         result.put(key1, value1);
         result.put(key2, value2);
+        return result;
+    }
+    private Map<String, Object> mapRelation(String key1, Object value1, String key2, Object value2,String key3, Object value3,String key4, Object value4) {
+        Map<String, Object> result = new HashMap<String, Object>(2);
+        result.put(key1, value1);
+        result.put(key2, value2);
+        result.put(key3, value3);
+        result.put(key4, value4);
         return result;
     }
 

@@ -2,21 +2,18 @@ package cz.zoubelu.controller;
 
 
 import com.google.common.collect.Lists;
-import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.Message;
-import cz.zoubelu.domain.SystemID;
+import cz.zoubelu.utils.SystemID;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
-import cz.zoubelu.utils.TimeRange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -46,9 +43,9 @@ public class RestGraphController {
 
 
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
-    public @ResponseBody Application saveApp() {
+    public @ResponseBody Map<String, Object> saveApp() {
         dataConversion.convertData(createMessages());
-        return applicationRepo.findByName("NHUGO");
+        return visualization.visualizeGraph();
     }
 
 
