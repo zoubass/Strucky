@@ -33,7 +33,7 @@ public enum SystemID {
     CZGLISA(141),
     PEGAS_KUKÁTKO(100),
     SCA(101),
-    poradce(102),
+    PORADCE(102),
     HUGO(103),
     FAC_APP(104),
     POVINNÉ_RUČENÍ_IPAD(105),
@@ -78,7 +78,7 @@ public enum SystemID {
         this.id = id;
     }
 
-    Integer getID() {
+    public Integer getID() {
         return this.id;
     }
 

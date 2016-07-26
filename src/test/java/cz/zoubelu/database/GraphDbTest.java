@@ -25,7 +25,7 @@ public class GraphDbTest extends AbstractTest {
     private Visualization visualization;
 
     private List<Application> getAppNode() {
-        Assert.assertNotNull(graphService);
+        Assert.assertNotNull(applicationRepo);
         List<Method> providedMethods = new ArrayList<>();
         providedMethods.add(new Method("getClientValue", 100));
         Application providingApp = new Application("providingApp", providedMethods);
@@ -41,8 +41,8 @@ public class GraphDbTest extends AbstractTest {
     @Test
     public void shouldSaveAppAndRetrieveInformation() {
         //TODO: zmenit vytvoreni dat na @Before a nebrat si to z metody getAppNode
-        graphService.saveApps(getAppNode());
-        List<Application> apps = graphService.findAll();
+        applicationRepo.save(getAppNode());
+        List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
 
         Assert.assertNotNull(apps.get(0));
         String consumedMethodName = apps.get(0).getConsumeRelationship().get(0).getMethod().getName();
@@ -54,7 +54,7 @@ public class GraphDbTest extends AbstractTest {
     @Test
     public void testVisualizeJson() {
         //TODO: Stejny jak vyse
-        graphService.saveApps(getAppNode());
+        applicationRepo.save(getAppNode());
         visualization.visualizeGraph();
     }
 

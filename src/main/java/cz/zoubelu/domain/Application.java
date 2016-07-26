@@ -31,13 +31,21 @@ public class Application {
     @Relationship(type = "CONSUMES", direction = Relationship.OUTGOING)
     private List<ConsumeRelationship> consumeRelationship;
 
+	//default constructor
     public Application(){
 
-    }
-    public Application(String name, List<Method> providedMethods) {
-        this.name = name;
-        this.providedMethods = providedMethods;
-    }
+	}
+
+	public Application(String name, List<Method> providedMethods) {
+		this.name = name;
+		this.providedMethods = providedMethods;
+	}
+
+	public Application(String name, Integer systemId, List<Method> providedMethods) {
+		this.name = name;
+		this.providedMethods = providedMethods;
+		this.systemId = systemId;
+	}
 
 
     public Long getId() {

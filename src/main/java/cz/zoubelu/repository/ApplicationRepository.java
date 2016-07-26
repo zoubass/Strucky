@@ -14,9 +14,11 @@ import java.util.Map;
  * Created by zoubas on 25.6.16.
  */
 public interface ApplicationRepository extends GraphRepository<Application> {
-    //FIXME: opravit cypher scripty
     @Query("MATCH (a: Application) WHERE a.name={0} RETURN a")
     Application findByName(String name);
+
+    @Query("MATCH (a: Application) WHERE a.systemId={0} RETURN a")
+    Application findBySystemId(String name);
 
     @Query("START n=node(*) MATCH (n)-[r]->(m) RETURN n as application,r as rel,m as method")
     List<Map<String, Object>> getGraph();

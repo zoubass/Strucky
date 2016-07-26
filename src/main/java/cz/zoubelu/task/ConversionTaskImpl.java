@@ -1,6 +1,6 @@
 package cz.zoubelu.task;
 
-import cz.zoubelu.service.DataConversionService;
+import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.utils.DateUtils;
 import it.sauronsoftware.cron4j.Task;
 import it.sauronsoftware.cron4j.TaskExecutionContext;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ConversionTaskImpl extends Task implements ConversionTask {
 
 	@Autowired
-	private DataConversionService conversionService;
+	private DataConversion conversionService;
 
 	@Override
 	public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {

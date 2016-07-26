@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 /**
  * Created by zoubas on 12.7.16.
  */
-public interface ConsumesRelationshipRepository extends GraphRepository<ConsumeRelationship> {
+public interface RelationshipRepository extends GraphRepository<ConsumeRelationship> {
 
     @Query("MATCH (m:Method)<-[c:CONSUMES]-(a:Application) WHERE id(m)={mId} AND id(a)={appId} RETURN c")
     ConsumeRelationship findRelationship(@Param("appId") Application consumingApp, @Param("mId") Method consumedMethod);
