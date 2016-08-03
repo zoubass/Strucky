@@ -9,7 +9,7 @@ import java.sql.SQLException;
 /**
  * Created by zoubas on 21.5.16.
  */
-public class InteractionMapper implements RowMapper<Message> {
+public class MessageMapper implements RowMapper<Message> {
 
     public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
         Message informalog = new Message();

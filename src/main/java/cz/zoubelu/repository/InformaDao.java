@@ -14,9 +14,4 @@ public interface InformaDao {
 
     List<Message> getInteractionData(TimeRange timeRange);
 
-    //TODO: tato metoda je zde pouze pro test, je pro vytvoření struktury grafové databáze
-    List<String> getApplicationsInPlatform();
-
-    List<String> getMethodOfApplication(String application);
-
 }

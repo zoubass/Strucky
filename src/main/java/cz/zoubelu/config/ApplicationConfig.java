@@ -4,8 +4,11 @@ import cz.zoubelu.repository.InformaDao;
 import cz.zoubelu.repository.impl.InformaDaoImpl;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.service.impl.VisualizationImpl;
-import org.apache.log4j.Logger;
+import cz.zoubelu.validation.Validator;
+import cz.zoubelu.validation.impl.MessageValidator;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,22 +18,41 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Created by zoubas
  */
 @Configuration
 @ComponentScan(basePackages = {"cz.zoubelu.service"})
-//TODO: presunout neo4j repositories do graph configurace a zarovne tedy
-// udelat jednu konfiguraci, ktera provede funkce jenz maji produkcni a testovaci spolecne...
 @EnableNeo4jRepositories(basePackages = "cz.zoubelu.repository")
 @EnableTransactionManagement
 public class ApplicationConfig {
-    private final Logger log = Logger.getLogger(getClass());
 
-    @Autowired
-    private DataSource dataSource;
+    @Value("${url}")
+    private String url;
+
+    @Value("${driver}")
+    private String driver;
+
+    @Value("${username}")
+    private String username;
+
+    @Value("${password}")
+    private String password;
+
+
+    @Bean
+    public BasicDataSource getDataSource() {
+        BasicDataSource bd = new BasicDataSource();
+        bd.setDriverClassName(driver);
+        bd.setUrl(url);
+        bd.setUsername(username);
+        bd.setPassword(password);
+        bd.setInitialSize(5);
+        bd.setMaxActive(10);
+        bd.setPoolPreparedStatements(true);
+        return bd;
+    }
 
     @Bean
     private static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
@@ -49,12 +71,17 @@ public class ApplicationConfig {
 
     @Bean
     public JdbcTemplate getJdbcTemplate() {
-        return new JdbcTemplate(dataSource.getDataSource());
+        return new JdbcTemplate(getDataSource());
     }
 
     @Bean
     public Visualization getVisualization() {
         return new VisualizationImpl();
+    }
+
+    @Bean
+    public Validator getValidator() {
+        return new MessageValidator();
     }
 
 }

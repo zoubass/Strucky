@@ -1,12 +1,11 @@
 package cz.zoubelu.repository.impl;
 
 import cz.zoubelu.repository.InformaDao;
-import cz.zoubelu.repository.mapper.InteractionMapper;
+import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.domain.Message;
 import cz.zoubelu.utils.TimeRange;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -16,26 +15,18 @@ public class InformaDaoImpl implements InformaDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private static final String TABLE_NAME = "MESSAGE";
-
     public InformaDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //TODO: neskládat SQL jako literály
-
     @Override
     public List<Message> getInteractionData(TimeRange timeRange) {
-        return this.jdbcTemplate.query("select * from " + TABLE_NAME + " where request_time between ? and ?",new InteractionMapper(), timeRange.getStartDate(), timeRange.getEndDate());
+        String tableName = "MESSAGE"; /*getTableName();*/
+        return this.jdbcTemplate.query("select * from " + tableName + " where request_time between ? and ?",new MessageMapper(), timeRange.getStartDate(), timeRange.getEndDate());
     }
 
-    @Override
-    public List<String> getApplicationsInPlatform() {
-        return this.jdbcTemplate.queryForList("select distinct application from " + TABLE_NAME, String.class);
-    }
-
-    @Override
-    public List<String> getMethodOfApplication(String application) {
-        return this.jdbcTemplate.queryForList("select distinct msg_type from MESSAGE where application = ?", String.class, application);
+    private String getTableName(){
+        //TODO: vytvořit název tabulky na základě aktuálního data
+        return null;
     }
 }

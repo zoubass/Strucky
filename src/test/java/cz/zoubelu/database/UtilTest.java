@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by t922274 on 14.7.2016.
+ * Created by zoubas on 14.7.2016.
  */
 public class UtilTest extends AbstractTest {
 

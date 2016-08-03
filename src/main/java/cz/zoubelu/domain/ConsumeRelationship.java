@@ -1,10 +1,13 @@
 package cz.zoubelu.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import org.neo4j.ogm.annotation.*;
 
 /**
  * Created by zoubas on 9.7.16.
  */
+@JsonIdentityInfo(generator=JSOGGenerator.class)
 @RelationshipEntity(type = "CONSUMES")
 public class ConsumeRelationship {
     @GraphId
@@ -16,9 +19,7 @@ public class ConsumeRelationship {
     @EndNode
     private Method method;
 
-    public ConsumeRelationship() {
-
-    }
+    public ConsumeRelationship() {}
 
     public ConsumeRelationship(Application application, Method method, Long totalUsage) {
         this.application = application;

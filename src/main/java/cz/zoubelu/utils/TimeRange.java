@@ -3,9 +3,8 @@ package cz.zoubelu.utils;
 import java.sql.Timestamp;
 
 /**
- * Created by t922274 on 14.7.2016.
+ * Created by zoubas on 14.7.2016.
  */
-//TODO: presunnout tridu do jineho package
 public class TimeRange {
 	private Timestamp startDate;
 	private Timestamp endDate;

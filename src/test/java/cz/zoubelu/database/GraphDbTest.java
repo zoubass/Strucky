@@ -8,6 +8,7 @@ import cz.zoubelu.domain.Method;
 import cz.zoubelu.service.Visualization;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +25,8 @@ public class GraphDbTest extends AbstractTest {
     @Autowired
     private Visualization visualization;
 
-    private List<Application> getAppNode() {
+    @Before
+    public void getAppNode() {
         Assert.assertNotNull(applicationRepo);
         List<Method> providedMethods = new ArrayList<>();
         providedMethods.add(new Method("getClientValue", 100));
@@ -34,14 +36,11 @@ public class GraphDbTest extends AbstractTest {
         consumeRelationship.setApplication(consumingApp);
         consumeRelationship.setMethod(providedMethods.iterator().next());
         consumingApp.setConsumeRelationship(Lists.newArrayList(consumeRelationship));
-
-        return Lists.newArrayList(consumingApp, providingApp);
+        applicationRepo.save(Lists.newArrayList(consumingApp, providingApp));
     }
 
     @Test
     public void shouldSaveAppAndRetrieveInformation() {
-        //TODO: zmenit vytvoreni dat na @Before a nebrat si to z metody getAppNode
-        applicationRepo.save(getAppNode());
         List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
 
         Assert.assertNotNull(apps.get(0));
@@ -49,13 +48,6 @@ public class GraphDbTest extends AbstractTest {
 
         Assert.assertEquals("consumingApp", apps.get(0).getName());
         Assert.assertEquals("getClientValue", consumedMethodName);
-    }
-
-    @Test
-    public void testVisualizeJson() {
-        //TODO: Stejny jak vyse
-        applicationRepo.save(getAppNode());
-        visualization.visualizeGraph();
     }
 
     @After

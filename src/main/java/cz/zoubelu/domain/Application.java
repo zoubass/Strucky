@@ -2,10 +2,7 @@ package cz.zoubelu.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
-import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class Application {
     private Integer systemId;
 
     @Property(name = "name")
+    @Index
     private String name;
 
     @Relationship(type = "PROVIDES", direction = Relationship.OUTGOING)
@@ -32,9 +30,7 @@ public class Application {
     private List<ConsumeRelationship> consumeRelationship;
 
 	//default constructor
-    public Application(){
-
-	}
+    public Application(){}
 
 	public Application(String name, List<Method> providedMethods) {
 		this.name = name;
@@ -87,4 +83,11 @@ public class Application {
     public void setProvidedMethods(List<Method> providedMethods) {
         this.providedMethods = providedMethods;
     }
+
+//    public List<Method> getConsumedMethods(){
+//        List<Method> consumedMethods;
+//        for (ConsumeRelationship rel: this.consumeRelationship) {
+//            consumedMethods.add(rel.getMethod());
+//        }
+//    }
 }

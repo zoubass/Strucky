@@ -4,7 +4,8 @@ package cz.zoubelu.utils;
  * Created by zoubas on 10.7.16.
  */
 public enum SystemID {
-    //TODO: UPRAVIT NAZVY
+
+    //TODO: přidat parametr name a pod tím aplikaci zobrazovat
     IBM_MB(0),
     CZGUSRMNG(1),
     CZGUCINFO(2),
@@ -26,7 +27,7 @@ public enum SystemID {
     CZGCOMM(19),
     CZGLEADMNG(20),
     CZGBLACKLISTING(21),
-    CZGCONTRACTIMPORTPMV(22),
+    CZGCONTRACTIMPORT(22),
     CZGPROCESSSUPPORT(23),
     CZCTIA(24),
     MONITORING(99),
@@ -66,9 +67,9 @@ public enum SystemID {
     INWEB(1013),
     SMS_FINANČNÍ_PORADENSTVÍ(1014),
     FSS_PARTNERS(1015),
-    volkswagen_financial_services(1016),
-    axima(1017),
-    český_obchodní_servis(1018),
+    VOLKSWAGEN_FINANCIAL_SERVICES(1016),
+    AXIMA(1017),
+    CESKY_OBCHODNI_SERVIS(1018),
     FEDS(1019),
     OVB(1020);
 
@@ -83,16 +84,13 @@ public enum SystemID {
     }
 
     public static String getSystemByID(Integer id) {
-        if(id==null) {
-//            throw new IllegalArgumentException("System ID cannot be null");
-            return "missing";
-        }
         for (SystemID system : values()) {
             if ((id).equals(system.getID())) {
+                // v budoucnu vracet parametr name, viz @SystemID line 8
                 return system.name();
             }
         }
-        return null;
+        return id.toString();
     }
 
 }

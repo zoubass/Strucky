@@ -4,15 +4,12 @@
     import cz.zoubelu.domain.Application;
     import cz.zoubelu.domain.ConsumeRelationship;
     import cz.zoubelu.domain.Method;
-    import cz.zoubelu.repository.ApplicationRepository;
-    import cz.zoubelu.repository.RelationshipRepository;
-    import cz.zoubelu.repository.MethodRepository;
     import org.junit.After;
     import org.junit.Assert;
     import org.junit.Test;
-    import org.springframework.beans.factory.annotation.Autowired;
 
     import java.util.List;
+    import java.util.Map;
 
     /**
      * Created by zoubas on 12.7.16.
@@ -30,7 +27,7 @@
             Application retrievedApp = applicationRepo.findByName("czgearnix");
             //get created method ID
             Long methodId = retrievedApp.getProvidedMethods().iterator().next().getId();
-            Method method = methodRepo.findProvidedMethodOfApplication(app, "ping", 1);
+            Method method = methodRepo.findProvidedMethod(app, "ping", 1);
 
             //Assert the returned method is the same
             Assert.assertEquals(methodId, method.getId());
@@ -65,8 +62,8 @@
             applicationRepo.save(app);
             Application modifiedApp = applicationRepo.findByName("modified");
             Assert.assertEquals(initId, modifiedApp.getId());
-
         }
+
         @After
         public void clear() {
             session.purgeDatabase();

@@ -188,12 +188,6 @@
             <!--TODO: vratit zpet na test, poskytuje pristup k http a embedded driveru na test-->
             <!--<scope>test</scope>-->
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.data</groupId>-->
-            <!--<artifactId>spring-data-neo4j</artifactId>-->
-            <!--<version>${spring.data.neo4j}</version>-->
-            <!--<type>test-jar</type>-->
-        <!--</dependency>-->
         <!--JSON-->
         <dependency>
             <groupId>com.voodoodyne.jackson.jsog</groupId>

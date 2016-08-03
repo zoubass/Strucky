@@ -1,9 +1,10 @@
 package cz.zoubelu.config;
 
-import org.apache.log4j.Logger;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 
 /**
@@ -12,7 +13,6 @@ import org.springframework.data.neo4j.config.Neo4jConfiguration;
 @Configuration
 @Profile("test")
 public class GraphTestConfig extends Neo4jConfiguration {
-    private final Logger log = Logger.getLogger(getClass());
 
     @Bean
     public SessionFactory getSessionFactory() {

@@ -18,8 +18,5 @@ public interface ApplicationRepository extends GraphRepository<Application> {
     Application findByName(String name);
 
     @Query("MATCH (a: Application) WHERE a.systemId={0} RETURN a")
-    Application findBySystemId(String name);
-
-    @Query("START n=node(*) MATCH (n)-[r]->(m) RETURN n as application,r as rel,m as method")
-    List<Map<String, Object>> getGraph();
+    Application findBySystemId(Integer systemId);
 }

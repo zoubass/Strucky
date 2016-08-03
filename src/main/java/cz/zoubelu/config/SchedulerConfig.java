@@ -6,17 +6,15 @@ import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 /**
- * Created by t922274 on 14.7.2016.
+ * Created by zoubas on 14.7.2016.
  */
 @Configuration
 public class SchedulerConfig {
 
 	@Bean
 	public Scheduler scheduler(){
-		//TODO: rozhodnout kde bude scheduler nastavovan, jaky bude scenar jeho pouziti, aby se nemenil pattern za runtime
 		Scheduler s = new Scheduler();
 		//		"59 11 * * Sun" - PRODUCTION PATTERN
 		SchedulingPattern pattern = new SchedulingPattern("* * * * *");

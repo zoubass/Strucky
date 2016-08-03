@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//TODO: Graph config je navic, v pripade kdy poustim jen test pro oracle db, ale ot je prkotina
 @ContextConfiguration(classes = {ApplicationConfig.class, DataSourceTestConfig.class, GraphTestConfig.class,
 		SchedulerConfig.class})
 @ActiveProfiles("test")
