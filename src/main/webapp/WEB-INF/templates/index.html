@@ -36,7 +36,7 @@
     }
 
     .node.application {
-        fill: #BBB;
+        fill: #969696;
         /*opacity: 90;*/
     }
 
@@ -55,10 +55,14 @@
         fill: #e4e218;
     }
 
-    .link {
+    .link.provides {
         stroke: #000;
         stroke-opacity: .6;
         stroke-width: 1px;
+    }
+    .link.consumes {
+        stroke: #00d3ff;
+        stroke-width: 2px;
     }
 
     .title {
@@ -90,7 +94,9 @@
 
         var link = svg.selectAll(".link")
                 .data(graph.links).enter()
-                .append("line").attr("class", "link");
+                .append("line").attr("class", function (d) {
+                    return "link " + d.type
+                });
 
         link.append("type").attr("class", "type").text(function (d) {
             return d.type
