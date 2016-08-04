@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Created by zoubas on 3.6.16.
  */
+//TODO: jaxson
 @JsonIdentityInfo(generator=JSOGGenerator.class)
 @NodeEntity
 public class Application {
