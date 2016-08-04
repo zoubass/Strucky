@@ -84,8 +84,8 @@ public class DataConversionImpl implements DataConversion {
 
     private Application getProvidingApp(Message msg) {
         // vytvořit vyhledání aplikace tak, že si nejdříve zjistí, zda nemá shodu s jménem nebo sysID v číselníku?
-        //SystemID system = SystemID.isInSystem(appNAme,tarID);
-//        if system != null vyhledej a pak kdyz ne tak se chovej
+        // SystemID system = SystemID.isInSystem(appNAme,tarID);
+        // if system != null vyhledej a pak kdyz ne tak přidej
         Application app = applicationRepo.findByName(StringUtils.upperCase(msg.getApplication()));
         return createApplicationIfNull(app, msg.getApplication(), msg.getMsg_tar_sys());
     }
@@ -98,7 +98,6 @@ public class DataConversionImpl implements DataConversion {
 
     private Application getConsumerApplication(Message msg) {
         String systemName = SystemID.getSystemByID(msg.getMsg_src_sys());
-        System.out.println("SYSTEM ID: " + msg.getMsg_src_sys());
         return createApplicationIfNull(applicationRepo.findByName(StringUtils.upperCase(systemName)), systemName, msg.getMsg_src_sys());
     }
 

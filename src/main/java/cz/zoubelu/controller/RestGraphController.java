@@ -70,11 +70,6 @@ public class RestGraphController {
     public List<ConsumeRelationship> getConsumedMethods(@PathVariable("systemId") Integer systemId) {
         NullUtils.nullCheck(systemId);
         Application app = applicationRepo.findBySystemId(systemId);
-//        NullUtils.nullCheck(app);
-//        Map<Method,Long> methods= new HashMap<>();
-//        for (ConsumeRelationship rel:app.getConsumeRelationship()) {
-//            methods.put(rel.getMethod(),rel.getTotalUsage());
-//        }
         return app.getConsumeRelationship();
     }
 
@@ -106,11 +101,10 @@ public class RestGraphController {
 
     // TODO: remove me
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
-    public
     @ResponseBody
-    Map<String, Object> saveApp() {
+    public Map<String, Object> saveApp() {
         Timestamp start = Timestamp.valueOf("2016-06-01 11:00:00.0");
-        Timestamp end = Timestamp.valueOf("2016-06-01 14:00:00.0");
+        Timestamp end = Timestamp.valueOf("2016-06-05 11:00:00.0");
         dataConversion.convertData(new TimeRange(start, end));
         return visualization.visualizeGraph();
     }
