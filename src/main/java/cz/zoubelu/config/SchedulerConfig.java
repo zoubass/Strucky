@@ -4,6 +4,7 @@ import cz.zoubelu.task.ConversionTaskImpl;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,11 +14,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SchedulerConfig {
 
+	@Value("${scheduler.pattern}")
+	private String schedulingPattern;
+
 	@Bean
 	public Scheduler scheduler(){
 		Scheduler s = new Scheduler();
-		//		"59 11 * * Sun" - PRODUCTION PATTERN
-		SchedulingPattern pattern = new SchedulingPattern("* * * * *");
+		SchedulingPattern pattern = new SchedulingPattern(schedulingPattern);
 		s.schedule(pattern,conversionTaskImpl());
 		return s;
 	}

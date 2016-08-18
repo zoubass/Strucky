@@ -9,9 +9,9 @@ import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.utils.NullUtils;
-import cz.zoubelu.utils.SystemID;
+import cz.zoubelu.domain.SystemID;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.repository.InformaDao;
+import cz.zoubelu.repository.InformaRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.utils.TimeRange;
@@ -42,7 +42,7 @@ public class RestGraphController {
     private RelationshipRepository relationRepo;
 
     @Autowired
-    private InformaDao informaDao;
+    private InformaRepository informaRepository;
 
     @Autowired
     private Visualization visualization;
@@ -88,18 +88,34 @@ public class RestGraphController {
     }
 
     /**
-     * Creating JSON which is source for graph view (index.html)
+     * Creating JSON which is source for graph view (visualisation.html)
      *
      * @return Map<String,Object> of all the nodes and relations in the graph as JSON
      */
     @RequestMapping("/graph")
     @ResponseBody
-    public Map<String, Object> test() {
+    public Map<String, Object> visualiseWholeGraph() {
         return visualization.visualizeGraph();
     }
 
 
-    // TODO: remove me
+/*
+    /**
+     * Creating JSON which is source for graph view of a single application and it's relations
+     *
+     * @return Map<String,Object>
+     *
+    @RequestMapping("/appRelations")
+    @ResponseBody
+    public Map<String, Object> visualizeAppRelations(@PathVariable("systemId") String appName) {
+        return visualization.visualizeApplicationRelations(applicationRepo.findByName(appName));
+    }
+*/
+	/**
+     * METODY POD TIMTO KOMENTAREM JSOU NA ODSTRANENI, SLOUZI POUZE PRO TEST
+     *
+     */
+
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> saveApp() {

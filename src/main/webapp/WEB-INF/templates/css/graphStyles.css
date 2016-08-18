@@ -1,0 +1,43 @@
+.node {
+    stroke: #222;
+    stroke-width: 1.5px;
+}
+
+.node.application {
+    fill: #969696;
+    /*opacity: 90;*/
+}
+
+.node.method100 {
+    fill: #b6ff36;
+}
+
+.node.method110 {
+    fill: #0fa106;
+}
+
+.node.method120 {
+    fill: #03510d;
+}
+.node.method0 {
+    fill: #e4e218;
+}
+
+.link.provides {
+    stroke: #000;
+    stroke-opacity: .6;
+    stroke-width: 1px;
+}
+.link.consumes {
+    stroke: #00d3ff;
+    stroke-width: 2px;
+}
+
+.title {
+    text-decoration-color: aliceblue;
+}
+
+.type {
+    stroke: #F00;
+    stroke-width: 1px;
+}

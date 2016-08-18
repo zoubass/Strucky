@@ -18,7 +18,9 @@ public interface RelationshipRepository extends GraphRepository<ConsumeRelations
     @Query("MATCH (m:Method)<-[c:CONSUMES]-(a:Application) WHERE id(m)={mId} AND id(a)={appId} RETURN c")
     ConsumeRelationship findRelationship(@Param("appId") Application consumingApp, @Param("mId") Method consumedMethod);
 
-    //TODO: opravit query
     @Query("START n=node(*) MATCH (n)-[r]->(m) RETURN n as application,r as rel,m as method")
     List<Map<String, Object>> getGraph();
+
+    @Query("START a=node(*) MATCH (a)-[r]->(m)  WHERE id(a)={appId} RETURN a as application,r as rel,m as method")
+    List<Map<String, Object>> getApplicationRelationships(@Param("appId") Application application);
 }

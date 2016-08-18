@@ -7,7 +7,7 @@ import cz.zoubelu.domain.Message;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
-import cz.zoubelu.utils.SystemID;
+import cz.zoubelu.domain.SystemID;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.Scheduler;
 import org.junit.After;
@@ -58,7 +58,7 @@ public class DataConversionTest extends AbstractTest {
     }
 
 
-    @Test
+//    @Test
     public void testScheduling() throws Exception {
         scheduler.start();
         Thread.sleep(1000L * 60L * 1L);
@@ -119,11 +119,20 @@ public class DataConversionTest extends AbstractTest {
 
     @Test
     public void testVisualizationQuery() {
+        clear();
         dataConversion.convertData(createMessages());
         List<Map<String, Object>> result = relationshipRepo.getGraph();
-        Map<String,Object> graph = visualization.visualizeGraph();
-        Assert.assertEquals(graph.size(), 10);
+        Assert.assertEquals(result.size(), 10);
+    }
 
+    @Test
+    public void testSingleAppVisualisation(){
+        clear();
+        dataConversion.convertData(createMessages());
+        List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName(SystemID.CZGAGENTINFO.name()));
+        Assert.assertTrue(result.size()==2);
+        Assert.assertEquals("getLead",((Method)result.get(0).get("method")).getName());
+        Assert.assertEquals("getPropertySomething",((Method)result.get(1).get("method")).getName());
     }
 
     @After

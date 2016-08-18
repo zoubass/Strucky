@@ -7,12 +7,14 @@ import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.Visualization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 /**
  * Created by zoubas on 14.7.2016.
  */
+@Service
 public class VisualizationImpl implements Visualization {
     @Autowired
     private RelationshipRepository relationshipRepository;
@@ -64,6 +66,11 @@ public class VisualizationImpl implements Visualization {
     @Override
     public Map<String, Object> visualizeGraph() {
         Iterator<Map<String, Object>> result = relationshipRepository.getGraph().iterator();
+        return toD3Format(result);
+    }
+
+    @Override public Map<String, Object> visualizeApplicationRelations(Application application) {
+        Iterator<Map<String, Object>> result = relationshipRepository.getApplicationRelationships(application).iterator();
         return toD3Format(result);
     }
 }

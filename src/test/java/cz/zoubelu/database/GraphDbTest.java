@@ -12,10 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by zoubas on 26.6.16.
@@ -49,6 +46,7 @@ public class GraphDbTest extends AbstractTest {
         Assert.assertEquals("consumingApp", apps.get(0).getName());
         Assert.assertEquals("getClientValue", consumedMethodName);
     }
+
 
     @After
     public void clear() {

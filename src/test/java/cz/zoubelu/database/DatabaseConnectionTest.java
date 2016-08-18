@@ -1,7 +1,6 @@
 package cz.zoubelu.database;
 
 
-import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.Message;
 import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.utils.TimeRange;
@@ -24,11 +23,11 @@ public class DatabaseConnectionTest extends AbstractTest {
 
     @Test
     public void testDataSize() {
-        Assert.assertNotNull(informaDao);
+        Assert.assertNotNull(informaRepository);
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-07 23:59:00.0");
 
-        List<Message> messages = informaDao.getInteractionData(new TimeRange(start,end));
+        List<Message> messages = informaRepository.getInteractionData(new TimeRange(start,end));
         Assert.assertEquals(69008, messages.size());
     }
 

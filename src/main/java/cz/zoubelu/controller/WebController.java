@@ -1,6 +1,5 @@
 package cz.zoubelu.controller;
 
-import cz.zoubelu.config.SchedulerConfig;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;
@@ -23,7 +22,7 @@ public class WebController {
     @RequestMapping(value = ("/index"), method = RequestMethod.GET)
     public String helloWorld(Model model) {
         model.addAttribute("pattern", "* * * * *");
-        return "index";
+        return "visualisation";
     }
 
 
@@ -36,7 +35,7 @@ public class WebController {
         }catch(Exception e){
             model.addAttribute("message","Nepodařilo se nastavit pattern, důvod: "+e.getMessage());
         }
-        return "index";
+        return "visualisation";
     }
 
     @RequestMapping(value = ("/start"), method = RequestMethod.GET)
@@ -51,6 +50,6 @@ public class WebController {
         }catch(Exception e){
             model.addAttribute("message","Nepodařilo se spustit/zastavit scheduler, důvod: "+e.getMessage());
         }
-        return "index";
+        return "visualisation";
     }
 }

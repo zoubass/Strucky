@@ -10,7 +10,7 @@ import java.util.List;
  * Created by zoubas on 21.5.16.
  */
 //FIXME: prejmenovat?
-public interface InformaDao {
+public interface InformaRepository {
 
     List<Message> getInteractionData(TimeRange timeRange);
 

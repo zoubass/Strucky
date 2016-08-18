@@ -1,5 +1,7 @@
 package cz.zoubelu.service;
 
+import cz.zoubelu.domain.Application;
+
 import java.util.Map;
 
 /**
@@ -8,4 +10,6 @@ import java.util.Map;
 public interface Visualization {
 
 	Map<String, Object> visualizeGraph();
+
+	Map<String, Object> visualizeApplicationRelations(Application application);
 }

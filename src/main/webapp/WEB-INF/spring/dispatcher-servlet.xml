@@ -13,6 +13,12 @@
     <context:component-scan base-package="cz.zoubelu.controller,cz.zoubelu.config"/>
     <mvc:annotation-driven/>
 
+    <mvc:resources location="WEB-INF/templates/css/" mapping="/css/**" />
+    <mvc:resources location="WEB-INF/templates/js/" mapping="/js/**" />
+
+    <!--<mvc:resources location="WEB-INF/templates/img/" mapping="/img/**" />-->
+    <!--<mvc:resources location="WEB-INF/templates/fonts/" mapping="/fonts/**" />-->
+
     <bean id="templateResolver"
           class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/templates/"/>
@@ -25,6 +31,7 @@
     </bean>
     <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine"/>
+        <property name="characterEncoding" value="UTF-8" />
     </bean>
 </beans>
  

@@ -1,4 +1,4 @@
-package cz.zoubelu.utils;
+package cz.zoubelu.domain;
 
 /**
  * Created by zoubas on 10.7.16.

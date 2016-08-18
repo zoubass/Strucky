@@ -3,12 +3,12 @@ package cz.zoubelu.service.impl;
 import com.google.common.collect.Lists;
 import cz.zoubelu.domain.*;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.repository.InformaDao;
+import cz.zoubelu.repository.InformaRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.utils.ConversionResult;
-import cz.zoubelu.utils.SystemID;
+import cz.zoubelu.domain.SystemID;
 import cz.zoubelu.utils.TimeRange;
 import cz.zoubelu.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ public class DataConversionImpl implements DataConversion {
     private final Logger log = Logger.getLogger(getClass());
 
     @Autowired
-    private InformaDao informaDao;
+    private InformaRepository informaRepository;
 
     @Autowired
     private ApplicationRepository applicationRepo;
@@ -45,7 +45,7 @@ public class DataConversionImpl implements DataConversion {
 
 
     public ConversionResult convertData(TimeRange timeRange) {
-        List<Message> messages = informaDao.getInteractionData(timeRange);
+        List<Message> messages = informaRepository.getInteractionData(timeRange);
         return convertData(messages);
     }
 
@@ -83,9 +83,6 @@ public class DataConversionImpl implements DataConversion {
 
 
     private Application getProvidingApp(Message msg) {
-        // vytvořit vyhledání aplikace tak, že si nejdříve zjistí, zda nemá shodu s jménem nebo sysID v číselníku?
-        // SystemID system = SystemID.isInSystem(appNAme,tarID);
-        // if system != null vyhledej a pak kdyz ne tak přidej
         Application app = applicationRepo.findByName(StringUtils.upperCase(msg.getApplication()));
         return createApplicationIfNull(app, msg.getApplication(), msg.getMsg_tar_sys());
     }
@@ -154,7 +151,7 @@ public class DataConversionImpl implements DataConversion {
         return method;
     }
 
-    // NEW RELATIONSHIP IN CASE IT DOESNT EXIST YET
+    // NEW RELATIONSHIP IN CASE IT DOESN'T EXIST YET
     private ConsumeRelationship createRelationship(Application consumer, Method method) {
         ConsumeRelationship consumeRelationship = new ConsumeRelationship(consumer, method, 1L);
         log.debug(String.format("Creating new relationship: %s CONSUMES -> %s.", consumer.getName(), method.getName()));

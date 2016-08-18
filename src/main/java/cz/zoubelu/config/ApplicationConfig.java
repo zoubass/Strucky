@@ -1,13 +1,12 @@
 package cz.zoubelu.config;
 
-import cz.zoubelu.repository.InformaDao;
-import cz.zoubelu.repository.impl.InformaDaoImpl;
+import cz.zoubelu.repository.InformaRepository;
+import cz.zoubelu.repository.impl.InformaRepositoryImpl;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.service.impl.VisualizationImpl;
 import cz.zoubelu.validation.Validator;
 import cz.zoubelu.validation.impl.MessageValidator;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -40,6 +39,18 @@ public class ApplicationConfig {
     @Value("${password}")
     private String password;
 
+    @Value("${acquireIncrement}")
+    private Integer acquireIncrement;
+
+    @Value("${maxIdleTime}")
+    private Integer maxIdleTime;
+
+    @Value("${maxPoolSize}")
+    private Integer maxPoolSize;
+
+    @Value("${minPoolSize}")
+    private Integer minPoolSize;
+
 
     @Bean
     public BasicDataSource getDataSource() {
@@ -49,8 +60,9 @@ public class ApplicationConfig {
         bd.setUsername(username);
         bd.setPassword(password);
         bd.setInitialSize(5);
+        bd.setMaxIdle(maxIdleTime);
         bd.setMaxActive(10);
-        bd.setPoolPreparedStatements(true);
+//        bd.setPoolPreparedStatements(true);
         return bd;
     }
 
@@ -59,24 +71,18 @@ public class ApplicationConfig {
         PropertySourcesPlaceholderConfigurer placeHolder = new PropertySourcesPlaceholderConfigurer();
         placeHolder.setIgnoreResourceNotFound(true);
         placeHolder.setIgnoreUnresolvablePlaceholders(true);
-        //TODO: nacitat vsechny properties v lokaci config?
-        placeHolder.setLocations(new Resource[]{new ClassPathResource("conf/database.properties"), new ClassPathResource("conf/neo4j.properties")});
+        placeHolder.setLocations(new Resource[]{new ClassPathResource("conf/database.properties"), new ClassPathResource("conf/neo4j.properties"),new ClassPathResource("conf/config.properties")});
         return placeHolder;
     }
 
     @Bean
-    public InformaDao getInformaDao() {
-        return new InformaDaoImpl(getJdbcTemplate());
+    public InformaRepository getInformaDao() {
+        return new InformaRepositoryImpl(getJdbcTemplate());
     }
 
     @Bean
     public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(getDataSource());
-    }
-
-    @Bean
-    public Visualization getVisualization() {
-        return new VisualizationImpl();
     }
 
     @Bean

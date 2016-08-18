@@ -1,6 +1,6 @@
 package cz.zoubelu.repository.impl;
 
-import cz.zoubelu.repository.InformaDao;
+import cz.zoubelu.repository.InformaRepository;
 import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.domain.Message;
 import cz.zoubelu.utils.TimeRange;
@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Created by zoubas on 25.6.16.
  */
-public class InformaDaoImpl implements InformaDao {
+public class InformaRepositoryImpl implements InformaRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    public InformaDaoImpl(JdbcTemplate jdbcTemplate) {
+    public InformaRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -26,7 +26,6 @@ public class InformaDaoImpl implements InformaDao {
     }
 
     private String getTableName(){
-        //TODO: vytvořit název tabulky na základě aktuálního data
         return null;
     }
 }
