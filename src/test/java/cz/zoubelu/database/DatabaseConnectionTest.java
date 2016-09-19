@@ -22,7 +22,7 @@ public class DatabaseConnectionTest extends AbstractTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void testDataSize() {
+    public void testDataShouldHaveSpecificSize() {
         Assert.assertNotNull(informaRepository);
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-07 23:59:00.0");
@@ -32,7 +32,7 @@ public class DatabaseConnectionTest extends AbstractTest {
     }
 
     @Test
-    public void testEdgeDates() {
+    public void testDataShouldBeInSpecifiedTimeRange() {
         List<Timestamp> minDate = jdbcTemplate.queryForList("select MIN(request_time) from MESSAGE", Timestamp.class);
         List<Timestamp> maxDate = jdbcTemplate.queryForList("select MAX(request_time) from MESSAGE", Timestamp.class);
         System.out.println(minDate.toString());

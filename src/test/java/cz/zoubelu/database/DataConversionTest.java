@@ -8,18 +8,25 @@ import cz.zoubelu.domain.Method;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.domain.SystemID;
+import cz.zoubelu.task.ConversionTask;
+import cz.zoubelu.utils.ConversionResult;
+import cz.zoubelu.utils.DateUtils;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.Scheduler;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import it.sauronsoftware.cron4j.SchedulingPattern;
+import it.sauronsoftware.cron4j.Task;
+import it.sauronsoftware.cron4j.TaskExecutionContext;
+import org.junit.*;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by zoubas on 10.7.16.
@@ -35,41 +42,51 @@ public class DataConversionTest extends AbstractTest {
     @Autowired
     private Visualization visualization;
 
+    @Autowired
+    private Task task;
+
+    private List<Message> messages;
+
     @Before
-    public void createSchemaFromEnum() {
+    public void startUp() {
+        messages = createMessages();
         for (SystemID sysId : SystemID.values()) {
             applicationRepo.save(new Application(sysId.name(), sysId.getID(), new ArrayList<Method>()));
         }
     }
 
     @Test
-    public void testConversionOnExistingSchema() {
-        Assert.assertNotNull(dataConversion);
+    public void shouldNotCreateNewEntitiesIfTheyExist() {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 02:00:00.0");
         dataConversion.convertData(new TimeRange(start, end));
 
         List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
         for (Application app : apps) {
-            System.out.println(app.getName());
             Assert.assertNotNull(app.getSystemId());
         }
-        Assert.assertEquals(69, apps.size());
+        Assert.assertEquals("The number of applications in database is not as expected.There were or were not created applications.",69, apps.size());
     }
 
 
-//    @Test
+    @Test
+//    @Ignore("This test is ignored because it tests scheduler and it takes too long")
     public void testScheduling() throws Exception {
+        Long init = System.currentTimeMillis();
+        //override method using mock, because normal conversion task takes too long
+        Task task = mock(Task.class);
+        scheduler.schedule(new SchedulingPattern("* * * * *"), task);
         scheduler.start();
-        Thread.sleep(1000L * 60L * 1L);
+        while ((init + 1000 * 60) > System.currentTimeMillis()) {
+            //do nothing at all for about 2 minutes
+        }
         scheduler.stop();
-        Assert.assertTrue(true);
+        verify(task, times(1)).execute(any(TaskExecutionContext.class));
     }
 
     @Test
-    public void testConversionFromMessages() {
-        clear();
-        dataConversion.convertData(createMessages());
+    public void shouldConvertTheGivenMessagesToGraphData() {
+        dataConversion.convertData(messages);
 
         Application agentInfo = applicationRepo.findByName(SystemID.CZGAGENTINFO.name());
         Application hugo = applicationRepo.findByName(SystemID.NHUGO.name());
@@ -112,23 +129,21 @@ public class DataConversionTest extends AbstractTest {
 
         Assert.assertEquals("getLead", lead.getProvidedMethods().get(0).getName());
 
-        Assert.assertEquals(6, Lists.newArrayList(applicationRepo.findAll()).size());
+        Assert.assertEquals(67, Lists.newArrayList(applicationRepo.findAll()).size());
         Assert.assertEquals(5, Lists.newArrayList(methodRepo.findAll()).size());
         Assert.assertEquals(5, Lists.newArrayList(relationshipRepo.findAll()).size());
     }
 
     @Test
     public void testVisualizationQuery() {
-        clear();
-        dataConversion.convertData(createMessages());
+        dataConversion.convertData(messages);
         List<Map<String, Object>> result = relationshipRepo.getGraph();
         Assert.assertEquals(result.size(), 10);
     }
 
     @Test
     public void testSingleAppVisualisation(){
-        clear();
-        dataConversion.convertData(createMessages());
+        dataConversion.convertData(messages);
         List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName(SystemID.CZGAGENTINFO.name()));
         Assert.assertTrue(result.size()==2);
         Assert.assertEquals("getLead",((Method)result.get(0).get("method")).getName());

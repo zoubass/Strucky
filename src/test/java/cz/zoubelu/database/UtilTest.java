@@ -13,10 +13,6 @@ public class UtilTest extends AbstractTest {
 	@Test
 	public void testTimeRangeCreation() {
 		TimeRange range = DateUtils.getTimeRange();
-
-		System.out.println(range.getStartDate());
-		System.out.println(range.getEndDate());
-
 		Assert.assertNotNull(range.getStartDate());
 		Assert.assertNotNull(range.getEndDate());
 	}

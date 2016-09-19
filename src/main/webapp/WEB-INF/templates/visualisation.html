@@ -18,7 +18,7 @@
                 <ul class="nav navbar-nav">
                     <li>
                         <select>
-                            <option th:each="name : ${T(cz.zoubelu.utils.SystemID).values()}"
+                            <option th:each="name : ${T(cz.zoubelu.domain.SystemID).values()}"
                                     th:value="${name}"
                                     th:text="${name}">value
                             </option>

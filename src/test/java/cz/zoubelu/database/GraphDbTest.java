@@ -23,7 +23,7 @@ public class GraphDbTest extends AbstractTest {
     private Visualization visualization;
 
     @Before
-    public void getAppNode() {
+    public void startUp() {
         Assert.assertNotNull(applicationRepo);
         List<Method> providedMethods = new ArrayList<>();
         providedMethods.add(new Method("getClientValue", 100));

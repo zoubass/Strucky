@@ -125,17 +125,17 @@ public class RestGraphController {
         return visualization.visualizeGraph();
     }
 
-    @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> control() {
-
-        for (SystemID sysId : SystemID.values()) {
-            applicationRepo.save(new Application(sysId.name(), sysId.getID(), new ArrayList<Method>()));
-        }
-
-        dataConversion.convertData(createMessages());
-        return visualization.visualizeGraph();
-    }
+//    @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
+//    @ResponseBody
+//    public Map<String, Object> control() {
+//
+//        for (SystemID sysId : SystemID.values()) {
+//            applicationRepo.save(new Application(sysId.name(), sysId.getID(), new ArrayList<Method>()));
+//        }
+//
+//        dataConversion.convertData(createMessages());
+//        return visualization.visualizeGraph();
+//    }
 
     @RequestMapping(value = ("/purge"), method = RequestMethod.GET)
     @ResponseBody
@@ -143,7 +143,7 @@ public class RestGraphController {
         session.purgeDatabase();
         return true;
     }
-
+/*
     private List<Message> createMessages() {
         Message m1 = new Message();
         Message m2 = new Message();
@@ -194,5 +194,5 @@ public class RestGraphController {
         m8.setMsg_version(110);
         return Lists.newArrayList(m1, m2, m3, m4, m5, m6, m7, m8);
     }
-
+*/
 }

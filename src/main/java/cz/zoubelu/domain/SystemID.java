@@ -2,6 +2,7 @@ package cz.zoubelu.domain;
 
 /**
  * Created by zoubas on 10.7.16.
+ * This enum represents the application schema of graph database
  */
 public enum SystemID {
 
