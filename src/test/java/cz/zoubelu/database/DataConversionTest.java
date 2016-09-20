@@ -73,15 +73,15 @@ public class DataConversionTest extends AbstractTest {
 //    @Ignore("This test is ignored because it tests scheduler and it takes too long")
     public void testScheduling() throws Exception {
         Long init = System.currentTimeMillis();
-        //override method using mock, because normal conversion task takes too long
+        //override method using mock, because normal task runs conversion
         Task task = mock(Task.class);
         scheduler.schedule(new SchedulingPattern("* * * * *"), task);
         scheduler.start();
-        while ((init + 1000 * 60) > System.currentTimeMillis()) {
-            //do nothing at all for about 2 minutes
+        while ((init + 2500 * 60) > System.currentTimeMillis()) {
+            //do nothing at all for some period of time
         }
         scheduler.stop();
-        verify(task, times(1)).execute(any(TaskExecutionContext.class));
+        verify(task, times(2)).execute(any(TaskExecutionContext.class));
     }
 
     @Test
@@ -143,6 +143,7 @@ public class DataConversionTest extends AbstractTest {
 
     @Test
     public void testSingleAppVisualisation(){
+        clear();
         dataConversion.convertData(messages);
         List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName(SystemID.CZGAGENTINFO.name()));
         Assert.assertTrue(result.size()==2);

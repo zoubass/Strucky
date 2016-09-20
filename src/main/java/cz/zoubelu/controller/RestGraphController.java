@@ -1,26 +1,23 @@
 package cz.zoubelu.controller;
 
-
-import com.google.common.collect.Lists;
 import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
-import cz.zoubelu.domain.Message;
 import cz.zoubelu.domain.Method;
-import cz.zoubelu.repository.MethodRepository;
-import cz.zoubelu.repository.RelationshipRepository;
-import cz.zoubelu.utils.NullUtils;
-import cz.zoubelu.domain.SystemID;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.InformaRepository;
+import cz.zoubelu.repository.MethodRepository;
+import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
+import cz.zoubelu.utils.NullUtils;
 import cz.zoubelu.utils.TimeRange;
 import org.neo4j.ogm.session.Neo4jSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zoubas on 16.7.16.
@@ -90,7 +87,7 @@ public class RestGraphController {
     /**
      * Creating JSON which is source for graph view (visualisation.html)
      *
-     * @return Map<String,Object> of all the nodes and relations in the graph as JSON
+     * @return Map<String,Object> of all the nodes and relations in the graph as JSON, one map row is one relation ('Node - Relation - Node') record.
      */
     @RequestMapping("/graph")
     @ResponseBody
