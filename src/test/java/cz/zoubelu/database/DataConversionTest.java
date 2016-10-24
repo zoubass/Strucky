@@ -8,16 +8,12 @@ import cz.zoubelu.domain.Method;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.domain.SystemID;
-import cz.zoubelu.task.ConversionTask;
-import cz.zoubelu.utils.ConversionResult;
-import cz.zoubelu.utils.DateUtils;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;
 import it.sauronsoftware.cron4j.TaskExecutionContext;
 import org.junit.*;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
@@ -70,15 +66,23 @@ public class DataConversionTest extends AbstractTest {
 
 
     @Test
-//    @Ignore("This test is ignored because it tests scheduler and it takes too long")
+    @Ignore("This test is ignored because it tests scheduler and it takes too long")
     public void testScheduling() throws Exception {
         Long init = System.currentTimeMillis();
         //override method using mock, because normal task runs conversion
         Task task = mock(Task.class);
         scheduler.schedule(new SchedulingPattern("* * * * *"), task);
         scheduler.start();
-        while ((init + 2500 * 60) > System.currentTimeMillis()) {
-            //do nothing at all for some period of time
+        while ((init + 2000 * 60) > System.currentTimeMillis()) {
+            /** chill time **/
+            /*          *\
+            \          /
+             \        /
+              \ (o.o)/
+                 //
+                 \\
+                 / \
+                /**/
         }
         scheduler.stop();
         verify(task, times(2)).execute(any(TaskExecutionContext.class));

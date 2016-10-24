@@ -20,7 +20,7 @@
                         <select>
                             <option th:each="name : ${T(cz.zoubelu.domain.SystemID).values()}"
                                     th:value="${name}"
-                                    th:text="${name}">value
+                                    th:text="${name.systemName}">value
                             </option>
                         </select>
                         <button class="btn btn-default" onclick="showGraph()" type="submit">Celý graf</button>

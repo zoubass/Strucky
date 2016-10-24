@@ -16,6 +16,7 @@ public class ConversionTaskImpl extends Task implements ConversionTask {
 
 	@Override
 	public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
+		//TODO: misto timeRange jmeno tabulky
 		conversionService.convertData(DateUtils.getTimeRange());
 	}
 }

@@ -1,14 +1,15 @@
 package cz.zoubelu.controller;
 
-import cz.zoubelu.domain.Application;
-import cz.zoubelu.domain.ConsumeRelationship;
-import cz.zoubelu.domain.Method;
+import com.google.common.collect.Lists;
+import cz.zoubelu.domain.*;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.InformaRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
+import cz.zoubelu.utils.ConversionError;
+import cz.zoubelu.utils.ErrorResponse;
 import cz.zoubelu.utils.NullUtils;
 import cz.zoubelu.utils.TimeRange;
 import org.neo4j.ogm.session.Neo4jSession;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +55,13 @@ public class RestGraphController {
      */
     @RequestMapping(value = "/{systemId}", method = RequestMethod.GET)
     @ResponseBody
-    public Application getApplication(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId);
-        return applicationRepo.findBySystemId(systemId);
+    public Object getApplication(@PathVariable("systemId") Integer systemId) {
+        try {
+            NullUtils.nullCheck(systemId);
+            return applicationRepo.findBySystemId(systemId);
+        }catch (Error e){
+            return new ErrorResponse(e.getMessage());
+        }
     }
 
     /**
@@ -96,18 +102,17 @@ public class RestGraphController {
     }
 
 
-/*
     /**
      * Creating JSON which is source for graph view of a single application and it's relations
      *
      * @return Map<String,Object>
-     *
-    @RequestMapping("/appRelations")
+     */
+    @RequestMapping("/appGraph/{systemId}")
     @ResponseBody
     public Map<String, Object> visualizeAppRelations(@PathVariable("systemId") String appName) {
         return visualization.visualizeApplicationRelations(applicationRepo.findByName(appName));
     }
-*/
+
 	/**
      * METODY POD TIMTO KOMENTAREM JSOU NA ODSTRANENI, SLOUZI POUZE PRO TEST
      *
@@ -122,17 +127,17 @@ public class RestGraphController {
         return visualization.visualizeGraph();
     }
 
-//    @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
-//    @ResponseBody
-//    public Map<String, Object> control() {
-//
-//        for (SystemID sysId : SystemID.values()) {
-//            applicationRepo.save(new Application(sysId.name(), sysId.getID(), new ArrayList<Method>()));
-//        }
-//
-//        dataConversion.convertData(createMessages());
-//        return visualization.visualizeGraph();
-//    }
+    @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> control() {
+
+        for (SystemID sysId : SystemID.values()) {
+            applicationRepo.save(new Application(sysId.name(), sysId.getID(), new ArrayList<Method>()));
+        }
+
+        dataConversion.convertData(createMessages());
+        return visualization.visualizeGraph();
+    }
 
     @RequestMapping(value = ("/purge"), method = RequestMethod.GET)
     @ResponseBody
@@ -140,7 +145,7 @@ public class RestGraphController {
         session.purgeDatabase();
         return true;
     }
-/*
+
     private List<Message> createMessages() {
         Message m1 = new Message();
         Message m2 = new Message();
@@ -191,5 +196,5 @@ public class RestGraphController {
         m8.setMsg_version(110);
         return Lists.newArrayList(m1, m2, m3, m4, m5, m6, m7, m8);
     }
-*/
+
 }

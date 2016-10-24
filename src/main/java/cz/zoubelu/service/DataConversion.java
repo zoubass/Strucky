@@ -1,10 +1,9 @@
 package cz.zoubelu.service;
 
 import cz.zoubelu.domain.Message;
-import cz.zoubelu.utils.ConversionResult;
+import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.TimeRange;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -17,12 +16,12 @@ public interface DataConversion {
      * @param timeRange Time range the relational data are in.
      * @return result with message.
      */
-    ConversionResult convertData(TimeRange timeRange);
+    List<ConversionError> convertData(TimeRange timeRange);
 
 	/**
 	 * Converts the given messages into nodes and relationships of graph database.
 	 * @param messages List of the messages from rel. database.
 	 * @return result with message.
      */
-	ConversionResult convertData(List<Message> messages);
+	List<ConversionError> convertData(List<Message> messages);
 }
