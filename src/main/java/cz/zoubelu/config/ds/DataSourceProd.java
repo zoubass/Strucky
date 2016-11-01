@@ -20,7 +20,7 @@ public class DataSourceProd implements DataSource{
 		ComboPooledDataSource cpds = new ComboPooledDataSource();
 		try {
 			cpds.setDriverClass("oracle.jdbc.OracleDriver");
-			cpds.setJdbcUrl("jdbc:oracle:thin:@lnxoratest1.cpas.cz:1530:PSPDEV");
+			cpds.setJdbcUrl("-----------------------");
 			cpds.setUser("----------");
 			cpds.setPassword("---------");
 			cpds.setMinPoolSize(1);
