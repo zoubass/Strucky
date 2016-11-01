@@ -1,5 +1,7 @@
-package cz.zoubelu.config;
+package cz.zoubelu.config.ds;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import cz.zoubelu.config.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +14,33 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 @Profile("test")
-public class DataSourceTestConfig {
+public class DataSourceTestConfig implements DataSource {
     private final Logger log = Logger.getLogger(getClass());
+
+    @Value("${url}")
+    private String url;
+
+    @Value("${driver}")
+    private String driver;
+
+    @Value("${username}")
+    private String username;
+
+    @Value("${password}")
+    private String password;
+
+    @Value("${acquireIncrement}")
+    private Integer acquireIncrement;
+
+    @Value("${maxIdleTime}")
+    private Integer maxIdleTime;
+
+    @Value("${maxPoolSize}")
+    private Integer maxPoolSize;
+
+    @Value("${minPoolSize}")
+    private Integer minPoolSize;
+
 
 
     @Value("classpath:h2structure/drop_schema.sql")
@@ -23,6 +50,22 @@ public class DataSourceTestConfig {
     @Value("classpath:h2structure/insert_201606.sql")
     private Resource insertTestData;
 
+    @Bean
+    public ComboPooledDataSource getDataSource() {
+        ComboPooledDataSource cpds = new ComboPooledDataSource();
+        try {
+            cpds.setDriverClass(driver);
+            cpds.setJdbcUrl(url);
+            cpds.setUser(username);
+            cpds.setPassword(password);
+            cpds.setMinPoolSize(1);
+            cpds.setMaxIdleTime(280);
+            cpds.setMaxPoolSize(3);
+        } catch (Exception e) {
+            log.error("Failed to initialize datasource. Exception while setting driver.",e);
+        }
+        return cpds;
+    }
 /*
     UNCOMMENT TO INSERT DATA INTO H2 DATABASE
 

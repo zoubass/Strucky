@@ -63,6 +63,7 @@ public enum SystemID {
 	CZGCODELIST("CZGCODELIST", 13),
 	CZGCARPRICING("CZGCARPRICING", 14),
 	CZGPRODCATALOG("CZGPRODCATALOG", 15),
+	CZGCONTRACTUPDATE("CZGCONTRACTUPDATE",555),
 	CZGAGENTINFO("CZGAGENTINFO", 16),
 	CZGEARNIX("CZGEARNIX", 17),
 	CZGSEARCH("CZGSEARCH", 18),
@@ -105,12 +106,16 @@ public enum SystemID {
 	}
 
 	public static Integer getIdByName(String name){
+		for (SystemID system : values()) {
+			if (name.equals(system.getSystemName())){
+				return system.getID();
+			}
+		}
 		try {
 			return valueOf(name).getID();
 		}catch (IllegalArgumentException e){
 			throw new IllegalArgumentException(
 					"Nepodarilo se ziskat systemID jelikoz v ciselniku neni aplikace: " + name);
 		}
-
 	}
 }

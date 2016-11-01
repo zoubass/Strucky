@@ -3,12 +3,11 @@ package cz.zoubelu.controller;
 import com.google.common.collect.Lists;
 import cz.zoubelu.domain.*;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.repository.InformaRepository;
+import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
-import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.ErrorResponse;
 import cz.zoubelu.utils.NullUtils;
 import cz.zoubelu.utils.TimeRange;
@@ -41,7 +40,7 @@ public class RestGraphController {
     private RelationshipRepository relationRepo;
 
     @Autowired
-    private InformaRepository informaRepository;
+    private InformaMessageRepository informaRepository;
 
     @Autowired
     private Visualization visualization;
@@ -118,14 +117,14 @@ public class RestGraphController {
      *
      */
 
-    @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> saveApp() {
-        Timestamp start = Timestamp.valueOf("2016-06-01 11:00:00.0");
-        Timestamp end = Timestamp.valueOf("2016-06-05 11:00:00.0");
-        dataConversion.convertData(new TimeRange(start, end));
-        return visualization.visualizeGraph();
-    }
+//    @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
+//    @ResponseBody
+//    public Map<String, Object> saveApp() {
+//        Timestamp start = Timestamp.valueOf("2016-06-01 11:00:00.0");
+//        Timestamp end = Timestamp.valueOf("2016-06-05 11:00:00.0");
+//        dataConversion.convertData(new TimeRange(start, end));
+//        return visualization.visualizeGraph();
+//    }
 
     @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
     @ResponseBody

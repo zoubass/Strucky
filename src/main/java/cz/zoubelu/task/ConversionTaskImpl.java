@@ -14,9 +14,15 @@ public class ConversionTaskImpl extends Task implements ConversionTask {
 	@Autowired
 	private DataConversion conversionService;
 
+	private String tablePrefix;
+
+	public ConversionTaskImpl(String tablePrefix){
+		this.tablePrefix=tablePrefix;
+	}
+
 	@Override
 	public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-		//TODO: misto timeRange jmeno tabulky
-		conversionService.convertData(DateUtils.getTimeRange());
+		String tableName = "A_MESSAGE_" + DateUtils.getTableSuffix();
+		conversionService.convertData(tableName);
 	}
 }

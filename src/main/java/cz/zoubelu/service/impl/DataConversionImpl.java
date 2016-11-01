@@ -3,7 +3,7 @@ package cz.zoubelu.service.impl;
 import com.google.common.collect.Lists;
 import cz.zoubelu.domain.*;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.repository.InformaRepository;
+import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
@@ -24,11 +24,13 @@ import java.util.Set;
 /**
  * Created by zoubas on 10.7.16.
  */
-@Service @Transactional public class DataConversionImpl implements DataConversion {
+@Service
+@Transactional
+public class DataConversionImpl implements DataConversion {
 	private final Logger log = Logger.getLogger(getClass());
 
 	@Autowired
-	private InformaRepository informaRepository;
+	private InformaMessageRepository informaRepository;
 
 	@Autowired
 	private ApplicationRepository applicationRepo;
@@ -47,6 +49,11 @@ import java.util.Set;
 		return convertData(messages);
 	}
 
+	public List<ConversionError> convertData(String tableName) {
+		List<Message> messages = informaRepository.getInteractionData(tableName);
+		return convertData(messages);
+	}
+
 	public List<ConversionError> convertData(List<Message> messages) {
 		log.info("Starting conversion.");
 		long startTime = System.currentTimeMillis();
@@ -59,8 +66,10 @@ import java.util.Set;
 		return errors;
 	}
 
+
+
 	private List<ConversionError> innerConversion(List<Message> messages) {
-		Set<ConversionError> errors = new HashSet<>();
+		Set<ConversionError> errors = new HashSet<ConversionError>();
 		for (Message msg : messages) {
 			try {
 				validator.validateMessage(msg);

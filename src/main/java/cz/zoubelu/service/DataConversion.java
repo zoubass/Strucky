@@ -24,4 +24,6 @@ public interface DataConversion {
 	 * @return result with message.
      */
 	List<ConversionError> convertData(List<Message> messages);
+
+	List<ConversionError> convertData(String tableName);
 }

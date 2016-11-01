@@ -58,9 +58,18 @@ public class DataConversionTest extends AbstractTest {
         dataConversion.convertData(new TimeRange(start, end));
 
         List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
+        List<Application> vyvrhel = new ArrayList<>();
         for (Application app : apps) {
             Assert.assertNotNull(app.getSystemId());
+
+            try {
+                SystemID.getIdByName(app.getName());
+            }catch (IllegalArgumentException e){
+                System.out.println(app.getName());
+                vyvrhel.add(app);
+            }
         }
+        System.out.println(vyvrhel.size());
         Assert.assertEquals("The number of applications in database is not as expected.There were or were not created applications.",69, apps.size());
     }
 
@@ -133,9 +142,10 @@ public class DataConversionTest extends AbstractTest {
 
         Assert.assertEquals("getLead", lead.getProvidedMethods().get(0).getName());
 
-        Assert.assertEquals(67, Lists.newArrayList(applicationRepo.findAll()).size());
-        Assert.assertEquals(5, Lists.newArrayList(methodRepo.findAll()).size());
-        Assert.assertEquals(5, Lists.newArrayList(relationshipRepo.findAll()).size());
+        Assert.assertEquals("The size of all apps there are in SystemIDs + 1 (the one should be created). ", 70,
+                Lists.newArrayList(applicationRepo.findAll()).size());
+        Assert.assertEquals("Method size is not correct.",5, Lists.newArrayList(methodRepo.findAll()).size());
+        Assert.assertEquals("The number of relations in graph.",5, Lists.newArrayList(relationshipRepo.findAll()).size());
     }
 
     @Test

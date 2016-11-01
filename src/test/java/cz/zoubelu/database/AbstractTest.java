@@ -1,11 +1,11 @@
 package cz.zoubelu.database;
 
 import cz.zoubelu.config.ApplicationConfig;
-import cz.zoubelu.config.DataSourceTestConfig;
+import cz.zoubelu.config.ds.DataSourceTestConfig;
 import cz.zoubelu.config.GraphTestConfig;
 import cz.zoubelu.config.SchedulerConfig;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.repository.InformaRepository;
+import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ActiveProfiles("test")
 public abstract class AbstractTest {
 	@Autowired
-	protected InformaRepository informaRepository;
+	protected InformaMessageRepository informaRepository;
 	@Autowired
 	protected Session session;
 	@Autowired

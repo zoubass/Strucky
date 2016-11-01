@@ -25,7 +25,7 @@ public class GraphDbTest extends AbstractTest {
     @Before
     public void startUp() {
         Assert.assertNotNull(applicationRepo);
-        List<Method> providedMethods = new ArrayList<>();
+        List<Method> providedMethods = new ArrayList<Method>();
         providedMethods.add(new Method("getClientValue", 100));
         Application providingApp = new Application("providingApp", providedMethods);
         Application consumingApp = new Application("consumingApp", null);
