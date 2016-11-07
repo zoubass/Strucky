@@ -10,12 +10,11 @@ import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.utils.ErrorResponse;
 import cz.zoubelu.utils.NullUtils;
-import cz.zoubelu.utils.TimeRange;
+import org.neo4j.kernel.api.exceptions.index.ExceptionDuringFlipKernelException;
 import org.neo4j.ogm.session.Neo4jSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,13 +53,8 @@ public class RestGraphController {
      */
     @RequestMapping(value = "/{systemId}", method = RequestMethod.GET)
     @ResponseBody
-    public Object getApplication(@PathVariable("systemId") Integer systemId) {
-        try {
-            NullUtils.nullCheck(systemId);
-            return applicationRepo.findBySystemId(systemId);
-        }catch (Error e){
-            return new ErrorResponse(e.getMessage());
-        }
+    public Application getApplication(@PathVariable("systemId") Integer systemId) {
+        return applicationRepo.findBySystemId(systemId);
     }
 
     /**
@@ -70,9 +64,16 @@ public class RestGraphController {
     @RequestMapping(value = "/{systemId}/consumes", method = RequestMethod.GET)
     @ResponseBody
     public List<ConsumeRelationship> getConsumedMethods(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId);
+        NullUtils.nullCheck(systemId, "System ID cannot be null.");
         Application app = applicationRepo.findBySystemId(systemId);
+        NullUtils.nullCheck(app, "Cannot find application with system id: " + systemId);
         return app.getConsumeRelationship();
+    }
+
+    @RequestMapping(value = "/{appName}/info", method = RequestMethod.GET)
+    @ResponseBody
+    public Application getApplicationInfo(@PathVariable("appName") String appName) {
+        return applicationRepo.findByName(appName);
     }
 
 
@@ -83,9 +84,9 @@ public class RestGraphController {
     @RequestMapping(value = "/{systemId}/provides", method = RequestMethod.GET)
     @ResponseBody
     public List<Method> getProvidedMethods(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId);
+        NullUtils.nullCheck(systemId, "System ID cannot be null.");
         Application app = applicationRepo.findBySystemId(systemId);
-        NullUtils.nullCheck(app);
+        NullUtils.nullCheck(app, "Cannot find application with system id: " + systemId);
         return app.getProvidedMethods();
     }
 
@@ -112,9 +113,15 @@ public class RestGraphController {
         return visualization.visualizeApplicationRelations(applicationRepo.findByName(appName));
     }
 
-	/**
+    @RequestMapping("/error")
+    @ResponseBody
+    public ErrorResponse returnError(Exception e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+
+    /**
      * METODY POD TIMTO KOMENTAREM JSOU NA ODSTRANENI, SLOUZI POUZE PRO TEST
-     *
      */
 
 //    @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
@@ -125,7 +132,6 @@ public class RestGraphController {
 //        dataConversion.convertData(new TimeRange(start, end));
 //        return visualization.visualizeGraph();
 //    }
-
     @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> control() {

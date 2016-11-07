@@ -1,13 +1,8 @@
-package cz.zoubelu.database;
+package cz.zoubelu.integration;
 
 import com.google.common.collect.Lists;
-import cz.zoubelu.domain.Application;
-import cz.zoubelu.domain.ConsumeRelationship;
-import cz.zoubelu.domain.Message;
-import cz.zoubelu.domain.Method;
+import cz.zoubelu.domain.*;
 import cz.zoubelu.service.DataConversion;
-import cz.zoubelu.service.Visualization;
-import cz.zoubelu.domain.SystemID;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
@@ -35,19 +30,13 @@ public class DataConversionTest extends AbstractTest {
     @Autowired
     private Scheduler scheduler;
 
-    @Autowired
-    private Visualization visualization;
-
-    @Autowired
-    private Task task;
-
     private List<Message> messages;
 
     @Before
     public void startUp() {
         messages = createMessages();
         for (SystemID sysId : SystemID.values()) {
-            applicationRepo.save(new Application(sysId.name(), sysId.getID(), new ArrayList<Method>()));
+            applicationRepo.save(new Application(sysId.getSystemName(), sysId.getID(), new ArrayList<Method>()));
         }
     }
 
@@ -58,19 +47,17 @@ public class DataConversionTest extends AbstractTest {
         dataConversion.convertData(new TimeRange(start, end));
 
         List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
-        List<Application> vyvrhel = new ArrayList<>();
+        List<Application> newApps = new ArrayList<>();
         for (Application app : apps) {
             Assert.assertNotNull(app.getSystemId());
-
             try {
                 SystemID.getIdByName(app.getName());
-            }catch (IllegalArgumentException e){
-                System.out.println(app.getName());
-                vyvrhel.add(app);
+            } catch (IllegalArgumentException e) {
+                newApps.add(app);
             }
         }
-        System.out.println(vyvrhel.size());
-        Assert.assertEquals("The number of applications in database is not as expected.There were or were not created applications.",69, apps.size());
+        Assert.assertEquals("The newly created application should be only one and that's 29.", "29", newApps.get(0).getName());
+        Assert.assertEquals("The number of applications in integration is not as expected.There were or were not created applications.", 70, apps.size());
     }
 
 
@@ -144,8 +131,8 @@ public class DataConversionTest extends AbstractTest {
 
         Assert.assertEquals("The size of all apps there are in SystemIDs + 1 (the one should be created). ", 70,
                 Lists.newArrayList(applicationRepo.findAll()).size());
-        Assert.assertEquals("Method size is not correct.",5, Lists.newArrayList(methodRepo.findAll()).size());
-        Assert.assertEquals("The number of relations in graph.",5, Lists.newArrayList(relationshipRepo.findAll()).size());
+        Assert.assertEquals("Method size is not correct.", 5, Lists.newArrayList(methodRepo.findAll()).size());
+        Assert.assertEquals("The number of relations in graph.", 5, Lists.newArrayList(relationshipRepo.findAll()).size());
     }
 
     @Test
@@ -156,18 +143,20 @@ public class DataConversionTest extends AbstractTest {
     }
 
     @Test
-    public void testSingleAppVisualisation(){
+//    @Ignore("Potrebuje fixnout, v transakci testu padne i prez vycisteni a fakt ze solo funguje.")
+    public void testSingleAppVisualisation() {
         clear();
-        dataConversion.convertData(messages);
+        dataConversion.convertData(createMessages());
         List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName(SystemID.CZGAGENTINFO.name()));
-        Assert.assertTrue(result.size()==2);
-        Assert.assertEquals("getLead",((Method)result.get(0).get("method")).getName());
-        Assert.assertEquals("getPropertySomething",((Method)result.get(1).get("method")).getName());
+        Assert.assertTrue(result.size() == 2);
+        Assert.assertEquals("getLead", ((Method) result.get(0).get("method")).getName());
+        Assert.assertEquals("getPropertySomething", ((Method) result.get(1).get("method")).getName());
     }
 
     @After
     public void clear() {
         session.purgeDatabase();
+        messages = null;
     }
 
     private List<Message> createMessages() {

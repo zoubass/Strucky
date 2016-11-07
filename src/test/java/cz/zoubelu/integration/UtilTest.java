@@ -1,4 +1,4 @@
-package cz.zoubelu.database;
+package cz.zoubelu.integration;
 
 import cz.zoubelu.utils.DateUtils;
 import cz.zoubelu.utils.TimeRange;
@@ -15,5 +15,11 @@ public class UtilTest extends AbstractTest {
 		TimeRange range = DateUtils.getTimeRange();
 		Assert.assertNotNull(range.getStartDate());
 		Assert.assertNotNull(range.getEndDate());
+	}
+
+	@Test
+	public void testTableSuffixCreation() {
+		String suffix = DateUtils.getTableSuffix();
+		Assert.assertTrue(suffix.length()==6);
 	}
 }

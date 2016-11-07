@@ -12,15 +12,15 @@ import java.util.List;
 public interface DataConversion {
 
 	/**
-     * Converts relational data into nodes and relationships of graph database, between the given time range.
+     * Converts relational data into nodes and relationships of graph integration, between the given time range.
      * @param timeRange Time range the relational data are in.
      * @return result with message.
      */
     List<ConversionError> convertData(TimeRange timeRange);
 
 	/**
-	 * Converts the given messages into nodes and relationships of graph database.
-	 * @param messages List of the messages from rel. database.
+	 * Converts the given messages into nodes and relationships of graph integration.
+	 * @param messages List of the messages from rel. integration.
 	 * @return result with message.
      */
 	List<ConversionError> convertData(List<Message> messages);

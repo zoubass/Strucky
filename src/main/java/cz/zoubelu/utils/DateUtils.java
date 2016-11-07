@@ -1,11 +1,9 @@
 package cz.zoubelu.utils;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by zoubas on 14.7.2016.

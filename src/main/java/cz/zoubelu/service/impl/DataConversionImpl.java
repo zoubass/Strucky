@@ -128,6 +128,7 @@ public class DataConversionImpl implements DataConversion {
 				log.info("There is no systemID for the new application: " + appName);
 			}
 			String name = StringUtils.upperCase(appName);
+			log.info(String.format("Creating application: %s with systemID: %s",name,systemId));
 			app = new Application(name, systemId, new ArrayList<Method>());
 			return applicationRepo.save(app);
 		} else {

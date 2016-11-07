@@ -14,6 +14,7 @@ import org.springframework.data.neo4j.config.Neo4jConfiguration;
 @Profile("production")
 public class GraphConfig extends Neo4jConfiguration {
 
+//    TODO: Change for production
     @Bean
     public SessionFactory getSessionFactory() {
         return new SessionFactory("cz.zoubelu.domain");

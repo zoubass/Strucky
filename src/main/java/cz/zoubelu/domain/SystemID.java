@@ -2,7 +2,7 @@ package cz.zoubelu.domain;
 
 /**
  * Created by zoubas on 10.7.16.
- * This enum represents the application schema of graph database
+ * This enum represents the application schema of graph integration
  */
 public enum SystemID {
 
@@ -51,14 +51,14 @@ public enum SystemID {
 	SROVNÁVAČ("SROVNÁVAČ", 1025),
 	IBM_MB("IBM_MB", 0),
 	CZGUSRMNG("GUSRMNG", 1),
-	GZGUCINFO("GUCINFO", 2),
-	GZGPOLINFO("GPOLINFO", 3),
-	CZGPOLICING("GPOLICING", 4),
-	CZGMESSAGING("GMESSAGING", 5),
-	CZGCALCBM("GCALCBM", 6),
-	CZGDELIVERY("GDELIVERY", 7),
-	CZGPRINTS("GPRINTS", 8),
-	CZGDA("GDA", 9),
+	CZGUCINFO("CZGUCINFO", 2),
+	CZGPOLINFO("CZGPOLINFO", 3),
+	CZGPOLICING("CZGPOLICING", 4),
+	CZGMESSAGING("CZGMESSAGING", 5),
+	CZGCALCBM("CZGCALCBM", 6),
+	CZGDELIVERY("CZGDELIVERY", 7),
+	CZGPRINTS("CZGPRINTS", 8),
+	CZGDA("CZGDA", 9),
 	CZGCLAIMS("CZGCLAIMS", 12),
 	CZGCODELIST("CZGCODELIST", 13),
 	CZGCARPRICING("CZGCARPRICING", 14),
@@ -115,7 +115,7 @@ public enum SystemID {
 			return valueOf(name).getID();
 		}catch (IllegalArgumentException e){
 			throw new IllegalArgumentException(
-					"Nepodarilo se ziskat systemID jelikoz v ciselniku neni aplikace: " + name);
+					"Nepodarilo se ziskat systemID jelikoz v ciselniku neni aplikace: " + name,e);
 		}
 	}
 }

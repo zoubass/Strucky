@@ -7,5 +7,9 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  */
 public interface DataSource {
 
+	/**
+	 * Creates datasource depending on profile
+	 * @return datasource for specific environment
+     */
 	ComboPooledDataSource getDataSource();
 }

@@ -1,0 +1,28 @@
+<html>
+<head th:replace="fragments::head"></head>
+<body>
+<div role="navigation" class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <div class="nav navbar-nav">
+                    <button class="btn btn-default" onclick="showGraph()" type="submit">Zobrazit graf</button>
+                    <a th:href="@{/admin}"><span class="btn btn-default">Sheduling</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="content">
+    <form th:method="get" th:action="@{/pattern}">
+        <p>
+            <label for="pattern">Pattern scheduleru</label>
+            <input type="text" id="pattern" name="pattern" th:value="${pattern}"/>
+            <a th:href="@{/pattern(pattern=${pattern})}" class="btn btn-default">Nastavit</a>
+        </p>
+        <span th:text="${message}" th:if="${message!=null}">Fucked up</span>
+    </form>
+
+</div>
+</body>
+</html>

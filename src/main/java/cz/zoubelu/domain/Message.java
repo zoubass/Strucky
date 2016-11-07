@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 /**
  * Model of one interaction between applications
- * This object represents one row in MESSAGE table, INFORMA_LOG database
+ * This object represents one row in MESSAGE table, INFORMA_LOG integration
  */
 public class Message {
     private Long id;

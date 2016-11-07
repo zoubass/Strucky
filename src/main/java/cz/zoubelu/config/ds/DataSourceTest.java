@@ -2,19 +2,16 @@ package cz.zoubelu.config.ds;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import cz.zoubelu.config.DataSource;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 @Profile("test")
-public class DataSourceTestConfig implements DataSource {
+public class DataSourceTest implements DataSource {
     private final Logger log = Logger.getLogger(getClass());
 
     @Value("${url}")
@@ -41,8 +38,6 @@ public class DataSourceTestConfig implements DataSource {
     @Value("${minPoolSize}")
     private Integer minPoolSize;
 
-
-
     @Value("classpath:h2structure/drop_schema.sql")
     private Resource dropDb;
     @Value("classpath:h2structure/create_schema.sql")
@@ -62,15 +57,13 @@ public class DataSourceTestConfig implements DataSource {
             cpds.setMaxIdleTime(280);
             cpds.setMaxPoolSize(3);
         } catch (Exception e) {
-            log.error("Failed to initialize datasource. Exception while setting driver.",e);
+            log.error("Failed to initialize datasource. Exception while setting driver.", e);
         }
         return cpds;
     }
 /*
-    UNCOMMENT TO INSERT DATA INTO H2 DATABASE
-
     @Bean
-    public DataSourceInitializer dataInit(final BasicDataSource getDataSource, final ResourceDatabasePopulator getDatabasePopulator) {
+    public DataSourceInitializer dataInit(final ComboPooledDataSource getDataSource, final ResourceDatabasePopulator getDatabasePopulator) {
         DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
         dataSourceInitializer.setDatabasePopulator(getDatabasePopulator);
         dataSourceInitializer.setDataSource(getDataSource);
@@ -86,6 +79,5 @@ public class DataSourceTestConfig implements DataSource {
         populator.addScript(insertTestData);
         return populator;
     }
-    */
-
+*/
 }

@@ -1,8 +1,8 @@
 package cz.zoubelu.repository.impl;
 
+import cz.zoubelu.domain.Message;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.mapper.MessageMapper;
-import cz.zoubelu.domain.Message;
 import cz.zoubelu.utils.TimeRange;
 import org.springframework.jdbc.core.JdbcTemplate;
 

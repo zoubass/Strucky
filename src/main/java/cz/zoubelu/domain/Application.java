@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Created by zoubas on 3.6.16.
  */
-//TODO: jaxson
 @JsonIdentityInfo(generator=JSOGGenerator.class)
 @NodeEntity
 public class Application {
@@ -85,10 +84,4 @@ public class Application {
         this.providedMethods = providedMethods;
     }
 
-//    public List<Method> getConsumedMethods(){
-//        List<Method> consumedMethods;
-//        for (ConsumeRelationship rel: this.consumeRelationship) {
-//            consumedMethods.add(rel.getMethod());
-//        }
-//    }
 }

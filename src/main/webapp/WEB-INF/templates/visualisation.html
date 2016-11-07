@@ -1,13 +1,5 @@
 <html>
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet"
-          href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css"/>
-    <link rel="stylesheet" href="@{../css/graphStyles.css}" th:href="@{css/graphStyles.css}" type="text/css"/>
-    <title>Vizualizace</title>
-</head>
-
+<head th:replace="fragments::head"></head>
 <body>
 <div id="graph">
 </div>
@@ -15,21 +7,31 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6 col-md-6">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <select>
-                            <option th:each="name : ${T(cz.zoubelu.domain.SystemID).values()}"
-                                    th:value="${name}"
-                                    th:text="${name.systemName}">value
-                            </option>
-                        </select>
-                        <button class="btn btn-default" onclick="showGraph()" type="submit">Celý graf</button>
-                        <span th:if="${message!=null}" th:text="${message}"></span>
-                    </li>
-                </ul>
+                <div class="nav navbar-nav">
+                    <button class="btn btn-default" onclick="showGraph()" type="submit">Zobrazit graf</button>
+                    <a th:href="@{/admin}"><span class="btn btn-default">Sheduling</span></a>
+                </div>
             </div>
         </div>
     </div>
+</div>
+<div id="toolbar">
+    <div id="appName"></div>
+    <table id="consumedMethodsTable">
+        <thead>
+        <th>Název</th>
+        <th>Verze</th>
+        <th>Počet</th>
+        </thead>
+        <tbody id="consumedTbody">
+        <tr>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
 <script type="text/javascript" src="../js/visualisationD3.js" th:src="@{js/visualisationD3.js}"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>

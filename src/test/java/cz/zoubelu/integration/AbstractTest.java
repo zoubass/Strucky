@@ -1,7 +1,7 @@
-package cz.zoubelu.database;
+package cz.zoubelu.integration;
 
 import cz.zoubelu.config.ApplicationConfig;
-import cz.zoubelu.config.ds.DataSourceTestConfig;
+import cz.zoubelu.config.ds.DataSourceTest;
 import cz.zoubelu.config.GraphTestConfig;
 import cz.zoubelu.config.SchedulerConfig;
 import cz.zoubelu.repository.ApplicationRepository;
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class, DataSourceTestConfig.class, GraphTestConfig.class,
+@ContextConfiguration(classes = {ApplicationConfig.class, DataSourceTest.class, GraphTestConfig.class,
 		SchedulerConfig.class})
 @ActiveProfiles("test")
 public abstract class AbstractTest {

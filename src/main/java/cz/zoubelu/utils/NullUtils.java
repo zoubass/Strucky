@@ -7,11 +7,7 @@ import cz.zoubelu.domain.Application;
  */
 public class NullUtils {
 
-    public static void nullCheck(Object obj){
-        if (obj == null) throw new NullPointerException("Objekt nesmí být null.");
-    }
-
-    public static void nullCheck(Application app){
-        if (app == null) throw new IllegalArgumentException("Aplikace nebyla nalezena.");
+    public static void nullCheck(Object obj,String message){
+        if (obj == null) throw new NullPointerException(message);
     }
 }

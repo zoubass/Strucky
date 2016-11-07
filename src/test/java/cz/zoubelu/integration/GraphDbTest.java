@@ -1,4 +1,4 @@
-package cz.zoubelu.database;
+package cz.zoubelu.integration;
 
 import com.google.common.collect.Lists;
 

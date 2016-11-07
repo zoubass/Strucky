@@ -22,7 +22,7 @@ public class ConversionTaskImpl extends Task implements ConversionTask {
 
 	@Override
 	public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-		String tableName = "A_MESSAGE_" + DateUtils.getTableSuffix();
+		String tableName = tablePrefix + DateUtils.getTableSuffix();
 		conversionService.convertData(tableName);
 	}
 }
