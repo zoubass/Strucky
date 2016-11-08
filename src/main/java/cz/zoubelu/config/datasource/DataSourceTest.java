@@ -1,4 +1,4 @@
-package cz.zoubelu.config.ds;
+package cz.zoubelu.config.datasource;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import cz.zoubelu.config.DataSource;

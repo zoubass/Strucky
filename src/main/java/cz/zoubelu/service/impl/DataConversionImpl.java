@@ -1,22 +1,23 @@
 package cz.zoubelu.service.impl;
 
 import com.google.common.collect.Lists;
+import cz.zoubelu.codelist.SystemApp;
+import cz.zoubelu.codelist.SystemsList;
 import cz.zoubelu.domain.*;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
+import cz.zoubelu.service.DynamicEntityProvider;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.TimeRange;
 import cz.zoubelu.validation.Validator;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +33,7 @@ public class DataConversionImpl implements DataConversion {
 	@Autowired
 	private InformaMessageRepository informaRepository;
 
+	//remove
 	@Autowired
 	private ApplicationRepository applicationRepo;
 
@@ -43,6 +45,9 @@ public class DataConversionImpl implements DataConversion {
 
 	@Autowired
 	private Validator validator;
+
+	@Autowired
+	private DynamicEntityProvider provider;
 
 	public List<ConversionError> convertData(TimeRange timeRange) {
 		List<Message> messages = informaRepository.getInteractionData(timeRange);
@@ -69,11 +74,11 @@ public class DataConversionImpl implements DataConversion {
 
 
 	private List<ConversionError> innerConversion(List<Message> messages) {
-		Set<ConversionError> errors = new HashSet<ConversionError>();
+		final Set<ConversionError> errors = new HashSet<ConversionError>();
 		for (Message msg : messages) {
 			try {
 				validator.validateMessage(msg);
-				Application providingApp = getProvidingApp(msg);
+				Application providingApp = getProvidingApplication(msg);
 				Method consumedMethod = getConsumedMethod(providingApp, msg);
 				Application consumingApp = getConsumingApplication(msg);
 
@@ -89,21 +94,27 @@ public class DataConversionImpl implements DataConversion {
 		return Lists.newArrayList(errors);
 	}
 
-	private Application getProvidingApp(Message msg) {
-		String appName = StringUtils.upperCase(msg.getApplication());
-		Application app = applicationRepo.findByName(appName);
-		return createApplicationIfNull(app, msg.getApplication(), SystemID.getIdByName(appName));
+	private Application getProvidingApplication(Message msg) {
+		SystemApp system = SystemsList.getIdByName(msg.getApplication());
+		boolean isNewlyCreated = system.getId().equals(-1);
+		if (isNewlyCreated) {
+			if (msg.getMsg_tar_sys() != null) {
+				system.setId(msg.getMsg_tar_sys());
+			} else {
+				log.error("Unable to get system ID for application with name: " + system.getName());
+			}
+		}
+		return provider.getApplication(system);
+	}
+
+	private Application getConsumingApplication(Message msg) {
+		SystemApp system = SystemsList.getSystemByID(msg.getMsg_src_sys());
+		return provider.getApplication(system);
 	}
 
 	private Method getConsumedMethod(Application app, Message msg) {
 		Method method = methodRepository.findProvidedMethod(app, msg.getMsg_type(), msg.getMsg_version());
 		return createMethodIfNull(app, method, msg);
-	}
-
-	private Application getConsumingApplication(Message msg) {
-		String systemName = SystemID.getSystemByID(msg.getMsg_src_sys());
-		return createApplicationIfNull(applicationRepo.findByName(StringUtils.upperCase(systemName)), systemName,
-				msg.getMsg_src_sys());
 	}
 
 	private void createConsumeRelation(Application consumer, Method method) {
@@ -122,19 +133,6 @@ public class DataConversionImpl implements DataConversion {
 	 * HELPER METHODS
 	 **/
 
-	private Application createApplicationIfNull(Application app, String appName, Integer systemId) {
-		if (app == null) {
-			if (systemId == null) {
-				log.info("There is no systemID for the new application: " + appName);
-			}
-			String name = StringUtils.upperCase(appName);
-			log.info(String.format("Creating application: %s with systemID: %s",name,systemId));
-			app = new Application(name, systemId, new ArrayList<Method>());
-			return applicationRepo.save(app);
-		} else {
-			return app;
-		}
-	}
 
 	private Method createMethodIfNull(Application app, Method method, Message msg) {
 		if (method == null) {

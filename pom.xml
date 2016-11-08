@@ -20,7 +20,8 @@
         <h2.version>1.4.191</h2.version>
         <commons.dbcp.version>1.2.2</commons.dbcp.version>
         <spring.data.neo4j>4.1.1.RELEASE</spring.data.neo4j>
-        <neo4j.version>2.3.5</neo4j.version>
+        <!--was 2.3.5-->
+        <neo4j.version>2.3.7</neo4j.version>
     </properties>
 
     <dependencies>
@@ -130,9 +131,9 @@
             <version>${h2.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.oracle</groupId>-->
-            <!--<artifactId>ojdbc6</artifactId>-->
-            <!--<version>11.2.0</version>-->
+        <!--<groupId>com.oracle</groupId>-->
+        <!--<artifactId>ojdbc6</artifactId>-->
+        <!--<version>11.2.0</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>c3p0</groupId>
@@ -236,4 +237,45 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>exclude-config</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <targetPath>META-INF</targetPath>
+                                    <includes>
+                                        <include>context.xml</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
+                            <packagingExcludes>
+                                WEB-INF/classes/context.xml,
+                                WEB-INF/classes/log4j.properties,
+                                WEB-INF/classes/config/**/*,
+                                WEB-INF/classes/config
+                            </packagingExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                        <excludes>
+                            <exclude>log4j.properties</exclude>
+                            <exclude>config/**/*</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 </project>

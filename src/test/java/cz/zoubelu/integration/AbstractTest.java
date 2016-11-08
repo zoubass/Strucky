@@ -1,7 +1,7 @@
 package cz.zoubelu.integration;
 
 import cz.zoubelu.config.ApplicationConfig;
-import cz.zoubelu.config.ds.DataSourceTest;
+import cz.zoubelu.config.datasource.DataSourceTest;
 import cz.zoubelu.config.GraphTestConfig;
 import cz.zoubelu.config.SchedulerConfig;
 import cz.zoubelu.repository.ApplicationRepository;

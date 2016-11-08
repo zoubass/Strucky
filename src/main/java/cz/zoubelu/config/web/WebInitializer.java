@@ -1,7 +1,7 @@
 package cz.zoubelu.config.web;
 
 import cz.zoubelu.config.*;
-import cz.zoubelu.config.ds.DataSourceProd;
+import cz.zoubelu.config.datasource.DataSourceProd;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -19,7 +19,7 @@ public class WebInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext servletContext) {
 		// Create the 'root' Spring application context
 		AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
-		//FIXME: Replace graphtest for graphconfig
+
 		appContext.register(ApplicationConfig.class,GraphConfig.class,SchedulerConfig.class, DataSourceProd.class);
 
 		// Manage the lifecycle of the root application context

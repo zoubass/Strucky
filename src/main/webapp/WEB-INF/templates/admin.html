@@ -14,11 +14,11 @@
     </div>
 </div>
 <div id="content">
-    <form th:method="get" th:action="@{/pattern}">
+    <form th:method="get" th:action="@{/admin/pattern/pattern=(${pattern})}">
         <p>
             <label for="pattern">Pattern scheduleru</label>
-            <input type="text" id="pattern" name="pattern" th:value="${pattern}"/>
-            <a th:href="@{/pattern(pattern=${pattern})}" class="btn btn-default">Nastavit</a>
+            <input type="text" name="pattern" id="pattern" th:field="*{pattern}"/>
+            <button class="btn btn-default">Nastavit</button>
         </p>
         <span th:text="${message}" th:if="${message!=null}">Fucked up</span>
     </form>

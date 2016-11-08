@@ -25,7 +25,8 @@ public class InformaRepositoryImpl implements InformaMessageRepository {
         return this.jdbcTemplate.query("select * from " + tableName + " where request_time between ? and ?",new MessageMapper(), timeRange.getStartDate(), timeRange.getEndDate());
     }
 
-    @Override public List<Message> getInteractionData(String tableName) {
-        return null;
+    @Override
+    public List<Message> getInteractionData(String tableName) {
+        return this.jdbcTemplate.query("select * from " + tableName,new MessageMapper());
     }
 }
