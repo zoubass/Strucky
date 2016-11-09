@@ -12,9 +12,12 @@ import java.sql.SQLException;
 public class MessageMapper implements RowMapper<Message> {
 
     public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return mapRow(rs);
+    }
+
+    public Message mapRow(ResultSet rs) throws SQLException {
         Message informalog = new Message();
         informalog.setId(rs.getLong("ID"));
-
         informalog.setRequest_time(rs.getTimestamp("REQUEST_TIME"));
         informalog.setResponse_time(rs.getTimestamp("RESPONSE_TIME"));
         informalog.setApplication(rs.getString("application"));

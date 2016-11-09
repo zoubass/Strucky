@@ -5,6 +5,8 @@ import cz.zoubelu.utils.TimeRange;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.sql.Timestamp;
+
 /**
  * Created by zoubas on 14.7.2016.
  */
@@ -19,7 +21,14 @@ public class UtilTest extends AbstractTest {
 
 	@Test
 	public void testTableSuffixCreation() {
-		String suffix = DateUtils.getTableSuffix();
-		Assert.assertTrue(suffix.length()==6);
+		String tableName = DateUtils.getTableSuffix("A_MESSAGE_");
+		Assert.assertTrue(tableName.contains("A_MESSAGE_"));
+		Assert.assertTrue(tableName.length()==16);
+	}
+
+	@Test
+	public void testLastDayOfMonthUtil() {
+		Timestamp time = DateUtils.getLastDayOfMonth(Timestamp.valueOf("2016-06-01 00:00:00"));
+		Assert.assertEquals(Timestamp.valueOf("2016-06-30 23:59:59.9"),time);
 	}
 }

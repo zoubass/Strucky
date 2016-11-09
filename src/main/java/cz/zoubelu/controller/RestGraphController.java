@@ -10,6 +10,7 @@ import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
+import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.ErrorResponse;
 import cz.zoubelu.utils.NullUtils;
 import cz.zoubelu.utils.TimeRange;
@@ -123,17 +124,13 @@ public class RestGraphController {
     }
 
 
-    /**
-     * METODY POD TIMTO KOMENTAREM JSOU NA ODSTRANENI, SLOUZI POUZE PRO TEST
-     */
 
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> saveApp() {
-        Timestamp start = Timestamp.valueOf("2016-06-01 11:00:00.0");
-        Timestamp end = Timestamp.valueOf("2016-06-01 12:00:00.0");
-        dataConversion.convertData(new TimeRange(start,end));
-        return visualization.visualizeGraph();
+    public List<ConversionError> insertData(@RequestParam String year,@RequestParam String month) {
+        Timestamp start = Timestamp.valueOf(year+"-"+month+"-01 00:00:00.0");
+        Timestamp end = Timestamp.valueOf(year+"-"+month+"-01 23:59:59.9");
+        return dataConversion.convertData(new TimeRange(start,end));
     }
 
     @RequestMapping(value = ("/createGraphSchema"), method = RequestMethod.GET)
@@ -144,7 +141,9 @@ public class RestGraphController {
         }
         return visualization.visualizeGraph();
     }
-
+    /**
+     * METODY POD TIMTO KOMENTAREM JSOU NA ODSTRANENI, SLOUZI POUZE PRO TEST
+     */
     @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> control() {

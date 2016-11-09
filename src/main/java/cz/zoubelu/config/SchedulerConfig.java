@@ -30,6 +30,6 @@ public class SchedulerConfig {
 
 	@Bean
 	public Task conversionTaskImpl(){
-		return new ConversionTaskImpl(tablePrefix);
+		return new ConversionTaskImpl();
 	}
 }

@@ -153,6 +153,11 @@ public class DataConversionTest extends AbstractTest {
         SystemsList.clear();
     }
 
+    @Test
+    public void testRowCallBack() {
+       informaRepository.getInteractionData("MESSAGE");
+    }
+
     private List<Message> createMessages() {
         Message m1 = new Message();
         Message m2 = new Message();

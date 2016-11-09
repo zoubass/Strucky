@@ -37,29 +37,6 @@ public class AdminController {
         return "visualisation";
     }
 
-    @RequestMapping(value = ("/start"), method = RequestMethod.GET)
-    public String startScheduler(Model model) {
-        try {
-            scheduler.start();
-            model.addAttribute("message", "Start scheduleru byl úspěšný.");
-        } catch (Exception e) {
-            model.addAttribute("message", "Nepodařilo se spustit scheduler, důvod: " + e.getMessage());
-        }
-        return "visualisation";
-    }
-
-    @RequestMapping(value = ("/stop"), method = RequestMethod.GET)
-    public String stopScheduler(Model model) {
-        try {
-            scheduler.start();
-            model.addAttribute("message", "Stop scheduleru byl úspěšný.");
-        } catch (Exception e) {
-            model.addAttribute("message", "Nepodařilo se zastavit scheduler, důvod: " + e.getMessage());
-        }
-        return "visualisation";
-    }
-
-
     @RequestMapping(method = RequestMethod.GET)
     public String showAdmin(Model model) {
         model.addAttribute("pattern", "* * * * *");

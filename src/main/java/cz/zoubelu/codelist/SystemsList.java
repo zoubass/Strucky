@@ -83,6 +83,11 @@ public class SystemsList {
 		add(new SystemApp("CZCTIA", 24));
 		add(new SystemApp("MONITORING", 99));
 		add(new SystemApp("CZGLISA", 141));
+		//newly added
+		add(new SystemApp("Message House",134));
+		add(new SystemApp("svcOVB",10));
+		add(new SystemApp("svcPMS",1026));
+		add(new SystemApp("cpojPWB",1026));
 	}};
 
 	public static SystemApp getSystemByID(Integer id) {
