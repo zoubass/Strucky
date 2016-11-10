@@ -1,9 +1,10 @@
 package cz.zoubelu.controller;
 
-import com.google.common.collect.Lists;
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.codelist.SystemsList;
-import cz.zoubelu.domain.*;
+import cz.zoubelu.domain.Application;
+import cz.zoubelu.domain.ConsumeRelationship;
+import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.MethodRepository;
@@ -130,7 +131,7 @@ public class RestGraphController {
     public List<ConversionError> insertData(@RequestParam String year,@RequestParam String month) {
         Timestamp start = Timestamp.valueOf(year+"-"+month+"-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf(year+"-"+month+"-01 23:59:59.9");
-        return dataConversion.convertData(new TimeRange(start,end));
+        return dataConversion.convertData("I was removed due to commmit",new TimeRange(start,end));
     }
 
     @RequestMapping(value = ("/createGraphSchema"), method = RequestMethod.GET)
@@ -141,72 +142,4 @@ public class RestGraphController {
         }
         return visualization.visualizeGraph();
     }
-    /**
-     * METODY POD TIMTO KOMENTAREM JSOU NA ODSTRANENI, SLOUZI POUZE PRO TEST
-     */
-    @RequestMapping(value = ("/insertTest"), method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> control() {
-        dataConversion.convertData(createMessages());
-        return visualization.visualizeGraph();
-    }
-
-    @RequestMapping(value = ("/purge"), method = RequestMethod.GET)
-    @ResponseBody
-    public boolean purge() {
-        session.purgeDatabase();
-        return true;
-    }
-
-    private List<Message> createMessages() {
-        Message m1 = new Message();
-        Message m2 = new Message();
-        Message m3 = new Message();
-        Message m4 = new Message();
-        Message m5 = new Message();
-        Message m6 = new Message();
-        Message m7 = new Message();
-        Message m8 = new Message();
-        m1.setApplication("CZGCALCBM");
-        m1.setMsg_src_sys(1001);
-        m1.setMsg_type("getClientValue");
-        m1.setMsg_version(100);
-
-        m2.setApplication("CZGCALCBM");
-        m2.setMsg_src_sys(1001);
-        m2.setMsg_type("getClientValue");
-        m2.setMsg_version(100);
-
-        m3.setApplication("CZGEARNIX");
-        m3.setMsg_src_sys(16);
-        m3.setMsg_type("getPropertySomething");
-        m3.setMsg_version(110);
-
-        m4.setApplication("czgcalcbm");
-        m4.setMsg_src_sys(191);
-        m4.setMsg_type("?");
-        m4.setMsg_version(null);
-
-        m5.setApplication("czgcalcbm");
-        m5.setMsg_src_sys(191);
-        m5.setMsg_type("?");
-        m5.setMsg_version(null);
-
-        m6.setApplication("CZGEARNIX");
-        m6.setMsg_src_sys(191);
-        m6.setMsg_type("nothing");
-        m6.setMsg_version(null);
-
-        m7.setApplication("czgleadmng");
-        m7.setMsg_src_sys(16);
-        m7.setMsg_type("getLead");
-        m7.setMsg_version(110);
-
-        m8.setApplication("CZGLEADMNG");
-        m8.setMsg_src_sys(16);
-        m8.setMsg_type("getLead");
-        m8.setMsg_version(110);
-        return Lists.newArrayList(m1, m2, m3, m4, m5, m6, m7, m8);
-    }
-
 }
