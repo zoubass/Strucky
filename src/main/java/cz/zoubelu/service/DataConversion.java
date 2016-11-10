@@ -16,7 +16,7 @@ public interface DataConversion {
      * @param timeRange Time range the relational data are in.
      * @return result with message.
      */
-    List<ConversionError> convertData(TimeRange timeRange);
+    List<ConversionError> convertData(String tableName, TimeRange timeRange);
 
 	/**
 	 * Converts the given messages into nodes and relationships of graph integration.
@@ -26,4 +26,6 @@ public interface DataConversion {
 	List<ConversionError> convertData(List<Message> messages);
 
 	List<ConversionError> convertData(String tableName);
+
+	void convertSingleMessage(Message message);
 }
