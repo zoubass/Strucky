@@ -3,21 +3,28 @@ package cz.zoubelu.service.impl;
 import com.google.common.collect.Lists;
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.codelist.SystemsList;
-import cz.zoubelu.domain.*;
+import cz.zoubelu.domain.Application;
+import cz.zoubelu.domain.ConsumeRelationship;
+import cz.zoubelu.domain.Message;
+import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.MethodRepository;
 import cz.zoubelu.repository.RelationshipRepository;
-import cz.zoubelu.service.DynamicEntityProvider;
+import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.service.DataConversion;
+import cz.zoubelu.service.DynamicEntityProvider;
 import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.TimeRange;
 import cz.zoubelu.validation.Validator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,13 +34,9 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class DataConversionImpl implements DataConversion {
+public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 	private final Logger log = Logger.getLogger(getClass());
 
-	@Autowired
-	private InformaMessageRepository informaRepository;
-
-	//remove
 	@Autowired
 	private ApplicationRepository applicationRepo;
 
@@ -49,49 +52,45 @@ public class DataConversionImpl implements DataConversion {
 	@Autowired
 	private DynamicEntityProvider provider;
 
-	public List<ConversionError> convertData(TimeRange timeRange) {
-		List<Message> messages = informaRepository.getInteractionData(timeRange);
-		return convertData(messages);
+	@Autowired
+	private InformaMessageRepository informaRepository;
+
+	final Set<ConversionError> errors = new HashSet<ConversionError>();
+
+	public List<ConversionError> convertData(String tableName, TimeRange timeRange) {
+		informaRepository.fetchAndConvertData(tableName, timeRange, this);
+		return Lists.newArrayList(errors);
 	}
 
 	public List<ConversionError> convertData(String tableName) {
-		List<Message> messages = informaRepository.getInteractionData(tableName);
-		return convertData(messages);
+		informaRepository.fetchAndConvertData(tableName,this);
+		return Lists.newArrayList(errors);
 	}
 
 	public List<ConversionError> convertData(List<Message> messages) {
-		log.info("Starting conversion.");
-		long startTime = System.currentTimeMillis();
-
-		List<ConversionError> errors = innerConversion(messages);
-
-		long stopTime = System.currentTimeMillis();
-		log.info(String.format("Conversion took %s ms.", stopTime - startTime));
-		log.info("Conversion ended with " + errors.size() + " errors.");
-		return errors;
-	}
-
-
-
-	private List<ConversionError> innerConversion(List<Message> messages) {
 		final Set<ConversionError> errors = new HashSet<ConversionError>();
-		for (Message msg : messages) {
+
+		for (Message message : messages) {
 			try {
-				validator.validateMessage(msg);
-				Application providingApp = getProvidingApplication(msg);
-				Method consumedMethod = getConsumedMethod(providingApp, msg);
-				Application consumingApp = getConsumingApplication(msg);
-
-				log.info(String.format("Saving relationship - Provider: %s, Method: %s, Consumer: %s.",
-						providingApp.getName(), consumedMethod.getName(), consumingApp.getName()));
-
-				createConsumeRelation(consumingApp, consumedMethod);
+				convertSingleMessage(message);
 			} catch (Exception e) {
-				log.error("Conversion of application failed. Reason: "+e.getMessage(), e);
+				log.error("Conversion of application failed. Reason: " + e.getMessage(), e);
 				errors.add(new ConversionError(e.getMessage()));
 			}
 		}
 		return Lists.newArrayList(errors);
+	}
+
+	public void convertSingleMessage(Message msg) {
+		validator.validateMessage(msg);
+		Application providingApp = getProvidingApplication(msg);
+		Method consumedMethod = getConsumedMethod(providingApp, msg);
+		Application consumingApp = getConsumingApplication(msg);
+
+		log.info(String.format("Saving relationship - Provider: %s, Method: %s, Consumer: %s.", providingApp.getName(),
+				consumedMethod.getName(), consumingApp.getName()));
+
+		createConsumeRelation(consumingApp, consumedMethod);
 	}
 
 	private Application getProvidingApplication(Message msg) {
@@ -120,7 +119,7 @@ public class DataConversionImpl implements DataConversion {
 	private void createConsumeRelation(Application consumer, Method method) {
 		ConsumeRelationship consumeRelationship = relationshipRepo.findRelationship(consumer, method);
 		if (consumeRelationship != null) {
-			log.info(String.format("Relationship: %s CONSUMES -> %s, already exists, incrementing total usage by 1.",
+			log.debug(String.format("Relationship: %s CONSUMES -> %s, already exists, incrementing total usage by 1.",
 					consumer.getName(), method.getName()));
 			consumeRelationship.setTotalUsage(consumeRelationship.getTotalUsage() + 1);
 		} else {
@@ -129,10 +128,21 @@ public class DataConversionImpl implements DataConversion {
 		relationshipRepo.save(consumeRelationship);
 	}
 
+	public void processRow(ResultSet resultSet) throws SQLException {
+		MessageMapper mapper = new MessageMapper();
+		Message message= null;
+		try {
+			message = mapper.mapRow(resultSet);
+			convertSingleMessage(message);
+		} catch (Exception e) {
+			errors.add(new ConversionError(
+					"Failed to convert message with ID: " + message!=null? message.getMsg_id(): "not available" + ". Reason: " + e.getMessage()));
+		}
+	}
+
 	/**
 	 * HELPER METHODS
 	 **/
-
 
 	private Method createMethodIfNull(Application app, Method method, Message msg) {
 		if (method == null) {
@@ -173,5 +183,4 @@ public class DataConversionImpl implements DataConversion {
 		applicationRepo.save(consumer);
 		return consumeRelationship;
 	}
-
 }
