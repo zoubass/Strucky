@@ -3,8 +3,13 @@ package cz.zoubelu.integration;
 import com.google.common.collect.Lists;
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.codelist.SystemsList;
-import cz.zoubelu.domain.*;
+import cz.zoubelu.domain.Application;
+import cz.zoubelu.domain.ConsumeRelationship;
+import cz.zoubelu.domain.Message;
+import cz.zoubelu.domain.Method;
+import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.service.DataConversion;
+import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
@@ -12,6 +17,7 @@ import it.sauronsoftware.cron4j.Task;
 import it.sauronsoftware.cron4j.TaskExecutionContext;
 import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -30,6 +36,8 @@ public class DataConversionTest extends AbstractTest {
     private DataConversion dataConversion;
 
     @Autowired
+    private JdbcTemplate template;
+    @Autowired
     private Scheduler scheduler;
 
     private List<Message> messages;
@@ -37,7 +45,7 @@ public class DataConversionTest extends AbstractTest {
     @Before
     public void startUp() {
         messages = createMessages();
-        for (SystemApp system : SystemsList.values()) {
+        for (SystemApp system : new SystemsList().values()) {
             applicationRepo.save(new Application(system.getName(), system.getId(), new ArrayList<Method>()));
         }
     }
@@ -46,10 +54,10 @@ public class DataConversionTest extends AbstractTest {
     public void shouldNotCreateNewEntitiesIfTheyExist() {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 02:00:00.0");
-        dataConversion.convertData(new TimeRange(start, end));
+        List<ConversionError> errors = dataConversion.convertData("MESSAGE", new TimeRange(start, end));
 
         List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
-        Assert.assertEquals("The number of applications in integration is not as expected.There were or were not created applications.", 70, apps.size());
+        Assert.assertEquals("The number of applications in integration is not as expected.There were or were not created applications.", 75, apps.size());
         Assert.assertEquals("The newly created application should be only one and that's 29.", "29", SystemsList.getSystemByID(29).getName());
     }
 
@@ -122,7 +130,7 @@ public class DataConversionTest extends AbstractTest {
 
         Assert.assertEquals("getLead", lead.getProvidedMethods().get(0).getName());
 
-        Assert.assertEquals("The size of all apps there are in SystemIDs + 1 (the one should be created). ", 70,
+        Assert.assertEquals("The size of all apps there are in SystemIDs + 1 (the one should be created). ", 75,
                 Lists.newArrayList(applicationRepo.findAll()).size());
         Assert.assertEquals("Method size is not correct.", 5, Lists.newArrayList(methodRepo.findAll()).size());
         Assert.assertEquals("The number of relations in graph.", 5, Lists.newArrayList(relationshipRepo.findAll()).size());
@@ -136,26 +144,35 @@ public class DataConversionTest extends AbstractTest {
     }
 
     @Test
-    @Ignore("Potrebuje fixnout, v transakci testu padne i prez vycisteni a fakt ze solo funguje.")
     public void testSingleAppVisualisation() {
-        clear();
         dataConversion.convertData(createMessages());
         List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName("CZGAGENTINFO"));
         Assert.assertTrue(result.size() == 2);
-        Assert.assertEquals("getLead", ((Method) result.get(0).get("method")).getName());
-        Assert.assertEquals("getPropertySomething", ((Method) result.get(1).get("method")).getName());
+        Assert.assertEquals("getLead", ((Method) result.get(1).get("method")).getName());
+        Assert.assertEquals("getPropertySomething", ((Method) result.get(0).get("method")).getName());
     }
 
     @After
     public void clear() {
         session.purgeDatabase();
         messages = null;
-        SystemsList.clear();
+        SystemsList.values().clear();
     }
 
     @Test
+    @Ignore("This test is only for performance comparison")
     public void testRowCallBack() {
-       informaRepository.getInteractionData("MESSAGE");
+        Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
+        Timestamp end = Timestamp.valueOf("2016-06-03 00:00:00.0");
+        long first = System.currentTimeMillis();
+        dataConversion.convertData("MESSAGE",new TimeRange(start,end));
+        long second = System.currentTimeMillis();
+        long third = System.currentTimeMillis();
+        List<Message> messages = template.query("select * from MESSAGE where request_time between ? and ?", new MessageMapper(),start,end);
+        dataConversion.convertData(messages);
+        long fourth = System.currentTimeMillis();
+        System.out.println(second-first);
+        System.out.println(fourth-third);
     }
 
     private List<Message> createMessages() {
