@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"cz.zoubelu.service"})
 @EnableNeo4jRepositories(basePackages = "cz.zoubelu.repository")
 @EnableTransactionManagement
-@PropertySource(value={"classpath:conf/database.properties","classpath:conf/neo4j.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value={"classpath:conf/database.properties","classpath:conf/neo-config.properties"}, ignoreResourceNotFound = true)
 public class ApplicationConfig {
 
     @Autowired
@@ -34,7 +34,7 @@ public class ApplicationConfig {
         PropertySourcesPlaceholderConfigurer placeHolder = new PropertySourcesPlaceholderConfigurer();
         placeHolder.setIgnoreResourceNotFound(true);
         placeHolder.setIgnoreUnresolvablePlaceholders(true);
-        placeHolder.setLocations(new Resource[]{new ClassPathResource("conf/database.properties"), new ClassPathResource("conf/neo4j.properties"),new ClassPathResource("conf/config.properties")});
+        placeHolder.setLocations(new Resource[]{new ClassPathResource("conf/neo-config.properties")});
         return placeHolder;
     }
 
