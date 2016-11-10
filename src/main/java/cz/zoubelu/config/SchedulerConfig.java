@@ -17,9 +17,6 @@ public class SchedulerConfig {
 	@Value("${scheduler.pattern}")
 	private String schedulingPattern;
 
-	@Value("${table.prefix}")
-	private String tablePrefix;
-
 	@Bean
 	public Scheduler scheduler(){
 		Scheduler s = new Scheduler();
