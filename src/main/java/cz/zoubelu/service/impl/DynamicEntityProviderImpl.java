@@ -66,8 +66,8 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 	private Application createApplication(SystemApp system) {
 		log.info(String.format("Creating application: %s with systemID: %s",system.getName(),system.getId()));
 		Application app = new Application(system.getName(), system.getId(), new ArrayList<Method>());
-		cache.cacheApplication(app);
-		return app;
+//		cache.cacheApplication(app);
+		return applicationRepo.save(app);
 	}
 
 	private Method createMethod(Application app, Message msg) {
