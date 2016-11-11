@@ -14,15 +14,18 @@
     </div>
 </div>
 <div id="content">
-    <form th:method="get" th:action="@{/admin/pattern/pattern=(${pattern})}">
+    <form class="navbar-form" method="post" action="#" th:action="@{/admin/pattern}">
         <p>
             <label for="pattern">Pattern scheduleru</label>
-            <input type="text" name="pattern" id="pattern" th:field="*{pattern}"/>
+            <input type="text" name="pattern" id="pattern" th:value="${pattern}" />
             <button class="btn btn-default">Nastavit</button>
         </p>
-        <span th:text="${message}" th:if="${message!=null}">Fucked up</span>
+        <span th:text="${message}" th:if="${message!=null}">Error</span>
     </form>
-
+    <div class="navbar-form">
+        <a th:href="@{/scheduler/start}"><button class="btn btn-default">Spustit scheduler</button></a>
+        <a th:href="@{/scheduler/stop}"><button class="btn btn-default">Zastavit scheduler</button></a>
+    </div>
 </div>
 </body>
 </html>
