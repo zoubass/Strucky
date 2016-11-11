@@ -1,7 +1,10 @@
 package cz.zoubelu.config;
 
+import cz.zoubelu.codelist.SystemsList;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.impl.InformaRepositoryImpl;
+import cz.zoubelu.service.DataConversion;
+import cz.zoubelu.service.impl.DataConversionImpl;
 import cz.zoubelu.validation.Validator;
 import cz.zoubelu.validation.impl.MessageValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Created by zoubas
  */
 @Configuration
-@ComponentScan(basePackages = {"cz.zoubelu.service"})
+@ComponentScan(basePackages = {"cz.zoubelu.service","cz.zoubelu.cache"})
 @EnableNeo4jRepositories(basePackages = "cz.zoubelu.repository")
 @EnableTransactionManagement
 @PropertySource(value={"classpath:conf/database.properties","classpath:conf/neo-config.properties"}, ignoreResourceNotFound = true)
@@ -51,6 +54,13 @@ public class ApplicationConfig {
     @Bean
     public Validator getValidator() {
         return new MessageValidator();
+    }
+
+    @Bean
+    public DataConversion getConvertor(){
+        DataConversionImpl conversion = new DataConversionImpl();
+        conversion.setSystemsList(new SystemsList());
+        return conversion;
     }
 
 }

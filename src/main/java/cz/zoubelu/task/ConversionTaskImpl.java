@@ -2,7 +2,6 @@ package cz.zoubelu.task;
 
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.utils.ConversionError;
-import cz.zoubelu.utils.CsvFileUtils;
 import cz.zoubelu.utils.DateUtils;
 import it.sauronsoftware.cron4j.Task;
 import it.sauronsoftware.cron4j.TaskExecutionContext;
@@ -32,7 +31,6 @@ public class ConversionTaskImpl extends Task implements ConversionTask {
 
 		String tableName = tablePrefix + DateUtils.getYearMonthSuffix();
 		List<ConversionError> errors = dataConversion.convertData(tableName);
-		CsvFileUtils.savelist();
 
 		long stopTime = System.currentTimeMillis();
 		log.info(String.format("Conversion took %s ms.", stopTime - startTime));

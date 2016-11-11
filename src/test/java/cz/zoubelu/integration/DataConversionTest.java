@@ -1,13 +1,12 @@
 package cz.zoubelu.integration;
 
 import com.google.common.collect.Lists;
+import cz.zoubelu.cache.Cache;
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.codelist.SystemsList;
-import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Message;
 import cz.zoubelu.domain.Method;
-import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.TimeRange;
@@ -36,31 +35,34 @@ public class DataConversionTest extends AbstractTest {
     private DataConversion dataConversion;
 
     @Autowired
-    private JdbcTemplate template;
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private Cache cache;
+
     @Autowired
     private Scheduler scheduler;
 
     private List<Message> messages;
 
+    private SystemsList systemsList;
+
     @Before
     public void startUp() {
-        messages = createMessages();
-        for (SystemApp system : new SystemsList().values()) {
-            applicationRepo.save(new Application(system.getName(), system.getId(), new ArrayList<Method>()));
+        /*
+        jdbcTemplate.update("Delete from message");
+        final String sql = "INSERT INTO MESSAGE(id,application,msg_src_sys,msg_version,msg_type) VALUES (?,?,?,?,?)";
+        int id = 1;
+        for (Message m: createMessages()){
+            jdbcTemplate.update(sql, id++, m.getApplication(), m.getMsg_src_sys(), m.getMsg_version(), m.getMsg_type());
+        }
+        */
+        messages=createMessages();
+        systemsList = new SystemsList();
+        for (SystemApp system : systemsList.values()) {
+            applicationRepo.save(new cz.zoubelu.domain.Application(system.getName(), system.getId(), new ArrayList<Method>()));
         }
     }
-
-    @Test
-    public void shouldNotCreateNewEntitiesIfTheyExist() {
-        Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
-        Timestamp end = Timestamp.valueOf("2016-06-01 02:00:00.0");
-        List<ConversionError> errors = dataConversion.convertData("MESSAGE", new TimeRange(start, end));
-
-        List<Application> apps = Lists.newArrayList(applicationRepo.findAll());
-        Assert.assertEquals("The number of applications in integration is not as expected.There were or were not created applications.", 75, apps.size());
-        Assert.assertEquals("The newly created application should be only one and that's 29.", "29", SystemsList.getSystemByID(29).getName());
-    }
-
 
     @Test
     @Ignore("This test is ignored because it tests scheduler and it takes too long")
@@ -87,18 +89,20 @@ public class DataConversionTest extends AbstractTest {
 
     @Test
     public void shouldConvertTheGivenMessagesToGraphData() {
-        dataConversion.convertData(messages);
+        List<ConversionError> errors = dataConversion.convertData(messages);
 
-        Application agentInfo = applicationRepo.findByName("CZGAGENTINFO");
-        Application hugo = applicationRepo.findByName("NHUGO");
-        Application a191 = applicationRepo.findByName("191");
-        Application lead = applicationRepo.findByName("CZGLEADMNG");
+        cz.zoubelu.domain.Application agentInfo = applicationRepo.findByName("CZGAGENTINFO");
+        cz.zoubelu.domain.Application hugo = applicationRepo.findByName("NHUGO");
+        cz.zoubelu.domain.Application a191 = applicationRepo.findByName("191");
+        cz.zoubelu.domain.Application lead = applicationRepo.findByName("CZGLEADMNG");
 
-        ConsumeRelationship firstAgRel = agentInfo.getConsumeRelationship().get(0);
-        ConsumeRelationship secondAgRel = agentInfo.getConsumeRelationship().get(1);
-        List<ConsumeRelationship> hugoRels = hugo.getConsumeRelationship();
+        Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
 
         Assert.assertTrue(agentInfo.getConsumeRelationship().size() > 0);
+        ConsumeRelationship firstAgRel = agentInfo.getConsumeRelationship().get(1);
+        ConsumeRelationship secondAgRel = agentInfo.getConsumeRelationship().get(0);
+        List<ConsumeRelationship> hugoRels = hugo.getConsumeRelationship();
+
         Assert.assertEquals("CZGAGENTINFO", firstAgRel.getApplication().getName());
         Assert.assertEquals("getLead", firstAgRel.getMethod().getName());
         Assert.assertEquals(new Long(2), firstAgRel.getTotalUsage());
@@ -138,41 +142,50 @@ public class DataConversionTest extends AbstractTest {
 
     @Test
     public void testVisualizationQuery() {
-        dataConversion.convertData(messages);
+        List<ConversionError> errors = dataConversion.convertData(messages);
         List<Map<String, Object>> result = relationshipRepo.getGraph();
-        Assert.assertEquals(result.size(), 10);
+
+        Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
+        Assert.assertEquals("The number of relations.",result.size(), 10);
     }
 
     @Test
     public void testSingleAppVisualisation() {
-        dataConversion.convertData(createMessages());
+        List<ConversionError> errors = dataConversion.convertData(messages);
         List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName("CZGAGENTINFO"));
-        Assert.assertTrue(result.size() == 2);
-        Assert.assertEquals("getLead", ((Method) result.get(1).get("method")).getName());
-        Assert.assertEquals("getPropertySomething", ((Method) result.get(0).get("method")).getName());
+
+        Assert.assertTrue("Shouldn't contain errors.", errors.size() == 0);
+        Assert.assertTrue("The number of relations.",result.size() == 2);
+        boolean hasMethod = ((Method)result.get(0).get("method")).getName().equals("getPropertySomething");
+
+        if (hasMethod){
+            Assert.assertTrue(((Method)result.get(1).get("method")).getName().equals("getLead"));
+        }else {
+            Assert.assertTrue(((Method)result.get(0).get("method")).getName().equals("getLead"));
+            Assert.assertTrue(((Method)result.get(1).get("method")).getName().equals("getPropertySomething"));
+        }
+    }
+
+    @Test
+//    @Ignore("This test is only for performance comparison")
+    public void testRowCallBack() {
+        Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
+        Timestamp end = Timestamp.valueOf("2016-06-01 23:00:00.0");
+        long first = System.currentTimeMillis();
+        List<ConversionError> errors = dataConversion.convertData("MESSAGE", new TimeRange(start,end));
+        long second = System.currentTimeMillis();
+        System.out.println("---------------------------------------------------------");
+        System.out.println(second-first);
+        System.out.println("---------------------------------------------------------");
+        Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
     }
 
     @After
     public void clear() {
         session.purgeDatabase();
         messages = null;
-        SystemsList.values().clear();
-    }
-
-    @Test
-    @Ignore("This test is only for performance comparison")
-    public void testRowCallBack() {
-        Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
-        Timestamp end = Timestamp.valueOf("2016-06-03 00:00:00.0");
-        long first = System.currentTimeMillis();
-        dataConversion.convertData("MESSAGE",new TimeRange(start,end));
-        long second = System.currentTimeMillis();
-        long third = System.currentTimeMillis();
-        List<Message> messages = template.query("select * from MESSAGE where request_time between ? and ?", new MessageMapper(),start,end);
-        dataConversion.convertData(messages);
-        long fourth = System.currentTimeMillis();
-        System.out.println(second-first);
-        System.out.println(fourth-third);
+        systemsList.values().clear();
+        cache.clearCache();
     }
 
     private List<Message> createMessages() {

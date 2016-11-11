@@ -13,7 +13,6 @@ import java.util.List;
 public class DateUtils {
 
 	public static TimeRange getTimeRange() {
-		//TODO: osetrit mozne exceptiony a upravit tak aby to bralo od pulnoci prvniho dne do pulnoci posledniho
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		Timestamp start = new Timestamp(cal.getTime().getTime());
@@ -22,18 +21,18 @@ public class DateUtils {
 		return new TimeRange(start, end);
 	}
 
-	public static String getTableSuffix(String tablePrefix) {
+	public static String getYearMonthSuffix() {
 		Calendar cal = Calendar.getInstance();
 		String year = String.valueOf(cal.get(Calendar.YEAR));
 		String month = String.valueOf(cal.get(Calendar.MONTH)-1);
 		if (month.length()==1){
 			month = "0"+month;
 		}
-		return tablePrefix + year + month;
+		return year + month;
 	}
 
 	public static List<TimeRange> getWeeks(){
-		List<TimeRange> weeks = new ArrayList<>();
+		List<TimeRange> weeks = new ArrayList<TimeRange>();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		return null;
 	}

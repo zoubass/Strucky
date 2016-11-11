@@ -1,6 +1,7 @@
 package cz.zoubelu.controller;
 
 import it.sauronsoftware.cron4j.Scheduler;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,31 +14,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/scheduler")
 public class RestSchedulerController{
+//	private final Logger log = Logger.getLogger(getClass());
 
 	@Autowired
 	private Scheduler scheduler;
 
-	private static final String OK ="Success.";
-	private static final String FAIL = "Nepodařilo se provést akci, důvod: ";
 
-	@RequestMapping(value = ("/start"), method = RequestMethod.GET)
+	private static final String OK ="Successfully ";
+	private static final String FAIL = "Failed to procceed action. Reason: ";
+
+	@RequestMapping("/start")
 	public String startScheduler(Model model) {
 		try {
 			scheduler.start();
-			return OK;
+			return OK + " started.";
 		} catch (Exception e) {
 			return FAIL + e.getMessage();
 		}
 	}
 
-	@RequestMapping(value = ("/stop"), method = RequestMethod.GET)
+	@RequestMapping("/stop")
 	public String stopScheduler(Model model) {
 		try {
-			scheduler.start();
-			return OK;
+			scheduler.stop();
+			return OK + " stopped.";
 		} catch (Exception e) {
 			return FAIL + e.getMessage();
 		}
+	}
+
+	@RequestMapping("status")
+	public String getSchedulerStatus(){
+		return scheduler.isStarted()? "Running":"Stopped";
 	}
 
 

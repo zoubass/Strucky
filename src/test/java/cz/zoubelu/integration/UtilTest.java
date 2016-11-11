@@ -21,9 +21,8 @@ public class UtilTest extends AbstractTest {
 
 	@Test
 	public void testTableSuffixCreation() {
-		String tableName = DateUtils.getTableSuffix("A_MESSAGE_");
-		Assert.assertTrue(tableName.contains("A_MESSAGE_"));
-		Assert.assertTrue(tableName.length()==16);
+		String tableName = DateUtils.getYearMonthSuffix();
+		Assert.assertTrue(tableName.length()==6);
 	}
 
 	@Test
@@ -31,4 +30,11 @@ public class UtilTest extends AbstractTest {
 		Timestamp time = DateUtils.getLastDayOfMonth(Timestamp.valueOf("2016-06-01 00:00:00"));
 		Assert.assertEquals(Timestamp.valueOf("2016-06-30 23:59:59.9"),time);
 	}
+/*
+	@Test
+	public void testSystemListSave(){
+		IntegraAppsList list = new IntegraAppsList();
+		list.saveList();
+	}
+*/
 }

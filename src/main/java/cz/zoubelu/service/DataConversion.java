@@ -23,9 +23,11 @@ public interface DataConversion {
 	 * @param messages List of the messages from rel. integration.
 	 * @return result with message.
      */
+
 	List<ConversionError> convertData(List<Message> messages);
 
 	List<ConversionError> convertData(String tableName);
 
 	void convertSingleMessage(Message message);
+
 }

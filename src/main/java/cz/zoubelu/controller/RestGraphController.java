@@ -2,7 +2,6 @@ package cz.zoubelu.controller;
 
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.codelist.SystemsList;
-import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
@@ -58,7 +57,7 @@ public class RestGraphController {
      */
     @RequestMapping(value = "/{systemId}", method = RequestMethod.GET)
     @ResponseBody
-    public Application getApplication(@PathVariable("systemId") Integer systemId) {
+    public cz.zoubelu.domain.Application getApplication(@PathVariable("systemId") Integer systemId) {
         return applicationRepo.findBySystemId(systemId);
     }
 
@@ -69,15 +68,15 @@ public class RestGraphController {
     @RequestMapping(value = "/{systemId}/consumes", method = RequestMethod.GET)
     @ResponseBody
     public List<ConsumeRelationship> getConsumedMethods(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId, "SystemApp ID cannot be null.");
-        Application app = applicationRepo.findBySystemId(systemId);
+        NullUtils.nullCheck(systemId, "Application ID cannot be null.");
+        cz.zoubelu.domain.Application app = applicationRepo.findBySystemId(systemId);
         NullUtils.nullCheck(app, "Cannot find application with system id: " + systemId);
         return app.getConsumeRelationship();
     }
 
     @RequestMapping(value = "/{appName}/info", method = RequestMethod.GET)
     @ResponseBody
-    public Application getApplicationInfo(@PathVariable("appName") String appName) {
+    public cz.zoubelu.domain.Application getApplicationInfo(@PathVariable("appName") String appName) {
         return applicationRepo.findByName(appName);
     }
 
@@ -89,8 +88,8 @@ public class RestGraphController {
     @RequestMapping(value = "/{systemId}/provides", method = RequestMethod.GET)
     @ResponseBody
     public List<Method> getProvidedMethods(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId, "SystemApp ID cannot be null.");
-        Application app = applicationRepo.findBySystemId(systemId);
+        NullUtils.nullCheck(systemId, "Application ID cannot be null.");
+        cz.zoubelu.domain.Application app = applicationRepo.findBySystemId(systemId);
         NullUtils.nullCheck(app, "Cannot find application with system id: " + systemId);
         return app.getProvidedMethods();
     }
@@ -130,15 +129,15 @@ public class RestGraphController {
     @ResponseBody
     public List<ConversionError> insertData(@RequestParam String year,@RequestParam String month) {
         Timestamp start = Timestamp.valueOf(year+"-"+month+"-01 00:00:00.0");
-        Timestamp end = Timestamp.valueOf(year+"-"+month+"-01 23:59:59.9");
-        return dataConversion.convertData("I was removed due to commmit",new TimeRange(start,end));
+        Timestamp end = Timestamp.valueOf(year+"-"+month+"-08 23:59:59.9");
+        return dataConversion.convertData("Informa_log.A_MESSAGE_" + year + month, new TimeRange(start, end));
     }
 
     @RequestMapping(value = ("/createGraphSchema"), method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> createSchema() {
-        for (SystemApp system : SystemsList.values()) {
-            applicationRepo.save(new Application(system.getName(), system.getId(), new ArrayList<Method>()));
+        for (SystemApp system : new SystemsList().values()) {
+            applicationRepo.save(new cz.zoubelu.domain.Application(system.getName(), system.getId(), new ArrayList<Method>()));
         }
         return visualization.visualizeGraph();
     }

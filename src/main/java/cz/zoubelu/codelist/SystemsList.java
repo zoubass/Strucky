@@ -11,7 +11,7 @@ import java.util.List;
  * This enum represents the application schema of graph integration
  */
 public class SystemsList {
-	private static final Logger log = Logger.getLogger("SystemsList");
+	private final Logger log = Logger.getLogger(getClass());
 
 	private static List<SystemApp> systemsList;
 
@@ -95,7 +95,7 @@ public class SystemsList {
 		}};
 	}
 
-	public static SystemApp getSystemByID(Integer id) {
+	public SystemApp getSystemByID(Integer id) {
 		for (SystemApp system : systemsList) {
 			if ((id).equals(system.getId())) {
 				return system;
@@ -105,7 +105,7 @@ public class SystemsList {
 		return addSystem(id.toString(), id);
 	}
 
-	public static SystemApp getIdByName(String nameLCase) {
+	public SystemApp getIdByName(String nameLCase) {
 		String name = StringUtils.upperCase(nameLCase);
 		for (SystemApp system : systemsList) {
 			if (name.equals(system.getName())) {
@@ -116,15 +116,14 @@ public class SystemsList {
 		return addSystem(name, -1);
 	}
 
-	private static SystemApp addSystem(String name, Integer id) {
+	private SystemApp addSystem(String name, Integer id) {
 		log.info(String.format("Adding new system to the system list. Name: %s id: %s.", name, id));
 		SystemApp s = new SystemApp(name, id);
 		systemsList.add(s);
 		return s;
 	}
 
-	public static List<SystemApp> values() {
+	public List<SystemApp> values(){
 		return systemsList;
 	}
-
 }
