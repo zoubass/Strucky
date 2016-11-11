@@ -22,16 +22,17 @@ public class InformaRepositoryImpl implements InformaMessageRepository {
 	}
 
 	public void fetchAndConvertData(String tableName, RowCallbackHandler handler) {
-		this.jdbcTemplate.query("select * from " + tableName, handler);
-	}
-
-	public void fetchAndConvertData(String tableName, final TimeRange timeRange, RowCallbackHandler handler) {
 //		try {
 //			jdbcTemplate.getDataSource().getConnection().setAutoCommit(false);
 //		} catch (SQLException e) {
 //			System.out.println("we|re fu*ked up.");
 //		}
-//		jdbcTemplate.setFetchSize(Int.MinValue());
+//		jdbcTemplate.setFetchSize(20000);
+		String sql = "select ID,REQUEST_TIME,RESPONSE_TIME,APPLICATION,ENVIRONMENT,NODE,MSG_TYPE,MSG_VERSION,MSG_UID,MSG_ID,MSG_SRC_SYS,MSG_SRC_ENV,MSG_TAR_SYS,MSG_TAR_ENV,MSG_PRIORITY,MSG_TTL,EXCEPTION,EXCEPTION_MESSAGE,IGNORED_EXCEPTION from ";
+		this.jdbcTemplate.query(sql + tableName, handler);
+	}
+
+	public void fetchAndConvertData(String tableName, final TimeRange timeRange, RowCallbackHandler handler) {
 		final String sql = "select * from " + tableName + " where request_time between ? and ?";
 		this.jdbcTemplate.query(sql, handler, timeRange.getStartDate(), timeRange.getEndDate());
 	}

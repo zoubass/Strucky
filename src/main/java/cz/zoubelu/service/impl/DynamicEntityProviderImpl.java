@@ -47,9 +47,9 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 
 	public Method getMethod(Application application, Message msg) {
 		Method method = methodRepository.findProvidedMethod(application, msg.getMsg_type(), msg.getMsg_version());
-		if (method != null){
+		if (method != null) {
 			return method;
-		}else{
+		} else {
 			return createMethod(application, msg);
 		}
 	}
@@ -66,7 +66,8 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 	private Application createApplication(SystemApp system) {
 		log.info(String.format("Creating application: %s with systemID: %s",system.getName(),system.getId()));
 		Application app = new Application(system.getName(), system.getId(), new ArrayList<Method>());
-		return applicationRepo.save(app);
+		cache.cacheApplication(app);
+		return app;
 	}
 
 	private Method createMethod(Application app, Message msg) {

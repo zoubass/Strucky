@@ -172,7 +172,7 @@ public class DataConversionTest extends AbstractTest {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 23:00:00.0");
         long first = System.currentTimeMillis();
-        List<ConversionError> errors = dataConversion.convertData("MESSAGE", new TimeRange(start,end));
+        List<ConversionError> errors = dataConversion.convertData("MESSAGE");
         long second = System.currentTimeMillis();
         System.out.println("---------------------------------------------------------");
         System.out.println(second-first);

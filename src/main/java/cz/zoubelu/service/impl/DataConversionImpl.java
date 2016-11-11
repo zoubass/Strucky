@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import cz.zoubelu.cache.Cache;
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.codelist.SystemsList;
+import cz.zoubelu.domain.Application;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Message;
 import cz.zoubelu.domain.Method;
@@ -93,9 +94,9 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 	 */
 	public void convertSingleMessage(Message msg) {
 		validator.validateMessage(msg);
-		cz.zoubelu.domain.Application providingApp = getProvidingApplication(msg);
+		Application providingApp = getProvidingApplication(msg);
 		Method consumedMethod = getConsumedMethod(providingApp, msg);
-		cz.zoubelu.domain.Application consumingApp = getConsumingApplication(msg);
+		Application consumingApp = getConsumingApplication(msg);
 
 		log.info(String.format("Saving relationship - Provider: %s, Method: %s, Consumer: %s.", providingApp.getName(),
 				consumedMethod.getName(), consumingApp.getName()));
@@ -103,7 +104,7 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 		createConsumeRelation(consumingApp, consumedMethod);
 	}
 
-	private cz.zoubelu.domain.Application getProvidingApplication(Message msg) {
+	private Application getProvidingApplication(Message msg) {
 		SystemApp system = systemsList.getIdByName(msg.getApplication());
 		boolean isNewlyCreated = system.getId().equals(-1);
 		if (isNewlyCreated) {
@@ -116,16 +117,16 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 		return provider.getApplication(system);
 	}
 
-	private cz.zoubelu.domain.Application getConsumingApplication(Message msg) {
+	private Application getConsumingApplication(Message msg) {
 		SystemApp system = systemsList.getSystemByID(msg.getMsg_src_sys());
 		return provider.getApplication(system);
 	}
 
-	private Method getConsumedMethod(cz.zoubelu.domain.Application app, Message msg) {
+	private Method getConsumedMethod(Application app, Message msg) {
 		return provider.getMethod(app,msg);
 	}
 
-	private void createConsumeRelation(cz.zoubelu.domain.Application consumer, Method method) {
+	private void createConsumeRelation(Application consumer, Method method) {
 		ConsumeRelationship consumeRelationship = provider.getRelationship(consumer,method);
 
 		if (consumeRelationship != null) {
@@ -158,6 +159,7 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 	private List<ConversionError> persistCacheAndFinish(){
 		log.info("Saving cached relations into the database.");
 		relationshipRepo.save(cache.getRelations());
+		applicationRepo.save(cache.getApplications());
 		CsvFileUtils.saveList(systemsList.values());
 		return Lists.newArrayList(errors);
 	}
@@ -169,7 +171,7 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 	/*
 	 NEW RELATIONSHIP IN CASE IT DOESN'T EXIST YET
 	  */
-	private ConsumeRelationship createRelationship(cz.zoubelu.domain.Application consumer, Method method) {
+	private ConsumeRelationship createRelationship(Application consumer, Method method) {
 		ConsumeRelationship consumeRelationship = new ConsumeRelationship(consumer, method, 1L);
 		log.info(String.format("Creating new relationship: %s CONSUMES -> %s.", consumer.getName(), method.getName()));
 		if (consumer.getConsumeRelationship() != null) {
