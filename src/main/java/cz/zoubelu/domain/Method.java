@@ -3,7 +3,6 @@ package cz.zoubelu.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
@@ -17,11 +16,9 @@ public class Method {
     private Long id;
 
     @Property(name="name")
-    @Index
     private String name;
 
     @Property(name = "version")
-    @Index
     private Integer version;
 
     public Method() {}

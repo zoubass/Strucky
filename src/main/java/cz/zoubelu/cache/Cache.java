@@ -14,21 +14,15 @@ public interface Cache {
 
 	void cacheRelation(ConsumeRelationship c);
 
-	void cacheMethod(Method m);
-
-	void cacheApplication(Application a);
-
 	Collection<ConsumeRelationship> getRelations();
-
-	Collection<Application> getApplications();
 
 	boolean contains(Application a,Method m);
 
-	boolean contains(SystemApp system);
+//	boolean contains(SystemApp system);
 
 	ConsumeRelationship get(Application a, Method m);
 
-	Application get(SystemApp system);
+//	Application get(SystemApp system);
 
 	void clearCache();
 }

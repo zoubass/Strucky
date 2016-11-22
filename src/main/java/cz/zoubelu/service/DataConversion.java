@@ -14,7 +14,8 @@ public interface DataConversion {
 	/**
      * Converts relational data into nodes and relationships of graph integration, between the given time range.
      * @param timeRange Time range the relational data are in.
-     * @return result with message.
+	 * @param tableName Name of the table.
+     * @return errors collection.
      */
     List<ConversionError> convertData(String tableName, TimeRange timeRange);
 

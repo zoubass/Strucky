@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
     @Autowired
     private Scheduler scheduler;
 
@@ -22,9 +23,9 @@ public class AdminController {
     @RequestMapping(value = ("/pattern"), method = RequestMethod.POST)
     public String configScheduler(@RequestParam(name = "pattern") String pattern, Model model) {
         try {
-            SchedulingPattern schedulingPattern = new SchedulingPattern(pattern);
-            scheduler.schedule(schedulingPattern,conversionTask);
-            model.addAttribute("message", "Pattern úspěšně nastaven. Prosím spusťe scheduler na /admin/start.");
+            scheduler = new Scheduler();
+            scheduler.schedule(new SchedulingPattern(pattern),conversionTask);
+            model.addAttribute("message", "Pattern " + pattern + " úspěšně nastaven.");
         } catch (Exception e) {
             model.addAttribute("message", "Nepodařilo se nastavit pattern, důvod: " + e.getMessage());
         }
@@ -34,6 +35,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String showAdmin(Model model) {
+//        model.addAttribute("pattern", scheduler.getSchedulingPattern("").toString());
         return "admin";
     }
 }

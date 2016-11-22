@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"cz.zoubelu.service","cz.zoubelu.cache"})
 @EnableNeo4jRepositories(basePackages = "cz.zoubelu.repository")
 @EnableTransactionManagement
-@PropertySource(value={"classpath:conf/database.properties","classpath:conf/neo-config.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value={"classpath:conf/database.properties","classpath*:neo-config.properties"}, ignoreResourceNotFound = true)
 public class ApplicationConfig {
 
     @Autowired

@@ -4,9 +4,6 @@ import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.utils.TimeRange;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import scala.Int;
-
-import java.sql.SQLException;
 
 /**
  * Created by zoubas on 25.6.16.
@@ -15,19 +12,11 @@ public class InformaRepositoryImpl implements InformaMessageRepository {
 
 	private JdbcTemplate jdbcTemplate;
 
-	private String tableName;
-
 	public InformaRepositoryImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	public void fetchAndConvertData(String tableName, RowCallbackHandler handler) {
-//		try {
-//			jdbcTemplate.getDataSource().getConnection().setAutoCommit(false);
-//		} catch (SQLException e) {
-//			System.out.println("we|re fu*ked up.");
-//		}
-//		jdbcTemplate.setFetchSize(20000);
 		String sql = "select ID,REQUEST_TIME,RESPONSE_TIME,APPLICATION,ENVIRONMENT,NODE,MSG_TYPE,MSG_VERSION,MSG_UID,MSG_ID,MSG_SRC_SYS,MSG_SRC_ENV,MSG_TAR_SYS,MSG_TAR_ENV,MSG_PRIORITY,MSG_TTL,EXCEPTION,EXCEPTION_MESSAGE,IGNORED_EXCEPTION from ";
 		this.jdbcTemplate.query(sql + tableName, handler);
 	}

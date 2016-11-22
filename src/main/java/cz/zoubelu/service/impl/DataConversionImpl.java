@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -159,7 +160,6 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 	private List<ConversionError> persistCacheAndFinish(){
 		log.info("Saving cached relations into the database.");
 		relationshipRepo.save(cache.getRelations());
-		applicationRepo.save(cache.getApplications());
 		CsvFileUtils.saveList(systemsList.values());
 		return Lists.newArrayList(errors);
 	}
@@ -181,7 +181,6 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 		}
 		applicationRepo.save(consumer);
 		cache.cacheRelation(consumeRelationship);
-//		relationshipRepo.save(consumeRelationship);
 		return consumeRelationship;
 	}
 

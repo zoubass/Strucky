@@ -21,7 +21,7 @@ public class ConversionTaskImpl extends Task implements ConversionTask {
 
 	private final Logger log = Logger.getLogger(getClass());
 
-	@Value("${table.prefix}")
+//	@Value("${table.prefix}")
 	private String tablePrefix;
 
 	@Override
@@ -30,10 +30,15 @@ public class ConversionTaskImpl extends Task implements ConversionTask {
 		long startTime = System.currentTimeMillis();
 
 		String tableName = tablePrefix + DateUtils.getYearMonthSuffix();
+		log.info("Querying table " + tableName);
 		List<ConversionError> errors = dataConversion.convertData(tableName);
 
 		long stopTime = System.currentTimeMillis();
 		log.info(String.format("Conversion took %s ms.", stopTime - startTime));
 		log.info("Conversion ended with " + errors.size() + " errors.");
+	}
+
+	public void setTablePrefix(String tablePrefix) {
+		this.tablePrefix = tablePrefix;
 	}
 }

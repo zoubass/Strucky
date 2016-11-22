@@ -20,7 +20,7 @@ public class Application {
     private Integer systemId;
 
     @Property(name = "name")
-    @Index
+//    @Index
     private String name;
 
     @Relationship(type = "PROVIDES", direction = Relationship.OUTGOING)

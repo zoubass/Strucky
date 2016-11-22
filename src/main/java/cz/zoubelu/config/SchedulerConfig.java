@@ -20,13 +20,16 @@ public class SchedulerConfig {
 	@Bean
 	public Scheduler scheduler(){
 		Scheduler s = new Scheduler();
-		SchedulingPattern pattern = new SchedulingPattern(schedulingPattern);
+		SchedulingPattern pattern = new SchedulingPattern("59 11 * * Sun");
 		s.schedule(pattern,conversionTaskImpl());
 		return s;
 	}
 
 	@Bean
 	public Task conversionTaskImpl(){
-		return new ConversionTaskImpl();
+		ConversionTaskImpl conversionTask = new ConversionTaskImpl();
+		conversionTask.setTablePrefix("Informa_log.A_MESSAGE_");
+		return conversionTask;
+
 	}
 }

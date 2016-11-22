@@ -18,11 +18,8 @@ import java.util.Map;
 public class CacheImpl implements Cache {
 	private Map<String, ConsumeRelationship> relCache;
 
-	private Map<String, Application> appCache;
-
 	public CacheImpl() {
 		relCache = new HashMap<String, ConsumeRelationship>();
-		appCache = new HashMap<String, Application>();
 	}
 
 	/**
@@ -30,14 +27,6 @@ public class CacheImpl implements Cache {
 	 */
 	public void cacheRelation(ConsumeRelationship c) {
 		relCache.put(hash(c), c);
-	}
-
-	public void cacheMethod(Method m) {
-		//TODO: implementuj nebo smaz
-	}
-
-	public void cacheApplication(Application a) {
-		appCache.put(hash(a), a);
 	}
 
 	/**
@@ -48,24 +37,12 @@ public class CacheImpl implements Cache {
 		return relCache.values();
 	}
 
-	public Collection<Application> getApplications() {
-		return appCache.values();
-	}
-
 	public ConsumeRelationship get(Application a, Method m) {
 		return relCache.get(hash(a, m));
 	}
 
-	public Application get(SystemApp system) {
-		return appCache.get(hash(system));
-	}
-
 	public boolean contains(Application a, Method m) {
 		return relCache.containsKey(hash(a,m));
-	}
-
-	public boolean contains(SystemApp system) {
-		return relCache.containsKey(hash(system));
 	}
 
 	/**
@@ -75,15 +52,6 @@ public class CacheImpl implements Cache {
 		return c.getApplication().getName() + c.getApplication().getSystemId() + c.getMethod().getName() + c.getMethod()
 				.getVersion();
 	}
-
-	private String hash(SystemApp system) {
-		return system.getName() + system.getId();
-	}
-
-	private String hash(Application a) {
-		return a.getName() + a.getId();
-	}
-
 
 	private String hash(Application a, Method m) {
 		return a.getName() + a.getSystemId() + m.getName() + m.getVersion();
@@ -95,7 +63,6 @@ public class CacheImpl implements Cache {
 	 */
 	public void clearCache() {
 		relCache.clear();
-		appCache.clear();
 	}
 
 }

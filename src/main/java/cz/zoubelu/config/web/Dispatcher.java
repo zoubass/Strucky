@@ -19,8 +19,8 @@ public class Dispatcher extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-		registry.addResourceHandler("/css/**").addResourceLocations("WEB-INF/templates/css/");
-		registry.addResourceHandler("/js/**").addResourceLocations("WEB-INF/templates/js/");
+		registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/");
+		registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/js/");
 	}
 
 	@Override

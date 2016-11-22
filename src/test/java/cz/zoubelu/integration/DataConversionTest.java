@@ -167,7 +167,7 @@ public class DataConversionTest extends AbstractTest {
     }
 
     @Test
-//    @Ignore("This test is only for performance comparison")
+    @Ignore("This test is only for performance comparison")
     public void testRowCallBack() {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 23:00:00.0");

@@ -1,12 +1,13 @@
 package cz.zoubelu.config.web;
 
-import cz.zoubelu.config.*;
+import cz.zoubelu.config.ApplicationConfig;
+import cz.zoubelu.config.GraphConfig;
+import cz.zoubelu.config.SchedulerConfig;
 import cz.zoubelu.config.datasource.DataSourceProd;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.util.Log4jConfigListener;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -25,11 +26,6 @@ public class WebInitializer implements WebApplicationInitializer {
 		// Manage the lifecycle of the root application context
 		servletContext.addListener(new ContextLoaderListener(appContext));
 		servletContext.setInitParameter("spring.profiles.active", "production");
-
-//		servletContext.setInitParameter("log4jConfigLocation","file:///${catalina.base}/shared/config/neo-log4j.properties");
-//		servletContext.setInitParameter("log4jExposeWebAppRoot","false");
-//		//TODO: deprecated what to do with it
-//		servletContext.addListener(new Log4jConfigListener());
 
 		// Create the dispatcher servlet's Spring application context
 		AnnotationConfigWebApplicationContext dispatcherServlet = new AnnotationConfigWebApplicationContext();

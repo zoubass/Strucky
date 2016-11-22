@@ -37,12 +37,8 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 	private MethodRepository methodRepository;
 
 	public Application getApplication(SystemApp system) {
-		if (cache.contains(system)) {
-			return cache.get(system);
-		} else {
-			Application appById = applicationRepo.findBySystemId(system.getId());
-			return appById != null ? appById:createApplication(system);
-		}
+		Application appById = applicationRepo.findBySystemId(system.getId());
+		return appById != null ? appById:createApplication(system);
 	}
 
 	public Method getMethod(Application application, Message msg) {
@@ -66,7 +62,6 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 	private Application createApplication(SystemApp system) {
 		log.info(String.format("Creating application: %s with systemID: %s",system.getName(),system.getId()));
 		Application app = new Application(system.getName(), system.getId(), new ArrayList<Method>());
-//		cache.cacheApplication(app);
 		return applicationRepo.save(app);
 	}
 
