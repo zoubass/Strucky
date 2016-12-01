@@ -36,47 +36,100 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 	@Autowired
 	private MethodRepository methodRepository;
 
+	/**
+	 * DATABASE LOOK UPS FOR ENTITY
+	 */
 	public Application getApplication(SystemApp system) {
-		Application appById = applicationRepo.findBySystemId(system.getId());
-		return appById != null ? appById:createApplication(system);
-	}
-
-	public Method getMethod(Application application, Message msg) {
-		Method method = methodRepository.findProvidedMethod(application, msg.getMsg_type(), msg.getMsg_version());
-		if (method != null) {
-			return method;
+		if (cache.contains(system)) {
+			return cache.get(system);
 		} else {
-			return createMethod(application, msg);
+			Application app = applicationRepo.findBySystemId(system.getId());
+			if (app != null) {
+				cache.cacheApplication(app);
+				return app;
+			} else {
+				return createApplication(system);
+			}
 		}
 	}
 
-	public ConsumeRelationship getRelationship(Application application, Method method) {
-		//check if its in cache, otherwise check in database
-		if (cache.contains(application, method)) {
-			return cache.get(application,method);
+	public Method getConsumedMethod(Application provider, Message msg) {
+		if (cache.contains(provider,msg.getMsg_type(),msg.getMsg_version())) {
+			return cache.get(provider,msg.getMsg_type(),msg.getMsg_version());
 		} else {
-			return relationshipRepo.findRelationship(application, method);
+			Method method = methodRepository.findProvidedMethod(provider, msg.getMsg_type(), msg.getMsg_version());
+			if (method != null) {
+				cache.cacheMethod(provider, method);
+				return method;
+			} else {
+				return createMethod(provider, msg);
+			}
 		}
 	}
 
+	public void createConsumeRelation(Application consumer, Method method) {
+		ConsumeRelationship relationship = null;
+
+		if (cache.contains(consumer, method)) {
+			relationship = cache.get(consumer,method);
+		} else {
+			relationship = relationshipRepo.findRelationship(consumer, method);
+		}
+
+		if (relationship != null) {
+			cache.cacheRelation(relationship);
+			log.debug(String.format("Relationship: %s CONSUMES -> %s, already exists, incrementing total usage by 1.",
+					consumer.getName(), method.getName()));
+			relationship.setTotalUsage(relationship.getTotalUsage() + 1);
+		} else {
+			createRelationship(consumer, method);
+		}
+	}
+
+	/**
+	 * PERSISTING CACHED RELATIONS INTO GRAPH
+	 */
+	public void persistCachedRelations() {
+		log.info("Saving cached relations into the database.");
+		relationshipRepo.save(cache.getRelations());
+		log.info("Saved.");
+	}
+
+	/**
+	 * DYNAMIC CREATION METHODS
+	 */
 	private Application createApplication(SystemApp system) {
 		log.info(String.format("Creating application: %s with systemID: %s",system.getName(),system.getId()));
 		Application app = new Application(system.getName(), system.getId(), new ArrayList<Method>());
+		cache.cacheApplication(app);
 		return applicationRepo.save(app);
 	}
 
-	private Method createMethod(Application app, Message msg) {
+	private Method createMethod(Application provider, Message msg) {
 		Method method = new Method(msg.getMsg_type(), msg.getMsg_version());
 		log.info(String.format("Creating method: %s, version: %s for app %s.", msg.getMsg_type(), msg.getMsg_version(),
-				app.getName()));
+				provider.getName()));
 
-		if (app.getProvidedMethods() != null) {
-			app.getProvidedMethods().add(method);
+		if (provider.getProvidedMethods() != null) {
+			provider.getProvidedMethods().add(method);
 		} else {
-			app.setProvidedMethods(Lists.newArrayList(method));
+			provider.setProvidedMethods(Lists.newArrayList(method));
 		}
-		applicationRepo.save(app);
-		log.info(String.format("Application: %s successfully saved.", app.getName()));
+		applicationRepo.save(provider);
+		cache.cacheMethod(provider, method);
+		log.info(String.format("Application: %s successfully saved.", provider.getName()));
 		return method;
+	}
+
+	private void createRelationship(Application consumer, Method method) {
+		ConsumeRelationship consumeRelationship = new ConsumeRelationship(consumer, method, 1L);
+		log.info(String.format("Creating new relationship: %s CONSUMES -> %s.", consumer.getName(), method.getName()));
+		if (consumer.getConsumeRelationship() != null) {
+			consumer.getConsumeRelationship().add(consumeRelationship);
+		} else {
+			consumer.setConsumeRelationship(Lists.newArrayList(consumeRelationship));
+		}
+		applicationRepo.save(consumer);
+		cache.cacheRelation(consumeRelationship);
 	}
 }

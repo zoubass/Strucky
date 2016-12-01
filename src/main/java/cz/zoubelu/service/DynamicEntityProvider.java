@@ -13,7 +13,9 @@ public interface DynamicEntityProvider {
 
 	cz.zoubelu.domain.Application getApplication(SystemApp system);
 
-	Method getMethod(cz.zoubelu.domain.Application app, Message m);
+	Method getConsumedMethod(cz.zoubelu.domain.Application app, Message m);
 
-	ConsumeRelationship getRelationship(cz.zoubelu.domain.Application a,Method m);
+	void createConsumeRelation(cz.zoubelu.domain.Application a,Method m);
+
+	void persistCachedRelations();
 }

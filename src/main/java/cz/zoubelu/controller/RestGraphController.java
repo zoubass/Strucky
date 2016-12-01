@@ -14,6 +14,7 @@ import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.ErrorResponse;
 import cz.zoubelu.utils.NullUtils;
 import cz.zoubelu.utils.TimeRange;
+import org.apache.log4j.Logger;
 import org.neo4j.ogm.session.Neo4jSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/application")
 public class RestGraphController {
+    private final Logger log = Logger.getLogger(getClass());
+
     @Autowired
     private ApplicationRepository applicationRepo;
 
@@ -127,10 +130,16 @@ public class RestGraphController {
 
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
     @ResponseBody
-    public List<ConversionError> insertData(@RequestParam String year,@RequestParam String month) {
+    public List<ConversionError> insertData(@RequestParam String year,@RequestParam String month,@RequestParam String day, @RequestParam String hour) {
         Timestamp start = Timestamp.valueOf(year+"-"+month+"-01 00:00:00.0");
-        Timestamp end = Timestamp.valueOf(year+"-"+month+"-08 23:59:59.9");
-        return dataConversion.convertData("Informa_log.A_MESSAGE_" + year + month, new TimeRange(start, end));
+        Timestamp end = Timestamp.valueOf(year+"-"+month+"-" +day +" " + hour + ":00:00.0");
+        long f = System.currentTimeMillis();
+        List<ConversionError> errors = dataConversion.convertData("Informa_log.A_MESSAGE_" + year + month, new TimeRange(start, end));
+        long l = System.currentTimeMillis();
+        log.info("--------------------------------------------------------------------------------");
+        log.info("Conversion took: " + (l-f));
+        log.info("--------------------------------------------------------------------------------");
+        return errors;
     }
 
     @RequestMapping(value = ("/createGraphSchema"), method = RequestMethod.GET)
@@ -138,6 +147,9 @@ public class RestGraphController {
     public Map<String, Object> createSchema() {
         for (SystemApp system : new SystemsList().values()) {
             applicationRepo.save(new cz.zoubelu.domain.Application(system.getName(), system.getId(), new ArrayList<Method>()));
+        }
+        for (int i = 0; i < 1200; i++) {
+            applicationRepo.findBySystemId(i);
         }
         return visualization.visualizeGraph();
     }

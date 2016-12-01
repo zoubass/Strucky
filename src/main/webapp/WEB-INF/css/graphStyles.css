@@ -75,3 +75,6 @@ table{
 #toolbar {
     float: right;
 }
+#graph{
+    margin: 45px 0px 0px;
+}

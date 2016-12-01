@@ -9,7 +9,6 @@ import cz.zoubelu.domain.Message;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.utils.ConversionError;
-import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;
@@ -134,7 +133,7 @@ public class DataConversionTest extends AbstractTest {
 
         Assert.assertEquals("getLead", lead.getProvidedMethods().get(0).getName());
 
-        Assert.assertEquals("The size of all apps there are in SystemIDs + 1 (the one should be created). ", 75,
+        Assert.assertEquals("The size of all apps there are in SystemIDs + 1 (the one should be created). ", 74,
                 Lists.newArrayList(applicationRepo.findAll()).size());
         Assert.assertEquals("Method size is not correct.", 5, Lists.newArrayList(methodRepo.findAll()).size());
         Assert.assertEquals("The number of relations in graph.", 5, Lists.newArrayList(relationshipRepo.findAll()).size());
@@ -167,12 +166,12 @@ public class DataConversionTest extends AbstractTest {
     }
 
     @Test
-    @Ignore("This test is only for performance comparison")
+//    @Ignore("This test is only for performance comparison.")
     public void testRowCallBack() {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 23:00:00.0");
         long first = System.currentTimeMillis();
-        List<ConversionError> errors = dataConversion.convertData("MESSAGE");
+        List<ConversionError> errors = dataConversion.convertData("MESSAGE_201606");
         long second = System.currentTimeMillis();
         System.out.println("---------------------------------------------------------");
         System.out.println(second-first);

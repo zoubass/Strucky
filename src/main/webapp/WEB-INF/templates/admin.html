@@ -1,18 +1,7 @@
 <html>
 <head th:replace="fragments::head"></head>
 <body>
-<div role="navigation" class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6 col-md-6">
-                <div class="nav navbar-nav">
-                    <a th:href="@{/index}"><button class="btn btn-default" onclick="showGraph()" type="submit">Zobrazit graf</button></a>
-                    <a th:href="@{/admin}"><span class="btn btn-default">Sheduling</span></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="fragments::#navigation"/>
 <div id="content">
     <form class="navbar-form" method="post" action="#" th:action="@{/admin/pattern}">
         <p>

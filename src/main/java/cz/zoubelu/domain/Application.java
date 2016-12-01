@@ -20,7 +20,6 @@ public class Application {
     private Integer systemId;
 
     @Property(name = "name")
-//    @Index
     private String name;
 
     @Relationship(type = "PROVIDES", direction = Relationship.OUTGOING)
@@ -29,7 +28,10 @@ public class Application {
     @Relationship(type = "CONSUMES", direction = Relationship.OUTGOING)
     private List<ConsumeRelationship> consumeRelationship;
 
-	//default constructor
+    /**
+     * CONSTRUCTORS
+     */
+
     public Application(){}
 
 	public Application(String name, List<Method> providedMethods) {

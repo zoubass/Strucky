@@ -74,7 +74,6 @@ public class SystemsList {
 			add(new SystemApp("CZGCODELIST", 13));
 			add(new SystemApp("CZGCARPRICING", 14));
 			add(new SystemApp("CZGPRODCATALOG", 15));
-			add(new SystemApp("CZGCONTRACTUPDATE", 555));
 			add(new SystemApp("CZGAGENTINFO", 16));
 			add(new SystemApp("CZGEARNIX", 17));
 			add(new SystemApp("CZGSEARCH", 18));
@@ -85,13 +84,14 @@ public class SystemsList {
 			add(new SystemApp("CZGPROCESSSUPPORT", 23));
 			add(new SystemApp("CZCTIA", 24));
 			add(new SystemApp("MONITORING", 99));
-			add(new SystemApp("CZGLISA", 141));
 			//newly added
 			add(new SystemApp("Message House", 134));
 			add(new SystemApp("SVCOVB", 10));
+			//vymyslene ID
+			add(new SystemApp("CZGCONTRACTUPDATE", 555));
 			add(new SystemApp("SVCPMS", 1026));
-			add(new SystemApp("CPOJPWB", 1026));
-			add(new SystemApp("TPUCCINI", 1026));
+			add(new SystemApp("CPOJPWB", 1055));
+			add(new SystemApp("TPUCCINI", 1056));
 		}};
 	}
 

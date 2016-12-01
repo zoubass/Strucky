@@ -1,5 +1,6 @@
 package cz.zoubelu.controller;
 
+import cz.zoubelu.task.ConversionTask;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import it.sauronsoftware.cron4j.Task;
@@ -18,13 +19,12 @@ public class AdminController {
     private Scheduler scheduler;
 
     @Autowired
-    private Task conversionTask;
+    private ConversionTask conversionTask;
 
     @RequestMapping(value = ("/pattern"), method = RequestMethod.POST)
     public String configScheduler(@RequestParam(name = "pattern") String pattern, Model model) {
         try {
-            scheduler = new Scheduler();
-            scheduler.schedule(new SchedulingPattern(pattern),conversionTask);
+            scheduler.reschedule(conversionTask.getScheduledTaskId(),pattern);
             model.addAttribute("message", "Pattern " + pattern + " úspěšně nastaven.");
         } catch (Exception e) {
             model.addAttribute("message", "Nepodařilo se nastavit pattern, důvod: " + e.getMessage());

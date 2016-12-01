@@ -13,4 +13,6 @@ public interface ConversionTask {
 	 * @throws RuntimeException
      */
 	void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException;
+
+	String getScheduledTaskId();
 }

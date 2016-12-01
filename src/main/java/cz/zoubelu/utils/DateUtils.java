@@ -31,6 +31,15 @@ public class DateUtils {
 		return year + month;
 	}
 
+	public static TimeRange getFirstHalfOfMonth(String tableName){
+		String year = tableName.substring(tableName.length()-6,tableName.length()-2);
+		String month = tableName.substring(tableName.length()-2,tableName.length());
+
+		Timestamp start = Timestamp.valueOf(year+"-"+month+"-"+"01 00:00:00.0");
+		Timestamp end = Timestamp.valueOf(year+"-"+month+"-"+"15 23:59:59.9");
+		return new TimeRange(start,end);
+	}
+
 	public static List<TimeRange> getWeeks(){
 		List<TimeRange> weeks = new ArrayList<TimeRange>();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

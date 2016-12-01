@@ -15,6 +15,8 @@ public class CsvFileUtils {
 
 	public static void saveList(List<SystemApp> systems) {
 		String file = "systemList" + DateUtils.getYearMonthSuffix() + ".csv";
+		log.info("Saving system list: "+ file);
+
 		if (systems.isEmpty() || systems == null) {
 			try {
 				FileWriter writer = new FileWriter(file);

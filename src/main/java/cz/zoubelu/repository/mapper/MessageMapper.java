@@ -21,21 +21,21 @@ public class MessageMapper implements RowMapper<Message> {
         informalog.setRequest_time(rs.getTimestamp("REQUEST_TIME"));
         informalog.setResponse_time(rs.getTimestamp("RESPONSE_TIME"));
         informalog.setApplication(rs.getString("application"));
-        informalog.setEnvironment(rs.getString("Environment"));
-        informalog.setNode(rs.getString("node"));
+//        informalog.setEnvironment(rs.getString("Environment"));
+//        informalog.setNode(rs.getString("node"));
         informalog.setMsg_type(rs.getString("Msg_type"));
         informalog.setMsg_version(rs.getInt("Msg_version"));
-        informalog.setMsg_uid(rs.getString("Msg_uid"));
-        informalog.setMsg_id(rs.getString("Msg_id"));
+//        informalog.setMsg_uid(rs.getString("Msg_uid"));
+//        informalog.setMsg_id(rs.getString("Msg_id"));
         informalog.setMsg_src_sys(rs.getInt("Msg_src_sys"));
-        informalog.setMsg_src_env(rs.getInt("Msg_src_env"));
+//        informalog.setMsg_src_env(rs.getInt("Msg_src_env"));
         informalog.setMsg_tar_sys(rs.getInt("Msg_tar_sys"));
-        informalog.setMsg_tar_env(rs.getInt("Msg_tar_env"));
-        informalog.setMsg_priority(rs.getInt("Msg_priority"));
-        informalog.setMsg_ttl(rs.getInt("Msg_ttl"));
-        informalog.setException(rs.getString("Exception"));
-        informalog.setException_message(rs.getString("Exception_message"));
-        informalog.setIgnored_exception(rs.getString("Ignored_exception"));
+//        informalog.setMsg_tar_env(rs.getInt("Msg_tar_env"));
+//        informalog.setMsg_priority(rs.getInt("Msg_priority"));
+//        informalog.setMsg_ttl(rs.getInt("Msg_ttl"));
+//        informalog.setException(rs.getString("Exception"));
+//        informalog.setException_message(rs.getString("Exception_message"));
+//        informalog.setIgnored_exception(rs.getString("Ignored_exception"));
         return informalog;
     }
 

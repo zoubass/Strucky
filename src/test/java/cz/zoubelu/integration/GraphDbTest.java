@@ -19,9 +19,6 @@ import java.util.*;
  */
 public class GraphDbTest extends AbstractTest {
 
-    @Autowired
-    private Visualization visualization;
-
     @Before
     public void startUp() {
         Assert.assertNotNull(applicationRepo);
