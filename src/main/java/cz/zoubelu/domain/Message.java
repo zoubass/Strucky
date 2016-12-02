@@ -27,8 +27,6 @@ public class Message {
     private String exception_message;
     private String ignored_exception;
 
-    //default constructor
-    public Message() {}
 
     public Long getId() {
         return id;

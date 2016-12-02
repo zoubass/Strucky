@@ -120,14 +120,6 @@ public class RestGraphController {
         return visualization.visualizeApplicationRelations(applicationRepo.findByName(appName));
     }
 
-    @RequestMapping("/error")
-    @ResponseBody
-    public ErrorResponse returnError(Exception e) {
-        return new ErrorResponse(e.getMessage());
-    }
-
-
-
     @RequestMapping(value = ("/insert"), method = RequestMethod.GET)
     @ResponseBody
     public List<ConversionError> insertData(@RequestParam String year,@RequestParam String month,@RequestParam String day, @RequestParam String hour) {
@@ -148,9 +140,12 @@ public class RestGraphController {
         for (SystemApp system : new SystemsList().values()) {
             applicationRepo.save(new cz.zoubelu.domain.Application(system.getName(), system.getId(), new ArrayList<Method>()));
         }
-        for (int i = 0; i < 1200; i++) {
-            applicationRepo.findBySystemId(i);
-        }
         return visualization.visualizeGraph();
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public ErrorResponse returnError(Exception e) {
+        return new ErrorResponse(e.getMessage());
     }
 }

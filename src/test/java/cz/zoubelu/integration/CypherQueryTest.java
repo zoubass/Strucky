@@ -42,7 +42,7 @@ public class CypherQueryTest extends AbstractTest {
         Application providingApp = new Application("IPROVIDE", methods);
         Method consumedMethod = providingApp.getProvidedMethods().iterator().next();
         //creates list of consumeRelationships and assign them to providing app;
-        consumingApp.setConsumeRelationship(Lists.newArrayList(new ConsumeRelationship(consumingApp, consumedMethod, new Long(1))));
+        consumingApp.setConsumeRelationship(Lists.newArrayList(new ConsumeRelationship(consumingApp, consumedMethod)));
         providingApp = applicationRepo.save(providingApp);
         consumingApp = applicationRepo.save(consumingApp);
         consumedMethod = providingApp.getProvidedMethods().iterator().next();

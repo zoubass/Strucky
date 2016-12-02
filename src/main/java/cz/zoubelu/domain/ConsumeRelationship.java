@@ -21,10 +21,10 @@ public class ConsumeRelationship {
 
     public ConsumeRelationship() {}
 
-    public ConsumeRelationship(Application application, Method method, Long totalUsage) {
+    public ConsumeRelationship(Application application, Method method) {
         this.application = application;
         this.method = method;
-        this.totalUsage = totalUsage;
+        this.totalUsage = 1L;
     }
 
     public Long getTotalUsage() {

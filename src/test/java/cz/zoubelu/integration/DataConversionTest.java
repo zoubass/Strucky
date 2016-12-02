@@ -17,7 +17,6 @@ import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -168,15 +167,16 @@ public class DataConversionTest extends AbstractTest {
     @Test
 //    @Ignore("This test is only for performance comparison.")
     public void testRowCallBack() {
-        Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
-        Timestamp end = Timestamp.valueOf("2016-06-01 23:00:00.0");
         long first = System.currentTimeMillis();
         List<ConversionError> errors = dataConversion.convertData("MESSAGE_201606");
         long second = System.currentTimeMillis();
+
         System.out.println("---------------------------------------------------------");
         System.out.println(second-first);
         System.out.println("---------------------------------------------------------");
         Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
+        Assert.assertTrue(applicationRepo.findBySystemId(0).getProvidedMethods().size()==0);
+        Assert.assertTrue(applicationRepo.findByName("CZGCONTRACTIMPORT").getSystemId()>3000);
     }
 
     @After
