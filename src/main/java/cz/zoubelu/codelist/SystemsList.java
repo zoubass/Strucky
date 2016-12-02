@@ -5,10 +5,11 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by zoubas on 10.7.16.
- * This enum represents the application schema of graph integration
+ * This list represents the application schema of graph integration
  */
 public class SystemsList {
 	private final Logger log = Logger.getLogger(getClass());
@@ -113,7 +114,7 @@ public class SystemsList {
 			}
 		}
 		log.info("Unable to find system with name: " + name + ".");
-		return addSystem(name, -1);
+		return addSystem(name, generateUniqueSystemId());
 	}
 
 	private SystemApp addSystem(String name, Integer id) {
@@ -125,5 +126,15 @@ public class SystemsList {
 
 	public List<SystemApp> values(){
 		return systemsList;
+	}
+
+	private Integer generateUniqueSystemId(){
+		Integer rNmbr = new Random().nextInt(5000 - 3001) + 3101;
+		for (SystemApp system: systemsList){
+			if (system.getId().equals(rNmbr)){
+				generateUniqueSystemId();
+			}
+		}
+		return rNmbr;
 	}
 }
