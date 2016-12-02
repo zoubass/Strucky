@@ -52,7 +52,7 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 	 * CONSTRUCTOR
 	 */
 	public DataConversionImpl(){
-		errors= new HashSet<ConversionError>();
+		errors = new HashSet<ConversionError>();
 	}
 
 	/**
@@ -119,12 +119,12 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 
 	private Application getProvidingApplication(Message msg) {
 		SystemApp system = systemsList.getIdByName(msg.getApplication());
-		boolean isNewlyCreated = system.getId().equals(-1);
+		boolean isNewlyCreated = (3000 < system.getId()) && (system.getId() < 5000);
 		if (isNewlyCreated) {
-			if (msg.getMsg_tar_sys() != null) {
+			if (msg.getMsg_tar_sys() != null && !msg.getMsg_tar_sys().equals(0)) {
 				system.setId(msg.getMsg_tar_sys());
 			} else {
-				log.error("Unable to get system ID for application with name: " + system.getName());
+				log.debug(String.format("Added new system w. name: %s, and generated system ID: %s",system.getName(),system.getId()));
 			}
 		}
 		return provider.getApplication(system);

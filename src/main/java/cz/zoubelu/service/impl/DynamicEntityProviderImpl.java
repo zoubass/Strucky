@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by t922274 on 8.11.2016.
@@ -35,6 +35,8 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 
 	@Autowired
 	private MethodRepository methodRepository;
+
+	private static String yearMonthSuffix;
 
 	/**
 	 * DATABASE LOOK UPS FOR ENTITY
@@ -81,6 +83,7 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 			log.debug(String.format("Relationship: %s CONSUMES -> %s, already exists, incrementing total usage by 1.",
 					consumer.getName(), method.getName()));
 			relationship.setTotalUsage(relationship.getTotalUsage() + 1);
+			// increase monthUsage
 		} else {
 			createRelationship(consumer, method);
 		}
@@ -122,7 +125,7 @@ public class DynamicEntityProviderImpl implements DynamicEntityProvider {
 	}
 
 	private void createRelationship(Application consumer, Method method) {
-		ConsumeRelationship consumeRelationship = new ConsumeRelationship(consumer, method, 1L);
+		ConsumeRelationship consumeRelationship = new ConsumeRelationship(consumer, method);
 		log.info(String.format("Creating new relationship: %s CONSUMES -> %s.", consumer.getName(), method.getName()));
 		if (consumer.getConsumeRelationship() != null) {
 			consumer.getConsumeRelationship().add(consumeRelationship);
