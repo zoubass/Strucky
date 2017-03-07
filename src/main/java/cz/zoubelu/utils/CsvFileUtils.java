@@ -11,26 +11,27 @@ import java.util.List;
  * Created by t922274 on 9.11.2016.
  */
 public class CsvFileUtils {
-	private static final Logger log = Logger.getLogger("CsvUtils");
+    private static final Logger log = Logger.getLogger("CsvUtils");
+    private static final String DELIMITER = ";";
 
-	public static void saveList(List<SystemApp> systems) {
-		String file = "systemList" + DateUtils.getYearMonthSuffix() + ".csv";
-		log.info("Saving system list: "+ file);
+    public static void saveList(List<SystemApp> systems) {
+        String file = "systemList" + DateUtils.getYearMonthSuffix() + ".csv";
+        log.info("Saving system list: " + file);
 
-		if (systems.isEmpty() || systems == null) {
-			try {
-				FileWriter writer = new FileWriter(file);
-				for (SystemApp s : systems) {
-					writer.write(s.getName() + ";" + s.getId() + "\n");
-				}
-				writer.flush();
-				writer.close();
-				log.info("Systems list successfully saved.");
-			} catch (IOException e) {
-				log.error("Failed to cache system list into directory: " + file, e);
-			}
-		} else {
-			log.error("Failed to save system list because it's empty.");
-		}
-	}
+        if (!systems.isEmpty() && systems != null) {
+            try {
+                FileWriter writer = new FileWriter(file);
+                for (SystemApp s : systems) {
+                    writer.write(s.getName() + DELIMITER + s.getId() + DELIMITER + "\n");
+                }
+                writer.flush();
+                writer.close();
+                log.info("Systems list successfully saved.");
+            } catch (IOException e) {
+                log.error("Failed to cache system list into directory: " + file, e);
+            }
+        } else {
+            log.error("Failed to save system list because it's empty.");
+        }
+    }
 }
