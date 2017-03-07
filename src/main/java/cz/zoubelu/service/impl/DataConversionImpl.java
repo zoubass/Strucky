@@ -11,6 +11,7 @@ import cz.zoubelu.repository.mapper.MessageMapper;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.DynamicEntityProvider;
 import cz.zoubelu.utils.ConversionError;
+import cz.zoubelu.utils.CsvFileUtils;
 import cz.zoubelu.utils.TimeRange;
 import cz.zoubelu.validation.Validator;
 import org.apache.log4j.Logger;
@@ -37,9 +38,6 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 
 	@Autowired
 	private DynamicEntityProvider provider;
-
-	@Autowired
-	private ConversionThread conversionThread;
 
 	@Autowired
 	private InformaMessageRepository informaRepository;
@@ -138,7 +136,7 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler{
 
 	private List<ConversionError> persistCacheAndFinish(){
 		provider.persistCachedRelations();
-//		CsvFileUtils.saveList(systemsList.values());
+		CsvFileUtils.saveList(systemsList.values());
 		return Lists.newArrayList(errors);
 	}
 
