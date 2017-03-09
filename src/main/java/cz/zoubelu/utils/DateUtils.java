@@ -61,13 +61,6 @@ public class DateUtils {
         return year + month;
     }
 
-    public static Timestamp getLastDayOfMonth(Timestamp time) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(time);
-        int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        return Timestamp.valueOf("2016-06-" + lastDay + " 23:59:59.9");
-    }
-
     public static Frequency recogniseSchedulerFrequency(String pattern) {
         //do some magic
         String[] parts = parseCron(pattern);

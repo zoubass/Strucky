@@ -122,8 +122,8 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler {
 
     private Application getProvidingApplication(Message msg) {
         SystemApp system = systemsList.getIdByName(msg.getApplication());
-        boolean isNewlyCreated = (3000 < system.getId()) && (system.getId() < 5000);
-        if (isNewlyCreated) {
+
+        if (systemsList.getNewlyCreated().contains(system)) {
             if (msg.getMsg_tar_sys() != null && !msg.getMsg_tar_sys().equals(0)) {
                 system.setId(msg.getMsg_tar_sys());
             } else {

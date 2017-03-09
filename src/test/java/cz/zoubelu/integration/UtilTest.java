@@ -32,12 +32,6 @@ public class UtilTest extends AbstractTest {
     }
 
     @Test
-    public void testLastDayOfMonthUtil() {
-        Timestamp time = DateUtils.getLastDayOfMonth(Timestamp.valueOf("2016-06-01 00:00:00"));
-        Assert.assertEquals(Timestamp.valueOf("2016-06-30 23:59:59.9"), time);
-    }
-
-    @Test
     public void testSystemListSave() {
         List<SystemApp> systemApps = new ArrayList<SystemApp>();
         systemApps.add(new SystemApp("ONE", 1));
