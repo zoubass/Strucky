@@ -1,6 +1,6 @@
 package cz.zoubelu.config;
 
-import cz.zoubelu.task.ConversionTaskImpl;
+import cz.zoubelu.task.ConversionTask;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ public class SchedulerConfig {
 	public Scheduler scheduler(){
 		Scheduler s = new Scheduler();
 		SchedulingPattern pattern = new SchedulingPattern("59 11 * * Sun");
-		ConversionTaskImpl task = conversionTaskImpl();
+		ConversionTask task = conversionTaskImpl();
 		String scheduleTaskId = s.schedule(pattern,task);
 		task.setScheduledTaskId(scheduleTaskId);
 		task.setPattern(pattern);
@@ -31,8 +31,8 @@ public class SchedulerConfig {
 	}
 
 	@Bean
-	public ConversionTaskImpl conversionTaskImpl(){
-		ConversionTaskImpl conversionTask = new ConversionTaskImpl();
+	public ConversionTask conversionTaskImpl(){
+		ConversionTask conversionTask = new ConversionTask();
 		conversionTask.setTablePrefix(tablePrefix);
 		return conversionTask;
 
