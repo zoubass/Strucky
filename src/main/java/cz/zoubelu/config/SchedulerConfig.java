@@ -26,6 +26,7 @@ public class SchedulerConfig {
 		ConversionTaskImpl task = conversionTaskImpl();
 		String scheduleTaskId = s.schedule(pattern,task);
 		task.setScheduledTaskId(scheduleTaskId);
+		task.setPattern(pattern);
 		return s;
 	}
 
