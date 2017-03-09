@@ -11,24 +11,19 @@ import java.util.List;
  */
 public interface DataConversion {
 
-	/**
+    /**
      * Converts relational data into nodes and relationships of graph integration, between the given time range.
+     *
      * @param timeRange Time range the relational data are in.
-	 * @param tableName Name of the table.
+     * @param tableName Name of the table.
      * @return errors collection.
      */
     List<ConversionError> convertData(String tableName, TimeRange timeRange);
 
-	/**
-	 * Converts the given messages into nodes and relationships of graph integration.
-	 * @param messages List of the messages from rel. integration.
-	 * @return result with message.
-     */
+    List<ConversionError> convertData(String tableName);
 
-	List<ConversionError> convertData(List<Message> messages);
+    //TODO: uz to ku*** samazat
+    public List<ConversionError> convertData(List<Message> messages);
 
-	List<ConversionError> convertData(String tableName);
-
-	void convertSingleMessage(Message message);
 
 }

@@ -28,120 +28,121 @@ import java.util.Set;
 /**
  * Created by zoubas on 10.7.16.
  */
-//TODO: Cela trida by nemela byt asi transactional, je pak nutne nastavit obri timneout na neo4j databazi, aby neuzavrela connection
+//TODO: Ma zde byt transactional?
 @Transactional
-public class DataConversionImpl implements DataConversion, RowCallbackHandler{
-	private final Logger log = Logger.getLogger(getClass());
+public class DataConversionImpl implements DataConversion, RowCallbackHandler {
+    private final Logger log = Logger.getLogger(getClass());
 
-	@Autowired
-	private Validator validator;
+    @Autowired
+    private Validator validator;
 
-	@Autowired
-	private DynamicEntityProvider provider;
+    @Autowired
+    private DynamicEntityProvider provider;
 
-	@Autowired
-	private InformaMessageRepository informaRepository;
+    @Autowired
+    private InformaMessageRepository informaRepository;
 
-	private SystemsList systemsList;
+    @Autowired
+    private SystemsList systemsList;
 
-	private final Set<ConversionError> errors;
+    private final Set<ConversionError> errors;
 
-	/**
-	 * CONSTRUCTOR
-	 */
-	public DataConversionImpl(){
-		errors = new HashSet<ConversionError>();
-	}
+    /**
+     * CONSTRUCTOR
+     */
+    public DataConversionImpl() {
+        errors = new HashSet<ConversionError>();
+    }
 
-	/**
-	 * Interface method implementation
-	 */
-	public List<ConversionError> convertData(String tableName, TimeRange timeRange) {
-		informaRepository.fetchAndConvertData(tableName, timeRange, this);
-		return persistCacheAndFinish();
-	}
+    /**
+     * Interface method implementation
+     */
+    public List<ConversionError> convertData(String tableName, TimeRange timeRange) {
+        systemsList.loadList();
+        informaRepository.fetchAndConvertData(tableName, timeRange, this);
+        return persistCacheAndFinish();
+    }
 
-	public List<ConversionError> convertData(String tableName) {
-		informaRepository.fetchAndConvertData(tableName,this);
-		return persistCacheAndFinish();
-	}
-	//TODO: smazat
-	public List<ConversionError> convertData(List<Message> messages) {
-		final Set<ConversionError> errors = new HashSet<ConversionError>();
+    public List<ConversionError> convertData(String tableName) {
+        systemsList.loadList();
+        informaRepository.fetchAndConvertData(tableName, this);
+        return persistCacheAndFinish();
+    }
 
-		for (Message message : messages) {
-			try {
-				convertSingleMessage(message);
-			} catch (Exception e) {
-				log.error("Conversion of application failed. Reason: " + e.getMessage(), e);
-				errors.add(new ConversionError(e.getMessage()));
-			}
-		}
-		return Lists.newArrayList(errors);
-	}
+    //TODO: smazat
+    public List<ConversionError> convertData(List<Message> messages) {
+        final Set<ConversionError> errors = new HashSet<ConversionError>();
 
-	/**
-	 * ROW HANDLING PROCESS METHOD
-	 *
-	 * @param resultSet
-	 * @throws SQLException
-	 */
-	public void processRow(ResultSet resultSet) throws SQLException {
-		MessageMapper mapper = new MessageMapper();
-		Message message= null;
-		try {
-			message = mapper.mapRow(resultSet);
-			convertSingleMessage(message);
-		} catch (Exception e) {
-			log.error("Error occurred during conversion.",e);
-			errors.add(new ConversionError(
-					"Failed to convert message with ID: " + message!=null? message.getMsg_id(): "N/A" + ". Reason: " + e.getMessage()));
-		}
-	}
+        for (Message message : messages) {
+            try {
+                convertSingleMessage(message);
+            } catch (Exception e) {
+                log.error("Conversion of application failed. Reason: " + e.getMessage(), e);
+                errors.add(new ConversionError(e.getMessage()));
+            }
+        }
+        return Lists.newArrayList(errors);
+    }
 
-	/**
-	 * Main method for mapping the message onto graph.
-	 * @param msg
-	 */
-	public void convertSingleMessage(Message msg) {
-		validator.validateMessage(msg);
+    /**
+     * ROW HANDLING PROCESS METHOD
+     *
+     * @param resultSet
+     * @throws SQLException
+     */
+    public void processRow(ResultSet resultSet) throws SQLException {
+        MessageMapper mapper = new MessageMapper();
+        Message message = null;
+        try {
+            message = mapper.mapRow(resultSet);
+            convertSingleMessage(message);
+        } catch (Exception e) {
+            log.error("Error occurred during conversion.", e);
+            errors.add(new ConversionError(
+                    "Failed to convert message with ID: " + message != null ? message.getMsg_id() : "N/A" + ". Reason: " + e.getMessage()));
+        }
+    }
 
-		Application providingApp = getProvidingApplication(msg);
-		Method consumedMethod = provider.getConsumedMethod(providingApp, msg);
-		Application consumingApp = getConsumingApplication(msg);
+    /**
+     * Main method for mapping the message onto graph.
+     *
+     * @param msg
+     */
+    public void convertSingleMessage(Message msg) {
+        validator.validateMessage(msg);
 
-		log.info(String.format("Saving relationship - Provider: %s, Method: %s, Consumer: %s.", providingApp.getName(),
-				consumedMethod.getName(), consumingApp.getName()));
-		provider.createConsumeRelation(consumingApp,consumedMethod);
-	}
+        Application providingApp = getProvidingApplication(msg);
+        Method consumedMethod = provider.getConsumedMethod(providingApp, msg);
+        Application consumingApp = getConsumingApplication(msg);
 
-	private Application getProvidingApplication(Message msg) {
-		SystemApp system = systemsList.getIdByName(msg.getApplication());
-		boolean isNewlyCreated = (3000 < system.getId()) && (system.getId() < 5000);
-		if (isNewlyCreated) {
-			if (msg.getMsg_tar_sys() != null && !msg.getMsg_tar_sys().equals(0)) {
-				system.setId(msg.getMsg_tar_sys());
-			} else {
-				log.debug(String.format("Added new system w. name: %s, and generated system ID: %s",system.getName(),system.getId()));
-			}
-		}
-		return provider.getApplication(system);
-	}
+        log.info(String.format("Saving relationship - Provider: %s, Method: %s, Consumer: %s.", providingApp.getName(),
+                consumedMethod.getName(), consumingApp.getName()));
+        provider.createConsumeRelation(consumingApp, consumedMethod);
+    }
 
-	private Application getConsumingApplication(Message msg) {
-		SystemApp system = systemsList.getSystemByID(msg.getMsg_src_sys());
-		return provider.getApplication(system);
-	}
+    private Application getProvidingApplication(Message msg) {
+        SystemApp system = systemsList.getIdByName(msg.getApplication());
+        boolean isNewlyCreated = (3000 < system.getId()) && (system.getId() < 5000);
+        if (isNewlyCreated) {
+            if (msg.getMsg_tar_sys() != null && !msg.getMsg_tar_sys().equals(0)) {
+                system.setId(msg.getMsg_tar_sys());
+            } else {
+                log.debug(String.format("Added new system w. name: %s, and generated system ID: %s", system.getName(), system.getId()));
+            }
+        }
+        return provider.getApplication(system);
+    }
+
+    private Application getConsumingApplication(Message msg) {
+        SystemApp system = systemsList.getSystemByID(msg.getMsg_src_sys());
+        return provider.getApplication(system);
+    }
 
 
-	private List<ConversionError> persistCacheAndFinish(){
-		provider.persistCachedRelations();
-		CsvFileUtils.saveList(systemsList.values());
-		return Lists.newArrayList(errors);
-	}
-
-	public void setSystemsList(SystemsList systemsList) {
-		this.systemsList = systemsList;
-	}
+    private List<ConversionError> persistCacheAndFinish() {
+        provider.persistCachedRelations();
+        systemsList.saveList();
+        return Lists.newArrayList(errors);
+    }
 
 }

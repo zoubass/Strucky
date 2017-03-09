@@ -47,15 +47,15 @@ public class DataConversionTest extends AbstractTest {
 
     @Before
     public void startUp() {
-        /*
+  /*
         jdbcTemplate.update("Delete from message");
         final String sql = "INSERT INTO MESSAGE(id,application,msg_src_sys,msg_version,msg_type) VALUES (?,?,?,?,?)";
         int id = 1;
         for (Message m: createMessages()){
             jdbcTemplate.update(sql, id++, m.getApplication(), m.getMsg_src_sys(), m.getMsg_version(), m.getMsg_type());
         }
-        */
-        messages=createMessages();
+    */
+        messages = createMessages();
         systemsList = new SystemsList();
         for (SystemApp system : systemsList.values()) {
             applicationRepo.save(new cz.zoubelu.domain.Application(system.getName(), system.getId(), new ArrayList<Method>()));
@@ -68,7 +68,7 @@ public class DataConversionTest extends AbstractTest {
         Long init = System.currentTimeMillis();
         //override method using mock, because normal task runs conversion
         Task task = mock(Task.class);
-        scheduler.schedule(new SchedulingPattern("* * * * *"), task);
+        scheduler.schedule(new SchedulingPattern("/1 * * * *"), task);
         scheduler.start();
         while ((init + 2000 * 60) > System.currentTimeMillis()) {
             /** chill time **/
@@ -94,7 +94,7 @@ public class DataConversionTest extends AbstractTest {
         cz.zoubelu.domain.Application a191 = applicationRepo.findByName("191");
         cz.zoubelu.domain.Application lead = applicationRepo.findByName("CZGLEADMNG");
 
-        Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
+        Assert.assertTrue("Shouldn't contain errors.", errors.size() == 0);
 
         Assert.assertTrue(agentInfo.getConsumeRelationship().size() > 0);
         ConsumeRelationship firstAgRel = agentInfo.getConsumeRelationship().get(1);
@@ -143,8 +143,8 @@ public class DataConversionTest extends AbstractTest {
         List<ConversionError> errors = dataConversion.convertData(messages);
         List<Map<String, Object>> result = relationshipRepo.getGraph();
 
-        Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
-        Assert.assertEquals("The number of relations.",result.size(), 10);
+        Assert.assertTrue("Shouldn't contain errors.", errors.size() == 0);
+        Assert.assertEquals("The number of relations.", result.size(), 10);
     }
 
     @Test
@@ -153,30 +153,30 @@ public class DataConversionTest extends AbstractTest {
         List<Map<String, Object>> result = relationshipRepo.getApplicationRelationships(applicationRepo.findByName("CZGAGENTINFO"));
 
         Assert.assertTrue("Shouldn't contain errors.", errors.size() == 0);
-        Assert.assertTrue("The number of relations.",result.size() == 2);
-        boolean hasMethod = ((Method)result.get(0).get("method")).getName().equals("getPropertySomething");
+        Assert.assertTrue("The number of relations.", result.size() == 2);
+        boolean hasMethod = ((Method) result.get(0).get("method")).getName().equals("getPropertySomething");
 
-        if (hasMethod){
-            Assert.assertTrue(((Method)result.get(1).get("method")).getName().equals("getLead"));
-        }else {
-            Assert.assertTrue(((Method)result.get(0).get("method")).getName().equals("getLead"));
-            Assert.assertTrue(((Method)result.get(1).get("method")).getName().equals("getPropertySomething"));
+        if (hasMethod) {
+            Assert.assertTrue(((Method) result.get(1).get("method")).getName().equals("getLead"));
+        } else {
+            Assert.assertTrue(((Method) result.get(0).get("method")).getName().equals("getLead"));
+            Assert.assertTrue(((Method) result.get(1).get("method")).getName().equals("getPropertySomething"));
         }
     }
 
     @Test
-//    @Ignore("This test is only for performance comparison.")
+    @Ignore("This test is only for performance comparison.")
     public void testRowCallBack() {
         long first = System.currentTimeMillis();
-        List<ConversionError> errors = dataConversion.convertData("MESSAGE_201606");
+        List<ConversionError> errors = dataConversion.convertData("MESSAGE");
         long second = System.currentTimeMillis();
 
         System.out.println("---------------------------------------------------------");
-        System.out.println(second-first);
+        System.out.println(second - first);
         System.out.println("---------------------------------------------------------");
-        Assert.assertTrue("Shouldn't contain errors.",errors.size()==0);
-        Assert.assertTrue(applicationRepo.findBySystemId(0).getProvidedMethods().size()==0);
-        Assert.assertTrue(applicationRepo.findByName("CZGCONTRACTIMPORT").getSystemId()>3000);
+        Assert.assertTrue("Shouldn't contain errors.", errors.size() == 0);
+        Assert.assertTrue(applicationRepo.findBySystemId(0).getProvidedMethods().size() == 0);
+        Assert.assertTrue(applicationRepo.findByName("CZGCONTRACTIMPORT").getSystemId() > 3000);
     }
 
     @After

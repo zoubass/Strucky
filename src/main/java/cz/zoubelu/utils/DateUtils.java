@@ -3,12 +3,14 @@ package cz.zoubelu.utils;
 import cz.zoubelu.service.Frequency;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,7 +19,10 @@ import java.util.List;
 public class DateUtils {
 
     public static TimeRange getTimeRange() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return getEdgesForDate(new Date());
+    }
+
+    public static TimeRange getWeekTimeRange() {
         Calendar cal = Calendar.getInstance();
         Timestamp start = new Timestamp(cal.getTime().getTime());
         cal.add(Calendar.DATE, -7);
@@ -25,30 +30,35 @@ public class DateUtils {
         return new TimeRange(start, end);
     }
 
-    //FIXME or REMOVE IF NOT NEEDED: 28.2.2017 to pri testu vratilo suffix 201700
-    public static String getYearMonthSuffix() {
+    private static TimeRange getEdgesForDate(Date date) {
         Calendar cal = Calendar.getInstance();
-        String year = String.valueOf(cal.get(Calendar.YEAR));
-        String month = String.valueOf(cal.get(Calendar.MONTH) - 1);
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-        return year + month;
-    }
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Timestamp start = new Timestamp(cal.getTime().getTime());
 
-    public static TimeRange getFirstHalfOfMonth(String tableName) {
-        String year = tableName.substring(tableName.length() - 6, tableName.length() - 2);
-        String month = tableName.substring(tableName.length() - 2, tableName.length());
-
-        Timestamp start = Timestamp.valueOf(year + "-" + month + "-" + "01 00:00:00.0");
-        Timestamp end = Timestamp.valueOf(year + "-" + month + "-" + "15 23:59:59.9");
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        Timestamp end = new Timestamp(cal.getTime().getTime());
         return new TimeRange(start, end);
     }
 
-    public static List<TimeRange> getWeeks() {
-        List<TimeRange> weeks = new ArrayList<TimeRange>();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        return null;
+    public static String getYearMonthSuffix() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        String year = String.valueOf(cal.get(Calendar.YEAR));
+        String month = String.valueOf(cal.get(Calendar.MONTH));
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        if (month.equals("00")) {
+            month = "12";
+        }
+        return year + month;
     }
 
     public static Timestamp getLastDayOfMonth(Timestamp time) {
@@ -79,10 +89,26 @@ public class DateUtils {
         return Frequency.UNKNOWN;
     }
 
+    public static TimeRange getTimeRangeByFrequency(String pattern) {
+        Frequency frequency = recogniseSchedulerFrequency(pattern);
+        switch (frequency) {
+            case DAILY:
+                return getTimeRange();
+            case WEEKLY:
+                return getWeekTimeRange();
+            case MONTHLY:
+                return null;
+            case UNKNOWN:
+                throw new RuntimeException("Failed to recognise frequency of scheduler from pattern: " + pattern);
+            default:
+                throw new RuntimeException("Failed to recognise frequency of scheduler from pattern: " + pattern);
+        }
+    }
+
     private static String[] parseCron(String pattern) {
         String[] parts = new String[5];
         parts[0] = pattern.substring(0, pattern.indexOf(" ", 0) + 1);
-        pattern = StringUtils.replaceOnce(pattern,parts[0],"");
+        pattern = StringUtils.replaceOnce(pattern, parts[0], "");
         parts[0].trim();
         int i = 1;
         int index = 0;
@@ -94,5 +120,10 @@ public class DateUtils {
         //last part remains in pattern
         parts[4] = pattern.substring(pattern.lastIndexOf(" "), pattern.length()).trim();
         return parts;
+    }
+
+    public static String getActualDateSuffix() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(new Date());
     }
 }

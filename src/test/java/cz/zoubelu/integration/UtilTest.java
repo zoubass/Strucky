@@ -21,8 +21,8 @@ public class UtilTest extends AbstractTest {
     @Test
     public void testTimeRangeCreation() {
         TimeRange range = DateUtils.getTimeRange();
-        Assert.assertNotNull(range.getStartDate());
-        Assert.assertNotNull(range.getEndDate());
+        Assert.assertEquals("00:00:00.0", range.getStartDate().toString().substring(11, 21));
+        Assert.assertEquals("23:59:59.9", range.getEndDate().toString().substring(11, 21));
     }
 
     @Test
@@ -43,7 +43,14 @@ public class UtilTest extends AbstractTest {
         systemApps.add(new SystemApp("ONE", 1));
         systemApps.add(new SystemApp("TWO", 2));
         systemApps.add(new SystemApp("THREE", 3));
-        CsvFileUtils.saveList(systemApps);
+        CsvFileUtils.save(systemApps, "SYSTEMS_LIST_test.csv");
+    }
+
+    @Test
+    public void testSystemListLoad() {
+        testSystemListSave();
+        List<SystemApp> systemApps = CsvFileUtils.load("SYSTEMS_LIST_test.csv");
+        Assert.assertEquals(systemApps.size(), 3);
     }
 
     @Test

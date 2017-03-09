@@ -44,7 +44,7 @@ public class DatabaseConnectionTest extends AbstractTest {
     public void shouldNotCreateNewEntitiesIfTheyExist() {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-01 02:00:00.0");
-        List<ConversionError> errors = dataConversion.convertData("MESSAGE_201606", new TimeRange(start, end));
+        List<ConversionError> errors = dataConversion.convertData("MESSAGE", new TimeRange(start, end));
 
         List<cz.zoubelu.domain.Application> apps = Lists.newArrayList(applicationRepo.findAll());
         Assert.assertEquals("The number of applications in integration is not as expected.There were or were not created applications.", 74, apps.size());
@@ -59,14 +59,14 @@ public class DatabaseConnectionTest extends AbstractTest {
         Timestamp start = Timestamp.valueOf("2016-06-01 00:00:00.0");
         Timestamp end = Timestamp.valueOf("2016-06-07 23:59:00.0");
 
-        Long dataSize = jdbcTemplate.queryForObject("select count(*) from Message_201606 where request_time between ? and ?",Long.class,start,end);
+        Long dataSize = jdbcTemplate.queryForObject("select count(*) from MESSAGE where request_time between ? and ?",Long.class,start,end);
         Assert.assertEquals(8611, dataSize.longValue());
     }
 
     @Test
     public void testDataShouldBeInSpecifiedTimeRange() {
-        Timestamp minDate = jdbcTemplate.queryForObject("select MIN(request_time) from MESSAGE_201606", Timestamp.class);
-        Timestamp maxDate = jdbcTemplate.queryForObject("select MAX(request_time) from MESSAGE_201606", Timestamp.class);
+        Timestamp minDate = jdbcTemplate.queryForObject("select MIN(request_time) from MESSAGE", Timestamp.class);
+        Timestamp maxDate = jdbcTemplate.queryForObject("select MAX(request_time) from MESSAGE", Timestamp.class);
         Assert.assertEquals("2016-06-01 00:09:52.245",minDate.toString());
         Assert.assertEquals("2016-06-26 01:00:18.991",maxDate.toString());
     }
