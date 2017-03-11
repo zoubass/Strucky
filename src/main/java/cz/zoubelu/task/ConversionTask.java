@@ -1,8 +1,8 @@
 package cz.zoubelu.task;
 
 import cz.zoubelu.service.DataConversion;
+import cz.zoubelu.service.impl.EmailSender;
 import cz.zoubelu.utils.ConversionError;
-import cz.zoubelu.utils.CsvFileUtils;
 import cz.zoubelu.utils.DateUtils;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.SchedulingPattern;
@@ -12,8 +12,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
-import static cz.zoubelu.utils.DateUtils.getTimeRange;
 
 /**
  * Created by zoubas on 14.7.2016.
@@ -50,6 +48,14 @@ public class ConversionTask extends Task {
         log.info(String.format("Conversion took %s ms, -> %s minutes.", stopTime - startTime,
                 ((stopTime - startTime) / 60000)));
         log.info("Conversion ended with " + errors.size() + " errors.");
+        sendEmail(errors);
+    }
+
+    private void sendEmail(List<ConversionError> errors) {
+        if (errors.size() > 0 && !errors.isEmpty()) {
+            EmailSender emailSender = new EmailSender();
+            emailSender.sendEmail(errors);
+        }
     }
 
     private String getTableName() {

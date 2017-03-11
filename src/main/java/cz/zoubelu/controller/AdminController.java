@@ -1,9 +1,9 @@
 package cz.zoubelu.controller;
 
 import cz.zoubelu.task.ConversionTask;
+import cz.zoubelu.utils.DateUtils;
 import it.sauronsoftware.cron4j.Scheduler;
 import it.sauronsoftware.cron4j.SchedulingPattern;
-import it.sauronsoftware.cron4j.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,15 +21,17 @@ public class AdminController {
     @Autowired
     private ConversionTask conversionTask;
 
-    @RequestMapping(value = ("/pattern"), method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public String configScheduler(@RequestParam(name = "pattern") String pattern, Model model) {
         try {
-            scheduler.reschedule(conversionTask.getScheduledTaskId(),pattern);
+            scheduler.reschedule(conversionTask.getScheduledTaskId(), pattern);
+            conversionTask.setPattern(new SchedulingPattern(pattern));
             model.addAttribute("message", "Pattern " + pattern + " úspěšně nastaven.");
         } catch (Exception e) {
             model.addAttribute("message", "Nepodařilo se nastavit pattern, důvod: " + e.getMessage());
         }
         model.addAttribute("pattern", pattern);
+        model.addAttribute("frequency", DateUtils.recogniseSchedulerFrequency(pattern).name());
         return "admin";
     }
 

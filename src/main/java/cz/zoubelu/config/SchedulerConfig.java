@@ -13,28 +13,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SchedulerConfig {
 
-	@Value("${scheduler.pattern}")
-	private String schedulingPattern;
+    @Value("${scheduler.pattern}")
+    private String schedulingPattern;
 
-	@Value("${table.prefix}")
-	private String tablePrefix;
+    @Value("${table.prefix}")
+    private String tablePrefix;
 
-	@Bean
-	public Scheduler scheduler(){
-		Scheduler s = new Scheduler();
-		SchedulingPattern pattern = new SchedulingPattern("59 11 * * Sun");
-		ConversionTask task = conversionTaskImpl();
-		String scheduleTaskId = s.schedule(pattern,task);
-		task.setScheduledTaskId(scheduleTaskId);
-		task.setPattern(pattern);
-		return s;
-	}
+    @Bean
+    public Scheduler scheduler() {
+        Scheduler s = new Scheduler();
+        SchedulingPattern pattern = new SchedulingPattern(schedulingPattern);
+        ConversionTask task = conversionTaskImpl();
+        String scheduleTaskId = s.schedule(pattern, task);
+        task.setScheduledTaskId(scheduleTaskId);
+        task.setPattern(pattern);
+        return s;
+    }
 
-	@Bean
-	public ConversionTask conversionTaskImpl(){
-		ConversionTask conversionTask = new ConversionTask();
-		conversionTask.setTablePrefix(tablePrefix);
-		return conversionTask;
+    @Bean
+    public ConversionTask conversionTaskImpl() {
+        ConversionTask conversionTask = new ConversionTask();
+        conversionTask.setTablePrefix(tablePrefix);
+        return conversionTask;
 
-	}
+    }
 }

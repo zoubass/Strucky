@@ -3,13 +3,14 @@
 <body>
 <div th:replace="fragments::#navigation"/>
 <div id="content">
-    <form class="navbar-form" method="post" action="#" th:action="@{/admin/pattern}">
+    <form class="navbar-form" method="post" action="#" th:action="@{/admin}">
         <p>
             <label for="pattern">Pattern scheduleru</label>
             <input type="text" name="pattern" id="pattern" th:value="${pattern}" />
             <button class="btn btn-default">Nastavit</button>
         </p>
         <span th:text="${message}" th:if="${message!=null}">Error</span>
+        <span th:text="${frequency}" th:if="${frequency!=null}">Cannot resolve frequency.</span>
     </form>
     <div class="navbar-form">
         <a th:href="@{/scheduler/start}"><button class="btn btn-default">Spustit scheduler</button></a>

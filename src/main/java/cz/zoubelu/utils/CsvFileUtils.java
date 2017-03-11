@@ -17,9 +17,6 @@ public class CsvFileUtils {
     private static final Logger log = Logger.getLogger("CsvUtils");
     private static final String DELIMITER = ";";
 
-    private String fileLocation;
-
-
     public static void save(List<SystemApp> systems, String fileLocation) {
 
         log.info("Saving system list: " + fileLocation);

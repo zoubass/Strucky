@@ -2,6 +2,8 @@ package cz.zoubelu.integration;
 
 import cz.zoubelu.codelist.SystemApp;
 import cz.zoubelu.service.Frequency;
+import cz.zoubelu.service.impl.EmailSender;
+import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.CsvFileUtils;
 import cz.zoubelu.utils.DateUtils;
 import cz.zoubelu.utils.TimeRange;
@@ -9,7 +11,6 @@ import it.sauronsoftware.cron4j.SchedulingPattern;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,15 @@ public class UtilTest extends AbstractTest {
         Assert.assertEquals(Frequency.DAILY, daily);
         Assert.assertEquals(Frequency.WEEKLY, weekly);
         Assert.assertEquals(Frequency.MONTHLY, monthly);
+    }
+
+    @Test
+    public void sendEmail() {
+        EmailSender emailSender = new EmailSender();
+        List<ConversionError> errors = new ArrayList<ConversionError>();
+        errors.add(new ConversionError("Somethings wrong"));
+        errors.add(new ConversionError("This should never happen."));
+        emailSender.sendEmail(errors);
     }
 
 }
