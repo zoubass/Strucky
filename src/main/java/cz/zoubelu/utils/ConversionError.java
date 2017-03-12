@@ -7,6 +7,7 @@ public class ConversionError {
     private String message;
 
     public ConversionError(String message) {
+        this.message = message;
     }
 
     public String getMessage() {

@@ -9,6 +9,7 @@ import cz.zoubelu.utils.DateUtils;
 import cz.zoubelu.utils.TimeRange;
 import it.sauronsoftware.cron4j.SchedulingPattern;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class UtilTest extends AbstractTest {
     }
 
     @Test
+    @Ignore("sends email if not ignored.")
     public void sendEmail() {
         EmailSender emailSender = new EmailSender();
         List<ConversionError> errors = new ArrayList<ConversionError>();

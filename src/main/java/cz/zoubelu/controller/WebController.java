@@ -22,6 +22,7 @@ public class WebController {
     @RequestMapping(value = {"/systemList"})
     public String showSystemList(Model model) {
         model.addAttribute("systems", systemsList.values());
+        //vracet, nebo zvyraznovat newly created
         return "systemsList";
     }
 }
