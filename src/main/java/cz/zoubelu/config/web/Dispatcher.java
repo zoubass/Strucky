@@ -13,7 +13,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackages = {"cz.zoubelu.controller,cz.zoubelu.config"})
+@ComponentScan(basePackages = {"cz.zoubelu.controller"})
 public class Dispatcher extends WebMvcConfigurerAdapter {
 
 	@Override

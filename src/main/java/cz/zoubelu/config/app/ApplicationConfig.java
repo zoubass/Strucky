@@ -1,11 +1,11 @@
-package cz.zoubelu.config;
+package cz.zoubelu.config.app;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import cz.zoubelu.codelist.SystemsList;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.impl.InformaRepositoryImpl;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.impl.DataConversionImpl;
-import cz.zoubelu.utils.CsvFileUtils;
 import cz.zoubelu.validation.Validator;
 import cz.zoubelu.validation.impl.MessageValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ApplicationConfig {
 
     @Autowired
-    private DataSource dataSource;
+    private ComboPooledDataSource dataSource;
 
     @Value("${systems.list.location}")
     private String fileLocation;
@@ -53,7 +53,7 @@ public class ApplicationConfig {
 
     @Bean
     public JdbcTemplate getJdbcTemplate() {
-        return new JdbcTemplate(dataSource.getDataSource());
+        return new JdbcTemplate(dataSource);
     }
 
     @Bean

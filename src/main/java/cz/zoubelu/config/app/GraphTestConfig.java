@@ -1,4 +1,4 @@
-package cz.zoubelu.config;
+package cz.zoubelu.config.app;
 
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;

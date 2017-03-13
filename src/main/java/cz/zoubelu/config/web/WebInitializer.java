@@ -1,9 +1,9 @@
 package cz.zoubelu.config.web;
 
-import cz.zoubelu.config.ApplicationConfig;
-import cz.zoubelu.config.GraphConfig;
-import cz.zoubelu.config.SchedulerConfig;
-import cz.zoubelu.config.datasource.DataSourceProd;
+import cz.zoubelu.config.app.ApplicationConfig;
+import cz.zoubelu.config.app.GraphConfig;
+import cz.zoubelu.config.app.SchedulerConfig;
+import cz.zoubelu.config.app.datasource.DataSourceProd;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;

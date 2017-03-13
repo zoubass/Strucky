@@ -5,17 +5,13 @@ import cz.zoubelu.codelist.SystemsList;
 import cz.zoubelu.domain.ConsumeRelationship;
 import cz.zoubelu.domain.Method;
 import cz.zoubelu.repository.ApplicationRepository;
-import cz.zoubelu.repository.InformaMessageRepository;
-import cz.zoubelu.repository.MethodRepository;
-import cz.zoubelu.repository.RelationshipRepository;
 import cz.zoubelu.service.DataConversion;
 import cz.zoubelu.service.Visualization;
 import cz.zoubelu.utils.ConversionError;
 import cz.zoubelu.utils.ErrorResponse;
-import cz.zoubelu.utils.NullUtils;
 import cz.zoubelu.utils.TimeRange;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.neo4j.ogm.session.Neo4jSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,18 +31,6 @@ public class RestGraphController {
 
     @Autowired
     private ApplicationRepository applicationRepo;
-
-    @Autowired
-    private MethodRepository methodRepo;
-
-    @Autowired
-    private Neo4jSession session;
-
-    @Autowired
-    private RelationshipRepository relationRepo;
-
-    @Autowired
-    private InformaMessageRepository informaRepository;
 
     @Autowired
     private Visualization visualization;
@@ -71,16 +55,14 @@ public class RestGraphController {
     @RequestMapping(value = "/{systemId}/consumes", method = RequestMethod.GET)
     @ResponseBody
     public List<ConsumeRelationship> getConsumedMethods(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId, "Application ID cannot be null.");
         cz.zoubelu.domain.Application app = applicationRepo.findBySystemId(systemId);
-        NullUtils.nullCheck(app, "Cannot find application with system id: " + systemId);
         return app.getConsumeRelationship();
     }
 
     @RequestMapping(value = "/{appName}/info", method = RequestMethod.GET)
     @ResponseBody
     public cz.zoubelu.domain.Application getApplicationInfo(@PathVariable("appName") String appName) {
-        return applicationRepo.findByName(appName);
+        return applicationRepo.findByName(StringUtils.upperCase(appName));
     }
 
 
@@ -91,9 +73,7 @@ public class RestGraphController {
     @RequestMapping(value = "/{systemId}/provides", method = RequestMethod.GET)
     @ResponseBody
     public List<Method> getProvidedMethods(@PathVariable("systemId") Integer systemId) {
-        NullUtils.nullCheck(systemId, "Application ID cannot be null.");
         cz.zoubelu.domain.Application app = applicationRepo.findBySystemId(systemId);
-        NullUtils.nullCheck(app, "Cannot find application with system id: " + systemId);
         return app.getProvidedMethods();
     }
 

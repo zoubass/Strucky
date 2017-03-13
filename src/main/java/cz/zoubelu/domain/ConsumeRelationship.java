@@ -1,6 +1,7 @@
 package cz.zoubelu.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 import org.neo4j.ogm.annotation.*;
 
@@ -8,6 +9,7 @@ import org.neo4j.ogm.annotation.*;
  * Created by zoubas on 9.7.16.
  */
 @JsonIdentityInfo(generator=JSOGGenerator.class)
+@JsonIgnoreProperties({"application"})
 @RelationshipEntity(type = "CONSUMES")
 public class ConsumeRelationship {
     @GraphId

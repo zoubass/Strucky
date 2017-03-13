@@ -148,20 +148,6 @@ public class SystemsList {
         return rNmbr;
     }
 
-    public List<SystemApp> loadList() {
-        this.systemsList = CsvFileUtils.load(fileLocation);
-        return values();
-    }
-
-    public void saveList() {
-
-        if (!values().isEmpty() && values() != null) {
-            CsvFileUtils.save(values(), fileLocation);
-        } else {
-            log.error("Failed to save system list because it's empty.");
-        }
-    }
-
     public void clearNewlyCreatedList() {
         this.newlyCreated = new ArrayList<SystemApp>();
     }
@@ -180,5 +166,40 @@ public class SystemsList {
 
     public void setNewlyCreated(List<SystemApp> newlyCreated) {
         this.newlyCreated = newlyCreated;
+    }
+
+    /**
+     * Things about the list file.
+     */
+    public List<SystemApp> loadList() {
+        this.systemsList = CsvFileUtils.load(fileLocation);
+        return values();
+    }
+
+    public void saveList() {
+
+        if (!values().isEmpty() && values() != null) {
+            CsvFileUtils.save(values(), fileLocation);
+        } else {
+            log.error("Failed to save system list because it's empty.");
+        }
+    }
+
+    public void remove(SystemApp system) {
+        SystemApp systemApp = getSystemByID(system.getId());
+        if (systemApp != null) {
+            systemsList.remove(systemApp);
+        } else {
+            throw new IllegalArgumentException("Cannot remove from list, can't find the system with id: " + system.getId());
+        }
+    }
+
+    public void edit(SystemApp system) {
+        remove(system);
+        systemsList.add(system);
+    }
+
+    public void add(SystemApp system) {
+        systemsList.add(system);
     }
 }

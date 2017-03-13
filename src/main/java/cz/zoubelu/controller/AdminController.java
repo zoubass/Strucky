@@ -37,7 +37,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String showAdmin(Model model) {
-//        model.addAttribute("pattern", scheduler.getSchedulingPattern("").toString());
+        model.addAttribute("pattern", conversionTask.getPattern());
         return "admin";
     }
 }

@@ -1,19 +1,16 @@
-package cz.zoubelu.config.datasource;
+package cz.zoubelu.config.app.datasource;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import cz.zoubelu.config.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
-@Configuration
 @Profile("test")
-public class DataSourceTest implements DataSource {
+public class DataSourceTest {
     private final Logger log = Logger.getLogger(getClass());
 
     @Value("${url}")

@@ -1,4 +1,4 @@
-package cz.zoubelu.config;
+package cz.zoubelu.config.app;
 
 import cz.zoubelu.task.ConversionTask;
 import it.sauronsoftware.cron4j.Scheduler;
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created by zoubas on 14.7.2016.
  */
-@Configuration
 public class SchedulerConfig {
 
     @Value("${scheduler.pattern}")
