@@ -3,7 +3,7 @@
 <head th:replace="fragments::head"></head>
 <body>
 <div th:replace="fragments::#navigation"/>
-<table border="1">
+<table border="1" id="systemsTable">
     <thead>
     <th>Name</th>
     <th>ID</th>
@@ -14,8 +14,8 @@
     <tr th:each="system : ${systems}">
         <td><input type="text" th:value="${system.name}"/></td>
         <td><input type="text" th:value="${system.id}" size="3"/></td>
-        <td><a th:href="@{/edit}">edit</a></td>
-        <td><a th:href="@{/delete}">remove</a></td>
+        <td><a th:href="@{'/edit/'+${system.id}}"><span class="edit"></span></a></td>
+        <td><a th:href="@{'/delete/'+${system.id}}"><span class="delete"></span></a></td>
     </tr>
     </tbody>
 </table>

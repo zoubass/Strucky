@@ -65,16 +65,36 @@ tbody {
     font-weight: bold;
 }
 
-th{
+th {
     width: 120px;
 }
-table{
-    table-layout:fixed;
+
+table {
+    table-layout: fixed;
 }
 
 #toolbar {
     float: right;
 }
-#graph{
+
+#graph {
     margin: 45px 0px 0px;
+}
+
+.delete {
+    background: url(../img/delete.png);
+    width: 25px;
+    height: 25px;
+    display: block;
+    float: left;
+}
+
+#systemsTable{
+    background-color: rgba(191, 191, 181, 0.71);
+    text-align: center;
+}
+
+#systemsTable tr td{
+    max-width:100%;
+    white-space:nowrap;
 }

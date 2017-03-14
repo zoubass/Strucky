@@ -30,18 +30,18 @@ public class WebController {
 
     @RequestMapping(value = {"/edit"})
     public String edit(@PathVariable SystemApp systemApp, Model model) {
-        systemsList.remove(systemApp);
+        systemsList.edit(systemApp);
         systemsList.saveList();
         model.addAttribute("message","Edit successful.");
         return "systemsList";
     }
 
-    @RequestMapping(value = {"/delete"})
-    public String delete(@PathVariable SystemApp systemApp, Model model) {
-        systemsList.edit(systemApp);
+    @RequestMapping(value = {"/delete/{id}"})
+    public String delete(@PathVariable Integer id, Model model) {
+        systemsList.remove(systemsList.getSystemByID(id));
         systemsList.saveList();
         model.addAttribute("message","Delete successful.");
-        return "systemsList";
+        return "redirect:/list.html";
     }
 
     @RequestMapping(value = {"/add"})
