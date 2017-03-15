@@ -30,7 +30,7 @@ import java.util.Set;
  */
 //TODO: Ma zde byt transactional?
 @Transactional
-public class DataConversionImpl implements DataConversion, RowCallbackHandler {
+public class DataConversionHandler implements DataConversion, RowCallbackHandler {
     private final Logger log = Logger.getLogger(getClass());
 
     @Autowired
@@ -50,7 +50,7 @@ public class DataConversionImpl implements DataConversion, RowCallbackHandler {
     /**
      * CONSTRUCTOR
      */
-    public DataConversionImpl() {
+    public DataConversionHandler() {
         errors = new HashSet<ConversionError>();
     }
 

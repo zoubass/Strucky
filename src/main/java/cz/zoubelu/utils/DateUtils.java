@@ -23,6 +23,12 @@ public class DateUtils {
     }
 
     public static TimeRange getWeekTimeRange() {
+        // je to delitelne 7?
+        // ano? pokracuj...
+        // je to mene nez 7 dni od zacatku tydne?
+        // ano je - vyber posledni dny z minuleho mesice
+        // ne neni - vyber klasicky tyden
+        // ne?
         Calendar cal = Calendar.getInstance();
         Timestamp start = new Timestamp(cal.getTime().getTime());
         cal.add(Calendar.DATE, -7);
@@ -90,12 +96,16 @@ public class DateUtils {
             case WEEKLY:
                 return getWeekTimeRange();
             case MONTHLY:
-                return null;
+                return getMonthlyTimeRange();
             case UNKNOWN:
                 throw new RuntimeException("Failed to recognise frequency of scheduler from pattern: " + pattern);
             default:
                 throw new RuntimeException("Failed to recognise frequency of scheduler from pattern: " + pattern);
         }
+    }
+
+    private static TimeRange getMonthlyTimeRange() {
+        return null;
     }
 
     private static String[] parseCron(String pattern) {

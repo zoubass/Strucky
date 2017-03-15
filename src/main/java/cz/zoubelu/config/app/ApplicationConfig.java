@@ -5,7 +5,7 @@ import cz.zoubelu.codelist.SystemsList;
 import cz.zoubelu.repository.InformaMessageRepository;
 import cz.zoubelu.repository.impl.InformaRepositoryImpl;
 import cz.zoubelu.service.DataConversion;
-import cz.zoubelu.service.impl.DataConversionImpl;
+import cz.zoubelu.service.impl.DataConversionHandler;
 import cz.zoubelu.validation.Validator;
 import cz.zoubelu.validation.impl.MessageValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class ApplicationConfig {
 
     @Bean
     public DataConversion getConvertor() {
-        return new DataConversionImpl();
+        return new DataConversionHandler();
     }
 
     @Bean
